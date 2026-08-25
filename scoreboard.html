@@ -36,6 +36,7 @@
         sans-serif;
     }
 
+
     #scoreboard {
       position: relative;
 
@@ -72,6 +73,7 @@
       background-repeat: no-repeat;
     }
 
+
     .stadium {
       position: absolute;
       inset: 0;
@@ -80,6 +82,7 @@
 
       pointer-events: none;
     }
+
 
     .stadium::before {
       content: "";
@@ -113,6 +116,7 @@
         );
     }
 
+
     .field {
       position: absolute;
 
@@ -131,6 +135,7 @@
 
       pointer-events: none;
     }
+
 
     .field::after {
       content: "";
@@ -159,6 +164,7 @@
         );
     }
 
+
     .content {
       position: relative;
 
@@ -173,6 +179,11 @@
       text-shadow:
         0 3px 7px rgba(0,0,0,1);
     }
+
+
+    /* =====================================
+       TOP SECTION
+       ===================================== */
 
     .header {
       height: 139px;
@@ -190,6 +201,7 @@
       text-align: center;
     }
 
+
     .main-title {
       width: 100%;
 
@@ -204,6 +216,7 @@
 
       text-overflow: ellipsis;
     }
+
 
     .competition-title {
       width: 100%;
@@ -222,6 +235,7 @@
       text-overflow: ellipsis;
     }
 
+
     .match-date {
       width: 100%;
 
@@ -237,6 +251,11 @@
       white-space: nowrap;
     }
 
+
+    /* =====================================
+       MATCH SECTION
+       ===================================== */
+
     .match {
       height: 183px;
       flex: 0 0 183px;
@@ -251,18 +270,19 @@
       align-items: end;
 
       padding:
-        15px 14px 0;
+        5px 14px 0;
     }
+
 
     .team {
       min-width: 0;
 
-      height: 158px;
+      height: 168px;
 
       display: grid;
 
       grid-template-rows:
-        42px
+        52px
         70px
         39px;
 
@@ -273,28 +293,35 @@
       text-align: center;
     }
 
+
     .team-name {
       width: 100%;
-      height: 42px;
+      height: 52px;
 
       display: flex;
 
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
 
-      font-size: 23px;
-      line-height: 1;
+      padding:
+        0 5px 5px;
+
+      font-size: 21px;
+      line-height: 1.05;
 
       font-weight: 900;
 
       text-align: center;
 
-      white-space: nowrap;
+      white-space: normal;
 
       overflow: hidden;
 
-      text-overflow: ellipsis;
+      overflow-wrap: anywhere;
+
+      word-break: normal;
     }
+
 
     .score {
       width: 100%;
@@ -317,6 +344,7 @@
       text-align: center;
     }
 
+
     .overs {
       height: 39px;
 
@@ -333,16 +361,18 @@
       white-space: nowrap;
     }
 
+
     .vs-column {
-      height: 158px;
+      height: 168px;
 
       display: grid;
 
       grid-template-rows:
-        42px
+        52px
         70px
         39px;
     }
+
 
     .vs {
       grid-row: 2;
@@ -357,6 +387,11 @@
 
       font-weight: 900;
     }
+
+
+    /* =====================================
+       RESULT
+       ===================================== */
 
     .result {
       flex: 1;
@@ -386,19 +421,24 @@
 
   <div id="scoreboard">
 
+
     <div
       class="stadium"
       id="stadiumOverlay"
     ></div>
+
 
     <div
       class="field"
       id="fieldOverlay"
     ></div>
 
+
     <div class="content">
 
+
       <div class="header">
+
 
         <div
           class="main-title"
@@ -407,12 +447,14 @@
           2026 Trinity Games
         </div>
 
+
         <div
           class="competition-title"
           id="competitionTitle"
         >
           LIVE CRICKET
         </div>
+
 
         <div
           class="match-date"
@@ -421,12 +463,15 @@
           LIVE
         </div>
 
+
       </div>
 
 
       <div class="match">
 
+
         <div class="team">
+
 
           <div
             class="team-name"
@@ -435,6 +480,7 @@
             Loading...
           </div>
 
+
           <div
             class="score"
             id="team1Score"
@@ -442,12 +488,14 @@
             --
           </div>
 
+
           <div
             class="overs"
             id="team1Overs"
           >
             -- overs
           </div>
+
 
         </div>
 
@@ -463,12 +511,14 @@
 
         <div class="team">
 
+
           <div
             class="team-name"
             id="team2Name"
           >
             Loading...
           </div>
+
 
           <div
             class="score"
@@ -477,6 +527,7 @@
             --
           </div>
 
+
           <div
             class="overs"
             id="team2Overs"
@@ -484,7 +535,9 @@
             -- overs
           </div>
 
+
         </div>
+
 
       </div>
 
@@ -492,9 +545,8 @@
       <div
         class="result"
         id="status"
-      >
-        Waiting for match...
-      </div>
+      ></div>
+
 
     </div>
 
@@ -503,23 +555,42 @@
 
   <script>
 
+
     const CONFIG_URL = "/api";
+
     const UPDATE_INTERVAL_MS = 5000;
+
 
     let CLUB_ID = null;
     let MATCH_ID = null;
 
     let HAS_VALID_MATCH = false;
 
-    let CURRENT_BACKGROUND = "Stadium Night";
-    let CUSTOM_BACKGROUND_URL = "";
+    let CURRENT_BACKGROUND =
+      "Stadium Night";
+
+    let CUSTOM_BACKGROUND_URL =
+      "";
 
 
-    function firstValue(obj, keys) {
+    /* =========================================
+       HELPERS
+       ========================================= */
 
-      for (const key of keys) {
 
-        const value = obj?.[key];
+    function firstValue(
+      obj,
+      keys
+    ) {
+
+      for (
+        const key
+        of keys
+      ) {
+
+        const value =
+          obj?.[key];
+
 
         if (
           value !== undefined &&
@@ -533,32 +604,61 @@
 
       }
 
+
       return "";
 
     }
 
 
-    function walk(obj, callback) {
+
+    function walk(
+      obj,
+      callback
+    ) {
 
       if (
         !obj ||
         typeof obj !== "object"
       ) {
+
         return;
+
       }
+
 
       callback(obj);
 
-      if (Array.isArray(obj)) {
 
-        for (const item of obj) {
-          walk(item, callback);
+      if (
+        Array.isArray(obj)
+      ) {
+
+        for (
+          const item
+          of obj
+        ) {
+
+          walk(
+            item,
+            callback
+          );
+
         }
 
-      } else {
+      }
 
-        for (const value of Object.values(obj)) {
-          walk(value, callback);
+      else {
+
+        for (
+          const value
+          of Object.values(obj)
+        ) {
+
+          walk(
+            value,
+            callback
+          );
+
         }
 
       }
@@ -566,19 +666,42 @@
     }
 
 
-    function extractMatchDetails(matchUrl) {
 
-      if (!matchUrl) {
+    /* =========================================
+       MATCH URL
+       ========================================= */
+
+
+    function extractMatchDetails(
+      matchUrl
+    ) {
+
+      if (
+        !matchUrl
+      ) {
+
         return null;
+
       }
 
-      const text = String(matchUrl).trim();
+
+      const text =
+        String(
+          matchUrl
+        ).trim();
+
 
       const clubMatch =
-        text.match(/[?&]clubId=(\d+)/i);
+        text.match(
+          /[?&]clubId=(\d+)/i
+        );
+
 
       const matchMatch =
-        text.match(/[?&]matchId=(\d+)/i);
+        text.match(
+          /[?&]matchId=(\d+)/i
+        );
+
 
       if (
         !clubMatch ||
@@ -589,27 +712,54 @@
 
       }
 
+
       return {
-        clubId: clubMatch[1],
-        matchId: matchMatch[1]
+
+        clubId:
+          clubMatch[1],
+
+        matchId:
+          matchMatch[1]
+
       };
 
     }
 
 
-    function convertImageUrl(url) {
 
-      if (!url) {
+    /* =========================================
+       CUSTOM BACKGROUND
+       ========================================= */
+
+
+    function convertImageUrl(
+      url
+    ) {
+
+      if (
+        !url
+      ) {
+
         return "";
+
       }
 
+
       const value =
-        String(url).trim();
+        String(
+          url
+        ).trim();
+
 
       const fileMatch =
-        value.match(/\/file\/d\/([^/]+)/);
+        value.match(
+          /\/file\/d\/([^/]+)/
+        );
 
-      if (fileMatch?.[1]) {
+
+      if (
+        fileMatch?.[1]
+      ) {
 
         return (
           `https://drive.google.com/thumbnail?id=${fileMatch[1]}&sz=w1600`
@@ -617,10 +767,16 @@
 
       }
 
-      const queryMatch =
-        value.match(/[?&]id=([^&]+)/);
 
-      if (queryMatch?.[1]) {
+      const queryMatch =
+        value.match(
+          /[?&]id=([^&]+)/
+        );
+
+
+      if (
+        queryMatch?.[1]
+      ) {
 
         return (
           `https://drive.google.com/thumbnail?id=${queryMatch[1]}&sz=w1600`
@@ -628,9 +784,11 @@
 
       }
 
+
       return value;
 
     }
+
 
 
     function applyBackground(
@@ -639,13 +797,21 @@
     ) {
 
       const board =
-        document.getElementById("scoreboard");
+        document.getElementById(
+          "scoreboard"
+        );
+
 
       const stadium =
-        document.getElementById("stadiumOverlay");
+        document.getElementById(
+          "stadiumOverlay"
+        );
+
 
       const field =
-        document.getElementById("fieldOverlay");
+        document.getElementById(
+          "fieldOverlay"
+        );
 
 
       if (
@@ -654,7 +820,10 @@
       ) {
 
         const imageUrl =
-          convertImageUrl(customUrl);
+          convertImageUrl(
+            customUrl
+          );
+
 
         board.style.backgroundImage =
           `
@@ -665,20 +834,26 @@
           url("${imageUrl}")
           `;
 
+
         board.style.backgroundSize =
           "cover";
+
 
         board.style.backgroundPosition =
           "center";
 
+
         board.style.backgroundRepeat =
           "no-repeat";
+
 
         stadium.style.display =
           "none";
 
+
         field.style.display =
           "none";
+
 
         return;
 
@@ -688,25 +863,34 @@
       stadium.style.display =
         "block";
 
+
       field.style.display =
         "block";
 
 
-      if (name === "Plain Dark") {
+      if (
+        name === "Plain Dark"
+      ) {
 
         board.style.background =
           "linear-gradient(to bottom, #05070a, #0b0e13)";
 
       }
 
-      else if (name === "Trinity Blue") {
+
+      else if (
+        name === "Trinity Blue"
+      ) {
 
         board.style.background =
           "linear-gradient(to bottom, #071b3a, #0b315f)";
 
       }
 
-      else if (name === "Stadium Day") {
+
+      else if (
+        name === "Stadium Day"
+      ) {
 
         board.style.background =
           "linear-gradient(to bottom, #79a9c9 0%, #769d65 55%, #2d6b34 100%)";
@@ -716,96 +900,137 @@
     }
 
 
-    function findTeamHolder(data) {
 
-      let holder = null;
+    /* =========================================
+       TEAM DATA
+       ========================================= */
+
+
+    function findTeamHolder(
+      data
+    ) {
+
+      let holder =
+        null;
+
 
       walk(
         data,
         (obj) => {
 
-          if (holder) {
+          if (
+            holder
+          ) {
+
             return;
+
           }
+
 
           const hasTeam1 =
             obj?.team1Name ||
             obj?.teamOneName;
 
+
           const hasTeam2 =
             obj?.team2Name ||
             obj?.teamTwoName;
+
 
           if (
             hasTeam1 &&
             hasTeam2
           ) {
 
-            holder = obj;
+            holder =
+              obj;
 
           }
 
         }
       );
 
+
       return holder;
 
     }
 
 
-    function buildTeams(data) {
+
+    function buildTeams(
+      data
+    ) {
 
       const holder =
-        findTeamHolder(data);
+        findTeamHolder(
+          data
+        );
 
-      if (!holder) {
+
+      if (
+        !holder
+      ) {
+
         return [];
+
       }
+
 
       return [
 
         {
+
           teamName:
             holder.team1Name ??
             holder.teamOneName ??
             "",
+
 
           score:
             holder.team1Score ??
             holder.teamOneScore ??
             "",
 
+
           wickets:
             holder.team1Wickets ??
             holder.teamOneWickets ??
             "",
 
+
           overs:
             holder.team1Overs ??
             holder.teamOneOvers ??
             ""
+
         },
 
+
         {
+
           teamName:
             holder.team2Name ??
             holder.teamTwoName ??
             "",
+
 
           score:
             holder.team2Score ??
             holder.teamTwoScore ??
             "",
 
+
           wickets:
             holder.team2Wickets ??
             holder.teamTwoWickets ??
             "",
 
+
           overs:
             holder.team2Overs ??
             holder.teamTwoOvers ??
             ""
+
         }
 
       ];
@@ -813,7 +1038,10 @@
     }
 
 
-    function formatScore(team) {
+
+    function formatScore(
+      team
+    ) {
 
       if (
         team.score === undefined ||
@@ -825,22 +1053,31 @@
 
       }
 
+
       if (
         team.wickets !== undefined &&
         team.wickets !== null &&
         String(team.wickets).trim() !== ""
       ) {
 
-        return `${team.score}/${team.wickets}`;
+        return (
+          `${team.score}/${team.wickets}`
+        );
 
       }
 
-      return String(team.score);
+
+      return String(
+        team.score
+      );
 
     }
 
 
-    function formatOvers(team) {
+
+    function formatOvers(
+      team
+    ) {
 
       if (
         team.overs !== undefined &&
@@ -848,26 +1085,44 @@
         String(team.overs).trim() !== ""
       ) {
 
-        return `${team.overs} overs`;
+        return (
+          `${team.overs} overs`
+        );
 
       }
+
 
       return "-- overs";
 
     }
 
 
-    function findRawMatchTitle(data) {
 
-      let title = "";
+    /* =========================================
+       COMPETITION TITLE
+       ========================================= */
+
+
+    function findRawMatchTitle(
+      data
+    ) {
+
+      let title =
+        "";
+
 
       walk(
         data,
         (obj) => {
 
-          if (title) {
+          if (
+            title
+          ) {
+
             return;
+
           }
+
 
           title =
             firstValue(
@@ -884,27 +1139,47 @@
         }
       );
 
+
       return title;
 
     }
 
 
-    function findCompetitionTitle(data) {
+
+    function findCompetitionTitle(
+      data
+    ) {
 
       const rawTitle =
-        findRawMatchTitle(data);
+        findRawMatchTitle(
+          data
+        );
 
-      if (!rawTitle) {
+
+      if (
+        !rawTitle
+      ) {
+
         return "LIVE CRICKET";
+
       }
 
+
       const text =
-        String(rawTitle).trim();
+        String(
+          rawTitle
+        ).trim();
+
 
       const parts =
-        text.split("-");
+        text.split(
+          "-"
+        );
 
-      if (parts.length >= 2) {
+
+      if (
+        parts.length >= 2
+      ) {
 
         return (
           parts
@@ -915,22 +1190,38 @@
 
       }
 
+
       return text;
 
     }
 
 
-    function findMatchDate(data) {
 
-      let date = "";
+    /* =========================================
+       DATE
+       ========================================= */
+
+
+    function findMatchDate(
+      data
+    ) {
+
+      let date =
+        "";
+
 
       walk(
         data,
         (obj) => {
 
-          if (date) {
+          if (
+            date
+          ) {
+
             return;
+
           }
+
 
           date =
             firstValue(
@@ -945,32 +1236,59 @@
         }
       );
 
-      return formatDate(date);
+
+      return formatDate(
+        date
+      );
 
     }
 
 
-    function formatDate(value) {
 
-      if (!value) {
+    function formatDate(
+      value
+    ) {
+
+      if (
+        !value
+      ) {
+
         return "LIVE";
+
       }
 
+
       const text =
-        String(value).trim();
+        String(
+          value
+        ).trim();
+
 
       const slash =
         text.match(
           /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
         );
 
-      if (slash) {
+
+      if (
+        slash
+      ) {
 
         const month =
-          slash[1].padStart(2, "0");
+          slash[1]
+            .padStart(
+              2,
+              "0"
+            );
+
 
         const day =
-          slash[2].padStart(2, "0");
+          slash[2]
+            .padStart(
+              2,
+              "0"
+            );
+
 
         return (
           `${day}/${month}/${slash[3]}`
@@ -978,12 +1296,16 @@
 
       }
 
+
       const iso =
         text.match(
           /^(\d{4})-(\d{2})-(\d{2})/
         );
 
-      if (iso) {
+
+      if (
+        iso
+      ) {
 
         return (
           `${iso[3]}/${iso[2]}/${iso[1]}`
@@ -991,72 +1313,63 @@
 
       }
 
+
       return text;
 
     }
 
 
-    function findBottomStatus(data) {
 
-      let finalResult = "";
+    /* =========================================
+       FINAL RESULT ONLY
+       ========================================= */
 
-      let liveText = "";
+
+    function findBottomStatus(
+      data
+    ) {
+
+      let finalResult =
+        "";
 
 
       walk(
         data,
         (obj) => {
 
-          if (!finalResult) {
+          if (
+            finalResult
+          ) {
 
-            const possibleResult =
-              firstValue(
-                obj,
-                [
-                  "result",
-                  "resultText",
-                  "matchResult"
-                ]
-              );
-
-            if (
-              possibleResult &&
-              /won|tied|draw|abandon|no result/i.test(
-                String(possibleResult)
-              )
-            ) {
-
-              finalResult =
-                String(possibleResult);
-
-            }
+            return;
 
           }
 
 
-          if (!liveText) {
+          const possibleResult =
+            firstValue(
+              obj,
+              [
+                "result",
+                "resultText",
+                "matchResult"
+              ]
+            );
 
-            const possibleLive =
-              firstValue(
-                obj,
-                [
-                  "status",
-                  "matchStatus",
-                  "chaseText"
-                ]
-              );
 
-            if (
-              possibleLive &&
-              !/won|tied|draw|abandon|no result/i.test(
-                String(possibleLive)
+          if (
+            possibleResult &&
+            /won by|won the match|tied|drawn|abandoned|no result/i.test(
+              String(
+                possibleResult
               )
-            ) {
+            )
+          ) {
 
-              liveText =
-                String(possibleLive);
-
-            }
+            finalResult =
+              String(
+                possibleResult
+              );
 
           }
 
@@ -1064,17 +1377,15 @@
       );
 
 
-      if (finalResult) {
-        return finalResult;
-      }
-
-      if (liveText) {
-        return liveText;
-      }
-
-      return "MATCH IN PROGRESS";
+      return finalResult;
 
     }
+
+
+
+    /* =========================================
+       CONFIG
+       ========================================= */
 
 
     async function loadConfig() {
@@ -1085,13 +1396,16 @@
           `${CONFIG_URL}?t=${Date.now()}`,
 
           {
-            cache: "no-store"
+            cache:
+              "no-store"
           }
 
         );
 
 
-      if (!response.ok) {
+      if (
+        !response.ok
+      ) {
 
         throw new Error(
           `Config HTTP ${response.status}`
@@ -1112,13 +1426,17 @@
         );
 
 
-      if (details) {
+      if (
+        details
+      ) {
 
         CLUB_ID =
           details.clubId;
 
+
         MATCH_ID =
           details.matchId;
+
 
         HAS_VALID_MATCH =
           true;
@@ -1148,6 +1466,12 @@
     }
 
 
+
+    /* =========================================
+       LIVE SCORE
+       ========================================= */
+
+
     async function loadScore() {
 
       if (
@@ -1155,11 +1479,6 @@
         !CLUB_ID ||
         !MATCH_ID
       ) {
-
-        document.getElementById(
-          "status"
-        ).textContent =
-          "Waiting for match...";
 
         return;
 
@@ -1174,13 +1493,16 @@
             `/api/${CLUB_ID}/${MATCH_ID}?t=${Date.now()}`,
 
             {
-              cache: "no-store"
+              cache:
+                "no-store"
             }
 
           );
 
 
-        if (!response.ok) {
+        if (
+          !response.ok
+        ) {
 
           throw new Error(
             `HTTP ${response.status}`
@@ -1194,10 +1516,14 @@
 
 
         const teams =
-          buildTeams(data);
+          buildTeams(
+            data
+          );
 
 
-        if (teams.length < 2) {
+        if (
+          teams.length < 2
+        ) {
 
           throw new Error(
             "Could not identify both teams"
@@ -1208,6 +1534,7 @@
 
         const team1 =
           teams[0];
+
 
         const team2 =
           teams[1];
@@ -1222,13 +1549,17 @@
         document.getElementById(
           "competitionTitle"
         ).textContent =
-          findCompetitionTitle(data);
+          findCompetitionTitle(
+            data
+          );
 
 
         document.getElementById(
           "matchDate"
         ).textContent =
-          findMatchDate(data);
+          findMatchDate(
+            data
+          );
 
 
         document.getElementById(
@@ -1248,36 +1579,48 @@
         document.getElementById(
           "team1Score"
         ).textContent =
-          formatScore(team1);
+          formatScore(
+            team1
+          );
 
 
         document.getElementById(
           "team2Score"
         ).textContent =
-          formatScore(team2);
+          formatScore(
+            team2
+          );
 
 
         document.getElementById(
           "team1Overs"
         ).textContent =
-          formatOvers(team1);
+          formatOvers(
+            team1
+          );
 
 
         document.getElementById(
           "team2Overs"
         ).textContent =
-          formatOvers(team2);
+          formatOvers(
+            team2
+          );
 
 
         document.getElementById(
           "status"
         ).textContent =
-          findBottomStatus(data);
+          findBottomStatus(
+            data
+          );
 
       }
 
 
-      catch (error) {
+      catch (
+        error
+      ) {
 
         console.error(
           "Score error:",
@@ -1289,6 +1632,12 @@
     }
 
 
+
+    /* =========================================
+       UPDATE EVERY 5 SECONDS
+       ========================================= */
+
+
     async function updateScoreboard() {
 
       try {
@@ -1297,7 +1646,10 @@
 
       }
 
-      catch (error) {
+
+      catch (
+        error
+      ) {
 
         console.error(
           "Google Sheet config error:",
@@ -1305,6 +1657,7 @@
         );
 
       }
+
 
       await loadScore();
 
@@ -1318,6 +1671,7 @@
       updateScoreboard,
       UPDATE_INTERVAL_MS
     );
+
 
   </script>
 

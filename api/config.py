@@ -4,30 +4,28 @@ import time
 import urllib.request
 
 
-PUBLISHED_SHEET_ID = (
-    "2PACX-1vR4tzngOQmR7M3kmCUSV_iM6Z54jOHSJhgs2NFOdlII-K84BQcxniYnQv5x0BIQXRLXCifNhYLKPQ8_"
-)
-
+SHEET_ID = "1fcaRTIzo_6IH5GBt-llbCl28BV-uX9hF-8HBaQCLD4w"
 SHEET_GID = "1812294085"
 
 
 def get_scoreboard_config():
 
+    # Read the CURRENT Google Sheet directly,
+    # rather than Google's cached "Publish to web" copy.
+
     url = (
-        "https://docs.google.com/spreadsheets/d/e/"
-        f"{PUBLISHED_SHEET_ID}"
-        "/pub"
-        f"?gid={SHEET_GID}"
-        "&single=true"
-        "&output=csv"
-        f"&cache={int(time.time())}"
+        f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export"
+        f"?format=csv"
+        f"&gid={SHEET_GID}"
+        f"&t={int(time.time() * 1000)}"
     )
 
     request = urllib.request.Request(
         url,
         headers={
             "User-Agent": "Mozilla/5.0",
-            "Cache-Control": "no-cache",
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
         },
     )
 
@@ -44,9 +42,7 @@ def get_scoreboard_config():
 
     rows = list(
         csv.reader(
-            io.StringIO(
-                content
-            )
+            io.StringIO(content)
         )
     )
 

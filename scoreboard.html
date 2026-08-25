@@ -569,6 +569,7 @@
 
       callback(obj);
 
+
       if (
         Array.isArray(obj)
       ) {
@@ -727,6 +728,7 @@
           "fieldOverlay"
         );
 
+
       if (
         name === "Custom" &&
         customUrl
@@ -765,11 +767,13 @@
 
       }
 
+
       stadium.style.display =
         "block";
 
       field.style.display =
         "block";
+
 
       if (
         name === "Plain Dark"
@@ -915,7 +919,6 @@
             ""
 
         },
-
 
         {
 
@@ -1242,6 +1245,197 @@
     }
 
 
+    function findLiveStats(
+      data
+    ) {
+
+      let runs =
+        null;
+
+      let balls =
+        null;
+
+      let oversLimit =
+        null;
+
+
+      walk(
+        data,
+        (obj) => {
+
+          if (
+            runs === null
+          ) {
+
+            const value =
+              obj?.runsScored;
+
+            if (
+              value !== undefined &&
+              value !== null &&
+              String(value).trim() !== ""
+            ) {
+
+              const number =
+                Number(value);
+
+              if (
+                !Number.isNaN(number)
+              ) {
+
+                runs =
+                  number;
+
+              }
+
+            }
+
+          }
+
+
+          if (
+            balls === null
+          ) {
+
+            const value =
+              obj?.ballsFaced;
+
+            if (
+              value !== undefined &&
+              value !== null &&
+              String(value).trim() !== ""
+            ) {
+
+              const number =
+                Number(value);
+
+              if (
+                !Number.isNaN(number)
+              ) {
+
+                balls =
+                  number;
+
+              }
+
+            }
+
+          }
+
+
+          if (
+            oversLimit === null
+          ) {
+
+            const text =
+              String(
+                obj?.matchResult ||
+                ""
+              );
+
+
+            const match =
+              text.match(
+                /\/\s*(\d+(?:\.\d+)?)\s*ov/i
+              );
+
+
+            if (
+              match?.[1]
+            ) {
+
+              const number =
+                Number(
+                  match[1]
+                );
+
+
+              if (
+                !Number.isNaN(number)
+              ) {
+
+                oversLimit =
+                  number;
+
+              }
+
+            }
+
+          }
+
+        }
+      );
+
+
+      return {
+        runs,
+        balls,
+        oversLimit
+      };
+
+    }
+
+
+    function getBottomText(
+      data
+    ) {
+
+      const regularStatus =
+        findStatus(
+          data
+        );
+
+
+      if (
+        /won|tied|draw|abandon|no result/i.test(
+          regularStatus
+        )
+      ) {
+
+        return regularStatus;
+
+      }
+
+
+      const stats =
+        findLiveStats(
+          data
+        );
+
+
+      if (
+        stats.runs === null ||
+        stats.balls === null ||
+        stats.oversLimit === null ||
+        stats.balls <= 0
+      ) {
+
+        return "MATCH IN PROGRESS";
+
+      }
+
+
+      const crr =
+        (
+          stats.runs * 6
+        ) /
+        stats.balls;
+
+
+      const projected =
+        Math.round(
+          crr *
+          stats.oversLimit
+        );
+
+
+      return (
+        `PROJECTED SCORE: ${projected} RUNS (CRR:${crr.toFixed(1)})`
+      );
+
+    }
+
+
     async function loadConfig() {
 
       const response =
@@ -1451,7 +1645,7 @@
         document.getElementById(
           "status"
         ).textContent =
-          findStatus(
+          getBottomText(
             data
           );
 

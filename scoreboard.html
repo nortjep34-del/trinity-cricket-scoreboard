@@ -181,10 +181,6 @@
     }
 
 
-    /* =====================================
-       TOP SECTION
-       ===================================== */
-
     .header {
       height: 139px;
       flex: 0 0 139px;
@@ -251,10 +247,6 @@
       white-space: nowrap;
     }
 
-
-    /* =====================================
-       MATCH SECTION
-       ===================================== */
 
     .match {
       height: 183px;
@@ -384,10 +376,6 @@
     }
 
 
-    /* =====================================
-       RESULT
-       ===================================== */
-
     .result {
       flex: 1;
 
@@ -401,7 +389,7 @@
 
       text-align: center;
 
-      font-size: 29px;
+      font-size: 27px;
       line-height: 1.05;
 
       font-weight: 900;
@@ -1318,7 +1306,7 @@
     }
 
 
-    function findStatus(
+    function findCompletedResult(
       data
     ) {
 
@@ -1339,26 +1327,260 @@
           }
 
 
-          result =
+          const possible =
             firstValue(
               obj,
               [
                 "result",
                 "resultText",
-                "matchResult",
-                "status",
-                "matchStatus",
-                "chaseText"
+                "matchResult"
               ]
             );
+
+
+          if (
+            possible &&
+            /won|tied|draw|abandon|no result/i.test(
+              String(possible)
+            )
+          ) {
+
+            result =
+              possible;
+
+          }
 
         }
       );
 
 
+      return result;
+
+    }
+
+
+    function findCurrentRunRate(
+      data
+    ) {
+
+      let rate =
+        null;
+
+
+      walk(
+        data,
+        (obj) => {
+
+          if (
+            rate !== null
+          ) {
+
+            return;
+
+          }
+
+
+          const value =
+            obj?.currentRunrate;
+
+
+          if (
+            value !== undefined &&
+            value !== null &&
+            String(value).trim() !== ""
+          ) {
+
+            const number =
+              Number(value);
+
+
+            if (
+              !Number.isNaN(number)
+            ) {
+
+              rate =
+                number;
+
+            }
+
+          }
+
+        }
+      );
+
+
+      return rate;
+
+    }
+
+
+    function findMatchOversLimit(
+      data
+    ) {
+
+      let overs =
+        null;
+
+
+      walk(
+        data,
+        (obj) => {
+
+          if (
+            overs !== null
+          ) {
+
+            return;
+
+          }
+
+
+          const directValues = [
+            obj?.matchOvers,
+            obj?.totalOvers,
+            obj?.maxOvers,
+            obj?.oversLimit,
+            obj?.noOfOvers
+          ];
+
+
+          for (
+            const value
+            of directValues
+          ) {
+
+            if (
+              value !== undefined &&
+              value !== null &&
+              String(value).trim() !== ""
+            ) {
+
+              const number =
+                Number(value);
+
+
+              if (
+                !Number.isNaN(number) &&
+                number > 0
+              ) {
+
+                overs =
+                  number;
+
+                return;
+
+              }
+
+            }
+
+          }
+
+
+          const textValues = [
+            obj?.matchResult,
+            obj?.status,
+            obj?.matchStatus
+          ];
+
+
+          for (
+            const value
+            of textValues
+          ) {
+
+            if (
+              !value
+            ) {
+
+              continue;
+
+            }
+
+
+            const match =
+              String(value).match(
+                /\/\s*(\d+(?:\.\d+)?)\s*ov/i
+              );
+
+
+            if (
+              match?.[1]
+            ) {
+
+              overs =
+                Number(match[1]);
+
+              return;
+
+            }
+
+          }
+
+        }
+      );
+
+
+      return overs;
+
+    }
+
+
+    function getProjectedScoreText(
+      data
+    ) {
+
+      const completedResult =
+        findCompletedResult(
+          data
+        );
+
+
+      if (
+        completedResult
+      ) {
+
+        return completedResult;
+
+      }
+
+
+      const currentRunRate =
+        findCurrentRunRate(
+          data
+        );
+
+
+      const oversLimit =
+        findMatchOversLimit(
+          data
+        );
+
+
+      if (
+        currentRunRate === null ||
+        oversLimit === null
+      ) {
+
+        return "MATCH IN PROGRESS";
+
+      }
+
+
+      const projected =
+        Math.round(
+          currentRunRate *
+          oversLimit
+        );
+
+
+      const formattedRate =
+        Number(
+          currentRunRate
+        ).toFixed(1);
+
+
       return (
-        result ||
-        "MATCH IN PROGRESS"
+        `PROJECTED SCORE: ${projected} RUNS (CRR:${formattedRate})`
       );
 
     }
@@ -1591,7 +1813,7 @@
         document.getElementById(
           "status"
         ).textContent =
-          findStatus(
+          getProjectedScoreText(
             data
           );
 
@@ -1651,3 +1873,5 @@
 
 
 </body>
+
+</html>

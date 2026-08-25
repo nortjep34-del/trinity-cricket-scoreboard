@@ -75,15 +75,12 @@
     .stadium {
       position: absolute;
       inset: 0;
-
       overflow: hidden;
-
       pointer-events: none;
     }
 
     .stadium::before {
       content: "";
-
       position: absolute;
 
       left: -43px;
@@ -377,10 +374,6 @@
       font-weight: 900;
     }
 
-    .error {
-      color: #ffc2c2;
-    }
-
   </style>
 
 </head>
@@ -569,7 +562,6 @@
 
       callback(obj);
 
-
       if (
         Array.isArray(obj)
       ) {
@@ -688,21 +680,6 @@
 
       }
 
-      const queryMatch =
-        value.match(
-          /[?&]id=([^&]+)/
-        );
-
-      if (
-        queryMatch?.[1]
-      ) {
-
-        return (
-          `https://drive.google.com/thumbnail?id=${queryMatch[1]}&sz=w1600`
-        );
-
-      }
-
       return value;
 
     }
@@ -767,68 +744,6 @@
 
       }
 
-
-      stadium.style.display =
-        "block";
-
-      field.style.display =
-        "block";
-
-
-      if (
-        name === "Plain Dark"
-      ) {
-
-        board.style.background =
-          "linear-gradient(to bottom, #05070a, #0b0e13)";
-
-      }
-
-      else if (
-        name === "Trinity Blue"
-      ) {
-
-        board.style.background =
-          "linear-gradient(to bottom, #071b3a, #0b315f)";
-
-      }
-
-      else if (
-        name === "Stadium Day"
-      ) {
-
-        board.style.background =
-          "linear-gradient(to bottom, #79a9c9 0%, #769d65 55%, #2d6b34 100%)";
-
-      }
-
-      else {
-
-        board.style.background =
-          `
-          radial-gradient(
-            circle at 7% 13%,
-            rgba(255,255,255,0.25) 0,
-            rgba(255,255,255,0.08) 5%,
-            transparent 15%
-          ),
-          radial-gradient(
-            circle at 93% 13%,
-            rgba(255,255,255,0.25) 0,
-            rgba(255,255,255,0.08) 5%,
-            transparent 15%
-          ),
-          linear-gradient(
-            to bottom,
-            #070b0f 0%,
-            #111719 33%,
-            #14271b 62%,
-            #0b2412 100%
-          )
-          `;
-
-      }
-
     }
 
 
@@ -851,17 +766,15 @@
 
           }
 
-          const hasTeam1 =
-            obj?.team1Name ||
-            obj?.teamOneName;
-
-          const hasTeam2 =
-            obj?.team2Name ||
-            obj?.teamTwoName;
-
           if (
-            hasTeam1 &&
-            hasTeam2
+            (
+              obj?.team1Name ||
+              obj?.teamOneName
+            ) &&
+            (
+              obj?.team2Name ||
+              obj?.teamTwoName
+            )
           ) {
 
             holder =
@@ -1003,7 +916,7 @@
     }
 
 
-    function findRawMatchTitle(
+    function findCompetitionTitle(
       data
     ) {
 
@@ -1026,9 +939,9 @@
             firstValue(
               obj,
               [
+                "seriesName",
                 "matchName",
                 "fixtureName",
-                "seriesName",
                 "leagueName",
                 "tournamentName"
               ]
@@ -1037,37 +950,22 @@
         }
       );
 
-      return title;
-
-    }
-
-
-    function findCompetitionTitle(
-      data
-    ) {
-
-      const rawTitle =
-        findRawMatchTitle(
-          data
-        );
-
       if (
-        !rawTitle
+        !title
       ) {
 
         return "LIVE CRICKET";
 
       }
 
+
       const text =
-        String(
-          rawTitle
-        ).trim();
+        String(title).trim();
+
 
       const parts =
-        text.split(
-          "-"
-        );
+        text.split("-");
+
 
       if (
         parts.length >= 2
@@ -1082,17 +980,8 @@
 
       }
 
-      if (
-        text.toLowerCase() !==
-        "2026 trinity games"
-          .toLowerCase()
-      ) {
 
-        return text;
-
-      }
-
-      return "LIVE CRICKET";
+      return text;
 
     }
 
@@ -1129,84 +1018,64 @@
         }
       );
 
-      return formatDate(
-        date
-      );
-
-    }
-
-
-    function formatDate(
-      value
-    ) {
 
       if (
-        !value
+        !date
       ) {
 
         return "LIVE";
 
       }
 
+
       const text =
         String(
-          value
+          date
         ).trim();
+
 
       const slash =
         text.match(
           /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
         );
 
+
       if (
         slash
       ) {
 
-        const month =
-          slash[1]
-            .padStart(
-              2,
-              "0"
-            );
-
-        const day =
-          slash[2]
-            .padStart(
-              2,
-              "0"
-            );
-
         return (
-          `${day}/${month}/${slash[3]}`
+          `${slash[2].padStart(2,"0")}/${slash[1].padStart(2,"0")}/${slash[3]}`
         );
 
       }
 
-      const iso =
-        text.match(
-          /^(\d{4})-(\d{2})-(\d{2})/
-        );
-
-      if (
-        iso
-      ) {
-
-        return (
-          `${iso[3]}/${iso[2]}/${iso[1]}`
-        );
-
-      }
 
       return text;
 
     }
 
 
-    function findStatus(
+    /*
+      ==========================================
+      LIVE PROJECTION
+      ==========================================
+
+      We deliberately use CricClubs' matchResult
+      text because it contains the CURRENT score:
+
+      CHL 35/2 (2.1/50 ov)
+
+      This avoids accidentally reading a batsman's
+      individual runsScored / ballsFaced fields.
+    */
+
+
+    function findMatchResultText(
       data
     ) {
 
-      let result =
+      let text =
         "";
 
       walk(
@@ -1214,152 +1083,21 @@
         (obj) => {
 
           if (
-            result
+            text
           ) {
 
             return;
 
           }
 
-          result =
-            firstValue(
-              obj,
-              [
-                "result",
-                "resultText",
-                "matchResult",
-                "status",
-                "matchStatus",
-                "chaseText"
-              ]
-            );
-
-        }
-      );
-
-      return (
-        result ||
-        "MATCH IN PROGRESS"
-      );
-
-    }
-
-
-    function findLiveStats(
-      data
-    ) {
-
-      let runs =
-        null;
-
-      let balls =
-        null;
-
-      let oversLimit =
-        null;
-
-
-      walk(
-        data,
-        (obj) => {
-
           if (
-            runs === null
+            obj?.matchResult
           ) {
 
-            const value =
-              obj?.runsScored;
-
-            if (
-              value !== undefined &&
-              value !== null &&
-              String(value).trim() !== ""
-            ) {
-
-              const number =
-                Number(value);
-
-              if (
-                !Number.isNaN(number)
-              ) {
-
-                runs =
-                  number;
-
-              }
-
-            }
-
-          }
-
-
-          if (
-            balls === null
-          ) {
-
-            const value =
-              obj?.ballsFaced;
-
-            if (
-              value !== undefined &&
-              value !== null &&
-              String(value).trim() !== ""
-            ) {
-
-              const number =
-                Number(value);
-
-              if (
-                !Number.isNaN(number)
-              ) {
-
-                balls =
-                  number;
-
-              }
-
-            }
-
-          }
-
-
-          if (
-            oversLimit === null
-          ) {
-
-            const text =
+            text =
               String(
-                obj?.matchResult ||
-                ""
-              );
-
-
-            const match =
-              text.match(
-                /\/\s*(\d+(?:\.\d+)?)\s*ov/i
-              );
-
-
-            if (
-              match?.[1]
-            ) {
-
-              const number =
-                Number(
-                  match[1]
-                );
-
-
-              if (
-                !Number.isNaN(number)
-              ) {
-
-                oversLimit =
-                  number;
-
-              }
-
-            }
+                obj.matchResult
+              ).trim();
 
           }
 
@@ -1367,47 +1105,106 @@
       );
 
 
-      return {
-        runs,
-        balls,
-        oversLimit
-      };
+      return text;
 
     }
 
 
-    function getBottomText(
+    function projectedScoreText(
       data
     ) {
 
-      const regularStatus =
-        findStatus(
+      const text =
+        findMatchResultText(
           data
         );
 
 
+      /*
+        Completed result
+      */
+
       if (
-        /won|tied|draw|abandon|no result/i.test(
-          regularStatus
+        /won by|won the match|tied|drawn|abandoned|no result/i.test(
+          text
         )
       ) {
 
-        return regularStatus;
+        return text;
 
       }
 
 
-      const stats =
-        findLiveStats(
-          data
+      /*
+        Example:
+
+        CHL 35/2 (2.1/50 ov)
+
+        Groups:
+
+        35 = runs
+        2  = completed overs
+        1  = balls in current over
+        50 = innings limit
+      */
+
+      const match =
+        text.match(
+          /(\d+)\s*\/\s*\d+\s*\(\s*(\d+)\.(\d+)\s*\/\s*(\d+(?:\.\d+)?)\s*ov/i
         );
 
 
       if (
-        stats.runs === null ||
-        stats.balls === null ||
-        stats.oversLimit === null ||
-        stats.balls <= 0
+        !match
+      ) {
+
+        return "MATCH IN PROGRESS";
+
+      }
+
+
+      const runs =
+        Number(
+          match[1]
+        );
+
+
+      const completedOvers =
+        Number(
+          match[2]
+        );
+
+
+      const ballsInOver =
+        Number(
+          match[3]
+        );
+
+
+      const oversLimit =
+        Number(
+          match[4]
+        );
+
+
+      /*
+        Cricket overs are NOT decimal numbers.
+
+        2.1 overs = 2 overs + 1 ball
+                  = 13 balls
+      */
+
+      const totalBalls =
+        (
+          completedOvers * 6
+        ) +
+        ballsInOver;
+
+
+      if (
+        totalBalls <= 0 ||
+        !Number.isFinite(runs) ||
+        !Number.isFinite(oversLimit)
       ) {
 
         return "MATCH IN PROGRESS";
@@ -1417,15 +1214,15 @@
 
       const crr =
         (
-          stats.runs * 6
+          runs * 6
         ) /
-        stats.balls;
+        totalBalls;
 
 
       const projected =
         Math.round(
           crr *
-          stats.oversLimit
+          oversLimit
         );
 
 
@@ -1440,15 +1237,12 @@
 
       const response =
         await fetch(
-
           `${CONFIG_URL}?t=${Date.now()}`,
-
           {
-            cache:
-              "no-store"
+            cache: "no-store"
           }
-
         );
+
 
       if (
         !response.ok
@@ -1460,18 +1254,18 @@
 
       }
 
+
       const config =
         await response.json();
 
-      const matchUrl =
-        config[
-          "CricClubs Match URL"
-        ] || "";
 
       const details =
         extractMatchDetails(
-          matchUrl
+          config[
+            "CricClubs Match URL"
+          ] || ""
         );
+
 
       if (
         details
@@ -1488,17 +1282,20 @@
 
       }
 
+
       CURRENT_BACKGROUND =
         config[
           "Background"
         ] ||
         CURRENT_BACKGROUND;
 
+
       CUSTOM_BACKGROUND_URL =
         config[
           "Custom Background URL"
         ] ||
         CUSTOM_BACKGROUND_URL;
+
 
       applyBackground(
         CURRENT_BACKGROUND,
@@ -1511,19 +1308,13 @@
     async function loadScore() {
 
       if (
-        !HAS_VALID_MATCH ||
-        !CLUB_ID ||
-        !MATCH_ID
+        !HAS_VALID_MATCH
       ) {
-
-        document.getElementById(
-          "status"
-        ).textContent =
-          "Waiting for match...";
 
         return;
 
       }
+
 
       try {
 
@@ -1533,11 +1324,11 @@
             `/api/${CLUB_ID}/${MATCH_ID}?t=${Date.now()}`,
 
             {
-              cache:
-                "no-store"
+              cache: "no-store"
             }
 
           );
+
 
         if (
           !response.ok
@@ -1549,23 +1340,25 @@
 
         }
 
+
         const data =
           await response.json();
+
 
         const teams =
           buildTeams(
             data
           );
 
+
         if (
           teams.length < 2
         ) {
 
-          throw new Error(
-            "Could not identify both teams"
-          );
+          return;
 
         }
+
 
         const team1 =
           teams[0];
@@ -1599,15 +1392,13 @@
         document.getElementById(
           "team1Name"
         ).textContent =
-          team1.teamName ||
-          "TEAM 1";
+          team1.teamName;
 
 
         document.getElementById(
           "team2Name"
         ).textContent =
-          team2.teamName ||
-          "TEAM 2";
+          team2.teamName;
 
 
         document.getElementById(
@@ -1645,18 +1436,18 @@
         document.getElementById(
           "status"
         ).textContent =
-          getBottomText(
+          projectedScoreText(
             data
           );
 
       }
+
 
       catch (
         error
       ) {
 
         console.error(
-          "Score error:",
           error
         );
 
@@ -1678,11 +1469,11 @@
       ) {
 
         console.error(
-          "Google Sheet config error:",
           error
         );
 
       }
+
 
       await loadScore();
 

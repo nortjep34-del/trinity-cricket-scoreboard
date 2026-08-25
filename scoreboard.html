@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
+
+  <meta charset="UTF-8">
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
+    content="width=384,height=288,initial-scale=1.0"
+  >
 
   <title>Trinity Cricket Scoreboard</title>
 
+
   <style>
+
     * {
       box-sizing: border-box;
     }
 
+
     html,
     body {
+
       margin: 0;
       padding: 0;
 
@@ -31,9 +37,12 @@
         Arial,
         Helvetica,
         sans-serif;
+
     }
 
+
     #scoreboard {
+
       position: relative;
 
       width: 384px;
@@ -41,7 +50,7 @@
 
       overflow: hidden;
 
-      color: #fff;
+      color: #ffffff;
 
       background:
         radial-gradient(
@@ -67,18 +76,25 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+
     }
 
+
     .stadium {
+
       position: absolute;
+
       inset: 0;
 
       overflow: hidden;
 
       pointer-events: none;
+
     }
 
+
     .stadium::before {
+
       content: "";
 
       position: absolute;
@@ -87,6 +103,7 @@
       right: -30px;
 
       top: 95px;
+
       height: 83px;
 
       background:
@@ -108,9 +125,12 @@
           100% 100%,
           0 100%
         );
+
     }
 
+
     .field {
+
       position: absolute;
 
       left: 0;
@@ -127,9 +147,12 @@
         );
 
       pointer-events: none;
+
     }
 
+
     .field::after {
+
       content: "";
 
       position: absolute;
@@ -154,9 +177,12 @@
           100% 100%,
           0 100%
         );
+
     }
 
+
     .content {
+
       position: relative;
 
       z-index: 5;
@@ -165,32 +191,48 @@
       height: 100%;
 
       display: flex;
+
       flex-direction: column;
 
       text-shadow:
         0 2px 5px rgba(0,0,0,1);
+
     }
 
+
+    /* ==========================================
+       TOP TITLE + CENTRED DATE
+       ========================================== */
+
+
     .header {
-      height: 72px;
-      flex: 0 0 72px;
+
+      height: 76px;
+
+      flex: 0 0 76px;
 
       display: flex;
+
       flex-direction: column;
 
       align-items: center;
+
       justify-content: flex-end;
 
       padding:
-        0 10px 7px;
+        0 8px 6px;
 
       text-align: center;
+
     }
 
+
     .match-title {
+
       width: 100%;
 
-      font-size: 17px;
+      font-size: 19px;
+
       line-height: 1;
 
       font-weight: 900;
@@ -200,20 +242,39 @@
       overflow: hidden;
 
       text-overflow: ellipsis;
+
     }
 
-    .meta {
+
+    .match-date {
+
+      width: 100%;
+
       margin-top: 8px;
 
-      font-size: 10px;
+      font-size: 12px;
+
       line-height: 1;
 
-      font-weight: 800;
+      font-weight: 900;
+
+      text-align: center;
+
+      white-space: nowrap;
+
     }
 
+
+    /* ==========================================
+       TEAM / SCORE SECTION
+       ========================================== */
+
+
     .match {
-      height: 136px;
-      flex: 0 0 136px;
+
+      height: 133px;
+
+      flex: 0 0 133px;
 
       display: grid;
 
@@ -225,149 +286,211 @@
       align-items: center;
 
       padding:
-        0 10px;
+        0 9px;
+
     }
 
+
     .team {
+
       min-width: 0;
 
-      height: 108px;
+      height: 111px;
 
       display: grid;
 
       grid-template-rows:
-        26px
-        46px
-        24px;
+        28px
+        48px
+        27px;
 
       align-items: center;
 
       justify-items: center;
 
       text-align: center;
+
     }
 
+
     .team-name {
+
       width: 100%;
-      height: 26px;
+
+      height: 28px;
 
       display: flex;
 
       align-items: center;
+
       justify-content: center;
 
-      font-size: 14px;
+      font-size: 16px;
+
       line-height: 1;
 
       font-weight: 900;
+
+      text-align: center;
 
       white-space: nowrap;
 
       overflow: hidden;
 
       text-overflow: ellipsis;
+
     }
+
 
     .score {
+
       width: 100%;
-      height: 46px;
+
+      height: 48px;
 
       display: flex;
 
       align-items: center;
+
       justify-content: center;
 
-      font-size: 38px;
+      font-size: 42px;
+
       line-height: 1;
 
       font-weight: 900;
 
-      letter-spacing: -1.7px;
+      letter-spacing: -1.8px;
 
       white-space: nowrap;
+
+      text-align: center;
+
     }
+
 
     .overs {
-      height: 24px;
+
+      height: 27px;
 
       display: flex;
 
       align-items: center;
+
       justify-content: center;
 
-      font-size: 15px;
+      font-size: 17px;
+
       line-height: 1;
 
       font-weight: 900;
 
       white-space: nowrap;
+
     }
 
+
     .vs-column {
-      height: 108px;
+
+      height: 111px;
 
       display: grid;
 
       grid-template-rows:
-        26px
-        46px
-        24px;
+        28px
+        48px
+        27px;
+
     }
 
+
     .vs {
+
       grid-row: 2;
 
       display: flex;
 
       align-items: center;
+
       justify-content: center;
 
-      font-size: 15px;
+      font-size: 17px;
+
+      line-height: 1;
+
       font-weight: 900;
+
     }
 
+
+    /* ==========================================
+       RESULT
+       ========================================== */
+
+
     .result {
+
       flex: 1;
 
       display: flex;
 
       align-items: center;
+
       justify-content: center;
 
       padding:
-        3px 16px 17px;
+        3px 15px 16px;
 
       text-align: center;
 
-      font-size: 18px;
+      font-size: 20px;
+
       line-height: 1.05;
 
       font-weight: 900;
+
     }
 
+
     .error {
+
       color: #ffc2c2;
+
     }
+
   </style>
+
 </head>
+
+
 
 <body>
 
+
   <div id="scoreboard">
+
 
     <div
       class="stadium"
       id="stadiumOverlay"
     ></div>
 
+
     <div
       class="field"
       id="fieldOverlay"
     ></div>
 
+
     <div class="content">
 
+
+      <!-- ===============================
+           TITLE
+           =============================== -->
+
       <div class="header">
+
 
         <div
           class="match-title"
@@ -376,24 +499,30 @@
           LIVE CRICKET
         </div>
 
-        <div class="meta">
 
-          League
-
-          &nbsp;&nbsp;|&nbsp;&nbsp;
-
-          <span id="matchDate">
-            LIVE
-          </span>
-
+        <div
+          class="match-date"
+          id="matchDate"
+        >
+          LIVE
         </div>
+
 
       </div>
 
 
+
+      <!-- ===============================
+           MATCH
+           =============================== -->
+
       <div class="match">
 
+
+        <!-- TEAM 1 -->
+
         <div class="team">
+
 
           <div
             class="team-name"
@@ -402,12 +531,14 @@
             Loading...
           </div>
 
+
           <div
             class="score"
             id="team1Score"
           >
             --
           </div>
+
 
           <div
             class="overs"
@@ -416,19 +547,29 @@
             -- overs
           </div>
 
+
         </div>
 
 
+
+        <!-- VS -->
+
         <div class="vs-column">
+
 
           <div class="vs">
             VS
           </div>
 
+
         </div>
 
 
+
+        <!-- TEAM 2 -->
+
         <div class="team">
+
 
           <div
             class="team-name"
@@ -437,12 +578,14 @@
             Loading...
           </div>
 
+
           <div
             class="score"
             id="team2Score"
           >
             --
           </div>
+
 
           <div
             class="overs"
@@ -451,24 +594,40 @@
             -- overs
           </div>
 
+
         </div>
+
 
       </div>
 
+
+
+      <!-- ===============================
+           RESULT
+           =============================== -->
 
       <div
         class="result"
         id="status"
       >
-        Connecting...
+        Waiting for match...
       </div>
 
+
     </div>
+
 
   </div>
 
 
+
   <script>
+
+
+    /* ==========================================
+       SETTINGS
+       ========================================== */
+
 
     const CONFIG_URL =
       "/api";
@@ -478,12 +637,25 @@
       5000;
 
 
+    /*
+      IMPORTANT:
+
+      There is deliberately NO old match ID
+      saved here anymore.
+
+      A match must come from the Google Sheet.
+
+      If Google temporarily fails, we KEEP
+      the current match instead of reverting.
+    */
+
+
     let CLUB_ID =
-      "38195";
+      null;
 
 
     let MATCH_ID =
-      "1561";
+      null;
 
 
     let CURRENT_BACKGROUND =
@@ -494,21 +666,27 @@
       "";
 
 
-    /*
-      ---------------------------------------------
-      HELPERS
-      ---------------------------------------------
-    */
+    let HAS_VALID_MATCH =
+      false;
+
+
+
+    /* ==========================================
+       HELPERS
+       ========================================== */
+
 
     function firstValue(
       obj,
       keys
     ) {
 
+
       for (
         const key
         of keys
       ) {
+
 
         const value =
           obj?.[key];
@@ -520,16 +698,21 @@
           String(value).trim() !== ""
         ) {
 
+
           return value;
 
+
         }
+
 
       }
 
 
       return "";
 
+
     }
+
 
 
     function walk(
@@ -537,12 +720,15 @@
       callback
     ) {
 
+
       if (
         !obj ||
         typeof obj !== "object"
       ) {
 
+
         return;
+
 
       }
 
@@ -556,70 +742,87 @@
         Array.isArray(obj)
       ) {
 
+
         for (
           const item
           of obj
         ) {
+
 
           walk(
             item,
             callback
           );
 
+
         }
+
 
       }
 
+
       else {
+
 
         for (
           const value
           of Object.values(obj)
         ) {
 
+
           walk(
             value,
             callback
           );
 
+
         }
 
+
       }
+
 
     }
 
 
-    /*
-      ---------------------------------------------
-      MATCH LINK
-      ---------------------------------------------
-    */
+
+    /* ==========================================
+       EXTRACT CRICCLUBS MATCH URL
+       ========================================== */
+
 
     function extractMatchDetails(
       matchUrl
     ) {
 
+
       if (
         !matchUrl
       ) {
 
+
         return null;
+
 
       }
 
 
+      const text =
+        String(
+          matchUrl
+        ).trim();
+
+
       const clubMatch =
-        String(matchUrl)
-          .match(
-            /[?&]clubId=(\d+)/i
-          );
+        text.match(
+          /[?&]clubId=(\d+)/i
+        );
 
 
       const matchMatch =
-        String(matchUrl)
-          .match(
-            /[?&]matchId=(\d+)/i
-          );
+        text.match(
+          /[?&]matchId=(\d+)/i
+        );
 
 
       if (
@@ -627,48 +830,56 @@
         !matchMatch
       ) {
 
+
         return null;
+
 
       }
 
 
       return {
 
+
         clubId:
           clubMatch[1],
+
 
         matchId:
           matchMatch[1]
 
+
       };
+
 
     }
 
 
-    /*
-      ---------------------------------------------
-      GOOGLE DRIVE IMAGE LINK CONVERSION
-      ---------------------------------------------
 
-      This means you can even paste a normal
-      Google Drive share link into the Sheet.
-    */
+    /* ==========================================
+       GOOGLE DRIVE BACKGROUND URL
+       ========================================== */
+
 
     function convertImageUrl(
       url
     ) {
 
+
       if (
         !url
       ) {
 
+
         return "";
+
 
       }
 
 
       const value =
-        String(url).trim();
+        String(
+          url
+        ).trim();
 
 
       const fileMatch =
@@ -681,9 +892,11 @@
         fileMatch?.[1]
       ) {
 
+
         return (
           `https://drive.google.com/thumbnail?id=${fileMatch[1]}&sz=w1600`
         );
+
 
       }
 
@@ -698,48 +911,50 @@
         queryMatch?.[1]
       ) {
 
+
         return (
           `https://drive.google.com/thumbnail?id=${queryMatch[1]}&sz=w1600`
         );
+
 
       }
 
 
       return value;
 
+
     }
 
 
-    /*
-      ---------------------------------------------
-      BACKGROUND
-      ---------------------------------------------
-    */
+
+    /* ==========================================
+       BACKGROUND
+       ========================================== */
+
 
     function applyBackground(
       name,
       customUrl
     ) {
 
+
       const board =
-        document
-          .getElementById(
-            "scoreboard"
-          );
+        document.getElementById(
+          "scoreboard"
+        );
 
 
       const stadium =
-        document
-          .getElementById(
-            "stadiumOverlay"
-          );
+        document.getElementById(
+          "stadiumOverlay"
+        );
 
 
       const field =
-        document
-          .getElementById(
-            "fieldOverlay"
-          );
+        document.getElementById(
+          "fieldOverlay"
+        );
+
 
 
       if (
@@ -747,23 +962,21 @@
         customUrl
       ) {
 
+
         const imageUrl =
           convertImageUrl(
             customUrl
           );
 
 
-        /*
-          Dark overlay is deliberately included
-          so white score text remains readable.
-        */
-
         board.style.backgroundImage =
-          `linear-gradient(
+          `
+          linear-gradient(
             rgba(0,0,0,0.30),
             rgba(0,0,0,0.48)
           ),
-          url("${imageUrl}")`;
+          url("${imageUrl}")
+          `;
 
 
         board.style.backgroundSize =
@@ -778,11 +991,6 @@
           "no-repeat";
 
 
-        /*
-          Hide our fake stadium graphics when
-          using an actual image.
-        */
-
         stadium.style.display =
           "none";
 
@@ -793,7 +1001,9 @@
 
         return;
 
+
       }
+
 
 
       stadium.style.display =
@@ -804,12 +1014,15 @@
         "block";
 
 
+
       if (
         name === "Plain Dark"
       ) {
 
+
         board.style.background =
           "linear-gradient(to bottom, #05070a, #0b0e13)";
+
 
       }
 
@@ -818,8 +1031,10 @@
         name === "Trinity Blue"
       ) {
 
+
         board.style.background =
           "linear-gradient(to bottom, #071b3a, #0b315f)";
+
 
       }
 
@@ -828,31 +1043,57 @@
         name === "Stadium Day"
       ) {
 
+
         board.style.background =
           "linear-gradient(to bottom, #79a9c9 0%, #769d65 55%, #2d6b34 100%)";
+
 
       }
 
 
       else {
 
+
         board.style.background =
-          "radial-gradient(circle at 7% 13%, rgba(255,255,255,0.25) 0, rgba(255,255,255,0.08) 5%, transparent 15%), radial-gradient(circle at 93% 13%, rgba(255,255,255,0.25) 0, rgba(255,255,255,0.08) 5%, transparent 15%), linear-gradient(to bottom, #070b0f 0%, #111719 33%, #14271b 62%, #0b2412 100%)";
+          `
+          radial-gradient(
+            circle at 7% 13%,
+            rgba(255,255,255,0.25) 0,
+            rgba(255,255,255,0.08) 5%,
+            transparent 15%
+          ),
+          radial-gradient(
+            circle at 93% 13%,
+            rgba(255,255,255,0.25) 0,
+            rgba(255,255,255,0.08) 5%,
+            transparent 15%
+          ),
+          linear-gradient(
+            to bottom,
+            #070b0f 0%,
+            #111719 33%,
+            #14271b 62%,
+            #0b2412 100%
+          )
+          `;
+
 
       }
+
 
     }
 
 
-    /*
-      ---------------------------------------------
-      TEAM DATA
-      ---------------------------------------------
-    */
+
+    /* ==========================================
+       TEAM DATA
+       ========================================== */
+
 
     function findTeamHolder(
       data
     ) {
+
 
       let holder =
         null;
@@ -862,11 +1103,14 @@
         data,
         (obj) => {
 
+
           if (
             holder
           ) {
 
+
             return;
+
 
           }
 
@@ -886,10 +1130,13 @@
             hasTeam2
           ) {
 
+
             holder =
               obj;
 
+
           }
+
 
         }
       );
@@ -897,12 +1144,15 @@
 
       return holder;
 
+
     }
+
 
 
     function buildTeams(
       data
     ) {
+
 
       const holder =
         findTeamHolder(
@@ -914,69 +1164,87 @@
         !holder
       ) {
 
+
         return [];
+
 
       }
 
 
       return [
 
+
         {
+
 
           teamName:
             holder.team1Name ??
             holder.teamOneName ??
             "",
 
+
           score:
             holder.team1Score ??
             holder.teamOneScore ??
             "",
+
 
           wickets:
             holder.team1Wickets ??
             holder.teamOneWickets ??
             "",
 
+
           overs:
             holder.team1Overs ??
             holder.teamOneOvers ??
             ""
 
+
         },
 
+
         {
+
 
           teamName:
             holder.team2Name ??
             holder.teamTwoName ??
             "",
 
+
           score:
             holder.team2Score ??
             holder.teamTwoScore ??
             "",
+
 
           wickets:
             holder.team2Wickets ??
             holder.teamTwoWickets ??
             "",
 
+
           overs:
             holder.team2Overs ??
             holder.teamTwoOvers ??
             ""
 
+
         }
+
 
       ];
 
+
     }
+
 
 
     function formatScore(
       team
     ) {
+
 
       if (
         team.score === undefined ||
@@ -984,7 +1252,9 @@
         String(team.score).trim() === ""
       ) {
 
+
         return "--";
+
 
       }
 
@@ -995,9 +1265,11 @@
         String(team.wickets).trim() !== ""
       ) {
 
+
         return (
           `${team.score}/${team.wickets}`
         );
+
 
       }
 
@@ -1006,12 +1278,15 @@
         team.score
       );
 
+
     }
+
 
 
     function formatOvers(
       team
     ) {
+
 
       if (
         team.overs !== undefined &&
@@ -1019,27 +1294,31 @@
         String(team.overs).trim() !== ""
       ) {
 
+
         return (
           `${team.overs} overs`
         );
+
 
       }
 
 
       return "-- overs";
 
+
     }
 
 
-    /*
-      ---------------------------------------------
-      TITLE
-      ---------------------------------------------
-    */
+
+    /* ==========================================
+       MATCH TITLE
+       ========================================== */
+
 
     function findMatchTitle(
       data
     ) {
+
 
       let title =
         "";
@@ -1049,11 +1328,14 @@
         data,
         (obj) => {
 
+
           if (
             title
           ) {
 
+
             return;
+
 
           }
 
@@ -1062,19 +1344,14 @@
             firstValue(
               obj,
               [
-
                 "matchName",
-
                 "fixtureName",
-
                 "seriesName",
-
                 "leagueName",
-
                 "tournamentName"
-
               ]
             );
+
 
         }
       );
@@ -1085,18 +1362,20 @@
         "LIVE CRICKET"
       );
 
+
     }
 
 
-    /*
-      ---------------------------------------------
-      DATE
-      ---------------------------------------------
-    */
+
+    /* ==========================================
+       MATCH DATE
+       ========================================== */
+
 
     function findMatchDate(
       data
     ) {
+
 
       let date =
         "";
@@ -1106,11 +1385,14 @@
         data,
         (obj) => {
 
+
           if (
             date
           ) {
 
+
             return;
+
 
           }
 
@@ -1119,15 +1401,12 @@
             firstValue(
               obj,
               [
-
                 "matchDate",
-
                 "fixtureDate",
-
                 "date"
-
               ]
             );
+
 
         }
       );
@@ -1137,18 +1416,23 @@
         date
       );
 
+
     }
+
 
 
     function formatDate(
       value
     ) {
 
+
       if (
         !value
       ) {
 
+
         return "LIVE";
+
 
       }
 
@@ -1157,6 +1441,7 @@
         String(
           value
         ).trim();
+
 
 
       const slash =
@@ -1169,27 +1454,28 @@
         slash
       ) {
 
+
         const month =
-          slash[1]
-            .padStart(
-              2,
-              "0"
-            );
+          slash[1].padStart(
+            2,
+            "0"
+          );
 
 
         const day =
-          slash[2]
-            .padStart(
-              2,
-              "0"
-            );
+          slash[2].padStart(
+            2,
+            "0"
+          );
 
 
         return (
           `${day}/${month}/${slash[3]}`
         );
 
+
       }
+
 
 
       const iso =
@@ -1202,27 +1488,31 @@
         iso
       ) {
 
+
         return (
           `${iso[3]}/${iso[2]}/${iso[1]}`
         );
+
 
       }
 
 
       return text;
 
+
     }
 
 
-    /*
-      ---------------------------------------------
-      RESULT
-      ---------------------------------------------
-    */
+
+    /* ==========================================
+       RESULT
+       ========================================== */
+
 
     function findStatus(
       data
     ) {
+
 
       let result =
         "";
@@ -1232,11 +1522,14 @@
         data,
         (obj) => {
 
+
           if (
             result
           ) {
 
+
             return;
+
 
           }
 
@@ -1245,21 +1538,15 @@
             firstValue(
               obj,
               [
-
                 "result",
-
                 "resultText",
-
                 "matchResult",
-
                 "status",
-
                 "matchStatus",
-
                 "chaseText"
-
               ]
             );
+
 
         }
       );
@@ -1270,16 +1557,18 @@
         "MATCH IN PROGRESS"
       );
 
+
     }
 
 
-    /*
-      ---------------------------------------------
-      GOOGLE SHEET
-      ---------------------------------------------
-    */
+
+    /* ==========================================
+       GOOGLE SHEET CONFIG
+       ========================================== */
+
 
     async function loadConfig() {
+
 
       const response =
         await fetch(
@@ -1287,8 +1576,10 @@
           `${CONFIG_URL}?t=${Date.now()}`,
 
           {
+
             cache:
               "no-store"
+
           }
 
         );
@@ -1298,9 +1589,11 @@
         !response.ok
       ) {
 
+
         throw new Error(
           `Config HTTP ${response.status}`
         );
+
 
       }
 
@@ -1309,10 +1602,12 @@
         await response.json();
 
 
+
       const matchUrl =
         config[
           "CricClubs Match URL"
         ] || "";
+
 
 
       const details =
@@ -1321,9 +1616,20 @@
         );
 
 
+
+      /*
+        Only change the current match
+        when Google gives us a VALID match.
+
+        A failed / invalid response will
+        NOT reset the current match.
+      */
+
+
       if (
         details
       ) {
+
 
         CLUB_ID =
           details.clubId;
@@ -1332,21 +1638,29 @@
         MATCH_ID =
           details.matchId;
 
+
+        HAS_VALID_MATCH =
+          true;
+
+
       }
+
 
 
       CURRENT_BACKGROUND =
         config[
           "Background"
         ] ||
-        "Stadium Night";
+        CURRENT_BACKGROUND;
+
 
 
       CUSTOM_BACKGROUND_URL =
         config[
           "Custom Background URL"
         ] ||
-        "";
+        CUSTOM_BACKGROUND_URL;
+
 
 
       applyBackground(
@@ -1357,25 +1671,48 @@
 
       );
 
+
     }
 
 
-    /*
-      ---------------------------------------------
-      LIVE SCORE
-      ---------------------------------------------
-    */
+
+    /* ==========================================
+       LIVE CRICCLUBS SCORE
+       ========================================== */
+
 
     async function loadScore() {
 
+
+      if (
+        !HAS_VALID_MATCH ||
+        !CLUB_ID ||
+        !MATCH_ID
+      ) {
+
+
+        document.getElementById(
+          "status"
+        ).textContent =
+          "Waiting for match...";
+
+
+        return;
+
+
+      }
+
+
+
       const statusEl =
-        document
-          .getElementById(
-            "status"
-          );
+        document.getElementById(
+          "status"
+        );
+
 
 
       try {
+
 
         const response =
           await fetch(
@@ -1383,26 +1720,33 @@
             `/api/${CLUB_ID}/${MATCH_ID}?t=${Date.now()}`,
 
             {
+
               cache:
                 "no-store"
+
             }
 
           );
+
 
 
         if (
           !response.ok
         ) {
 
+
           throw new Error(
             `HTTP ${response.status}`
           );
 
+
         }
+
 
 
         const data =
           await response.json();
+
 
 
         const teams =
@@ -1411,15 +1755,19 @@
           );
 
 
+
         if (
           teams.length < 2
         ) {
+
 
           throw new Error(
             "Could not identify both teams"
           );
 
+
         }
+
 
 
         const team1 =
@@ -1430,96 +1778,88 @@
           teams[1];
 
 
-        document
-          .getElementById(
-            "matchTitle"
-          )
-          .textContent =
-            findMatchTitle(
-              data
-            );
 
-
-        document
-          .getElementById(
-            "matchDate"
-          )
-          .textContent =
-            findMatchDate(
-              data
-            );
-
-
-        document
-          .getElementById(
-            "team1Name"
-          )
-          .textContent =
-            team1.teamName ||
-            "TEAM 1";
-
-
-        document
-          .getElementById(
-            "team2Name"
-          )
-          .textContent =
-            team2.teamName ||
-            "TEAM 2";
-
-
-        document
-          .getElementById(
-            "team1Score"
-          )
-          .textContent =
-            formatScore(
-              team1
-            );
-
-
-        document
-          .getElementById(
-            "team2Score"
-          )
-          .textContent =
-            formatScore(
-              team2
-            );
-
-
-        document
-          .getElementById(
-            "team1Overs"
-          )
-          .textContent =
-            formatOvers(
-              team1
-            );
-
-
-        document
-          .getElementById(
-            "team2Overs"
-          )
-          .textContent =
-            formatOvers(
-              team2
-            );
-
-
-        statusEl
-          .textContent =
-            findStatus(
-              data
-            );
-
-
-        statusEl
-          .classList
-          .remove(
-            "error"
+        document.getElementById(
+          "matchTitle"
+        ).textContent =
+          findMatchTitle(
+            data
           );
+
+
+
+        document.getElementById(
+          "matchDate"
+        ).textContent =
+          findMatchDate(
+            data
+          );
+
+
+
+        document.getElementById(
+          "team1Name"
+        ).textContent =
+          team1.teamName ||
+          "TEAM 1";
+
+
+
+        document.getElementById(
+          "team2Name"
+        ).textContent =
+          team2.teamName ||
+          "TEAM 2";
+
+
+
+        document.getElementById(
+          "team1Score"
+        ).textContent =
+          formatScore(
+            team1
+          );
+
+
+
+        document.getElementById(
+          "team2Score"
+        ).textContent =
+          formatScore(
+            team2
+          );
+
+
+
+        document.getElementById(
+          "team1Overs"
+        ).textContent =
+          formatOvers(
+            team1
+          );
+
+
+
+        document.getElementById(
+          "team2Overs"
+        ).textContent =
+          formatOvers(
+            team2
+          );
+
+
+
+        statusEl.textContent =
+          findStatus(
+            data
+          );
+
+
+
+        statusEl.classList.remove(
+          "error"
+        );
+
 
       }
 
@@ -1528,59 +1868,80 @@
         error
       ) {
 
+
         console.error(
+          "Score error:",
           error
         );
 
 
-        statusEl
-          .textContent =
-            `DATA ERROR: ${error.message}`;
+        /*
+          Do NOT wipe the previous score.
 
+          If CricClubs has a temporary issue,
+          leave the last good data on screen.
+        */
 
-        statusEl
-          .classList
-          .add(
-            "error"
-          );
 
       }
+
 
     }
 
 
-    /*
-      ---------------------------------------------
-      UPDATE EVERY 5 SECONDS
-      ---------------------------------------------
-    */
+
+    /* ==========================================
+       UPDATE
+       ========================================== */
+
 
     async function updateScoreboard() {
 
+
       try {
+
 
         await loadConfig();
 
+
       }
+
 
       catch (
         error
       ) {
 
+
         console.error(
-          "Config error:",
+          "Google Sheet config error:",
           error
         );
 
+
+        /*
+          Keep current match.
+          Do NOT revert.
+        */
+
+
       }
+
 
 
       await loadScore();
 
+
     }
 
 
+
+    /* ==========================================
+       START
+       ========================================== */
+
+
     updateScoreboard();
+
 
 
     setInterval(
@@ -1591,7 +1952,10 @@
 
     );
 
+
   </script>
 
+
 </body>
+
 </html>

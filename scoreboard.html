@@ -36,7 +36,6 @@
         sans-serif;
     }
 
-
     #scoreboard {
       position: relative;
 
@@ -73,7 +72,6 @@
       background-repeat: no-repeat;
     }
 
-
     .stadium {
       position: absolute;
       inset: 0;
@@ -82,7 +80,6 @@
 
       pointer-events: none;
     }
-
 
     .stadium::before {
       content: "";
@@ -116,7 +113,6 @@
         );
     }
 
-
     .field {
       position: absolute;
 
@@ -135,7 +131,6 @@
 
       pointer-events: none;
     }
-
 
     .field::after {
       content: "";
@@ -164,7 +159,6 @@
         );
     }
 
-
     .content {
       position: relative;
 
@@ -179,7 +173,6 @@
       text-shadow:
         0 3px 7px rgba(0,0,0,1);
     }
-
 
     .header {
       height: 139px;
@@ -197,7 +190,6 @@
       text-align: center;
     }
 
-
     .main-title {
       width: 100%;
 
@@ -212,7 +204,6 @@
 
       text-overflow: ellipsis;
     }
-
 
     .competition-title {
       width: 100%;
@@ -231,7 +222,6 @@
       text-overflow: ellipsis;
     }
 
-
     .match-date {
       width: 100%;
 
@@ -246,7 +236,6 @@
 
       white-space: nowrap;
     }
-
 
     .match {
       height: 183px;
@@ -264,7 +253,6 @@
       padding:
         15px 14px 0;
     }
-
 
     .team {
       min-width: 0;
@@ -284,7 +272,6 @@
 
       text-align: center;
     }
-
 
     .team-name {
       width: 100%;
@@ -309,7 +296,6 @@
       text-overflow: ellipsis;
     }
 
-
     .score {
       width: 100%;
       height: 70px;
@@ -331,7 +317,6 @@
       text-align: center;
     }
 
-
     .overs {
       height: 39px;
 
@@ -348,7 +333,6 @@
       white-space: nowrap;
     }
 
-
     .vs-column {
       height: 158px;
 
@@ -359,7 +343,6 @@
         70px
         39px;
     }
-
 
     .vs {
       grid-row: 2;
@@ -375,7 +358,6 @@
       font-weight: 900;
     }
 
-
     .result {
       flex: 1;
 
@@ -389,12 +371,11 @@
 
       text-align: center;
 
-      font-size: 27px;
+      font-size: 29px;
       line-height: 1.05;
 
       font-weight: 900;
     }
-
 
     .error {
       color: #ffc2c2;
@@ -409,24 +390,19 @@
 
   <div id="scoreboard">
 
-
     <div
       class="stadium"
       id="stadiumOverlay"
     ></div>
-
 
     <div
       class="field"
       id="fieldOverlay"
     ></div>
 
-
     <div class="content">
 
-
       <div class="header">
-
 
         <div
           class="main-title"
@@ -435,14 +411,12 @@
           2026 Trinity Games
         </div>
 
-
         <div
           class="competition-title"
           id="competitionTitle"
         >
           LIVE CRICKET
         </div>
-
 
         <div
           class="match-date"
@@ -451,15 +425,12 @@
           LIVE
         </div>
 
-
       </div>
 
 
       <div class="match">
 
-
         <div class="team">
-
 
           <div
             class="team-name"
@@ -468,7 +439,6 @@
             Loading...
           </div>
 
-
           <div
             class="score"
             id="team1Score"
@@ -476,14 +446,12 @@
             --
           </div>
 
-
           <div
             class="overs"
             id="team1Overs"
           >
             -- overs
           </div>
-
 
         </div>
 
@@ -499,14 +467,12 @@
 
         <div class="team">
 
-
           <div
             class="team-name"
             id="team2Name"
           >
             Loading...
           </div>
-
 
           <div
             class="score"
@@ -515,7 +481,6 @@
             --
           </div>
 
-
           <div
             class="overs"
             id="team2Overs"
@@ -523,9 +488,7 @@
             -- overs
           </div>
 
-
         </div>
-
 
       </div>
 
@@ -537,7 +500,6 @@
         Waiting for match...
       </div>
 
-
     </div>
 
   </div>
@@ -545,11 +507,9 @@
 
   <script>
 
-
     const CONFIG_URL = "/api";
 
     const UPDATE_INTERVAL_MS = 5000;
-
 
     let CLUB_ID = null;
     let MATCH_ID = null;
@@ -576,7 +536,6 @@
         const value =
           obj?.[key];
 
-
         if (
           value !== undefined &&
           value !== null &&
@@ -588,7 +547,6 @@
         }
 
       }
-
 
       return "";
 
@@ -609,9 +567,7 @@
 
       }
 
-
       callback(obj);
-
 
       if (
         Array.isArray(obj)
@@ -662,24 +618,20 @@
 
       }
 
-
       const text =
         String(
           matchUrl
         ).trim();
-
 
       const clubMatch =
         text.match(
           /[?&]clubId=(\d+)/i
         );
 
-
       const matchMatch =
         text.match(
           /[?&]matchId=(\d+)/i
         );
-
 
       if (
         !clubMatch ||
@@ -689,7 +641,6 @@
         return null;
 
       }
-
 
       return {
 
@@ -716,18 +667,15 @@
 
       }
 
-
       const value =
         String(
           url
         ).trim();
 
-
       const fileMatch =
         value.match(
           /\/file\/d\/([^/]+)/
         );
-
 
       if (
         fileMatch?.[1]
@@ -739,12 +687,10 @@
 
       }
 
-
       const queryMatch =
         value.match(
           /[?&]id=([^&]+)/
         );
-
 
       if (
         queryMatch?.[1]
@@ -755,7 +701,6 @@
         );
 
       }
-
 
       return value;
 
@@ -772,18 +717,15 @@
           "scoreboard"
         );
 
-
       const stadium =
         document.getElementById(
           "stadiumOverlay"
         );
 
-
       const field =
         document.getElementById(
           "fieldOverlay"
         );
-
 
       if (
         name === "Custom" &&
@@ -795,7 +737,6 @@
             customUrl
           );
 
-
         board.style.backgroundImage =
           `
           linear-gradient(
@@ -805,39 +746,30 @@
           url("${imageUrl}")
           `;
 
-
         board.style.backgroundSize =
           "cover";
-
 
         board.style.backgroundPosition =
           "center";
 
-
         board.style.backgroundRepeat =
           "no-repeat";
-
 
         stadium.style.display =
           "none";
 
-
         field.style.display =
           "none";
-
 
         return;
 
       }
 
-
       stadium.style.display =
         "block";
 
-
       field.style.display =
         "block";
-
 
       if (
         name === "Plain Dark"
@@ -848,7 +780,6 @@
 
       }
 
-
       else if (
         name === "Trinity Blue"
       ) {
@@ -858,7 +789,6 @@
 
       }
 
-
       else if (
         name === "Stadium Day"
       ) {
@@ -867,7 +797,6 @@
           "linear-gradient(to bottom, #79a9c9 0%, #769d65 55%, #2d6b34 100%)";
 
       }
-
 
       else {
 
@@ -906,7 +835,6 @@
       let holder =
         null;
 
-
       walk(
         data,
         (obj) => {
@@ -919,16 +847,13 @@
 
           }
 
-
           const hasTeam1 =
             obj?.team1Name ||
             obj?.teamOneName;
 
-
           const hasTeam2 =
             obj?.team2Name ||
             obj?.teamTwoName;
-
 
           if (
             hasTeam1 &&
@@ -942,7 +867,6 @@
 
         }
       );
-
 
       return holder;
 
@@ -958,7 +882,6 @@
           data
         );
 
-
       if (
         !holder
       ) {
@@ -966,7 +889,6 @@
         return [];
 
       }
-
 
       return [
 
@@ -977,18 +899,15 @@
             holder.teamOneName ??
             "",
 
-
           score:
             holder.team1Score ??
             holder.teamOneScore ??
             "",
 
-
           wickets:
             holder.team1Wickets ??
             holder.teamOneWickets ??
             "",
-
 
           overs:
             holder.team1Overs ??
@@ -1005,18 +924,15 @@
             holder.teamTwoName ??
             "",
 
-
           score:
             holder.team2Score ??
             holder.teamTwoScore ??
             "",
 
-
           wickets:
             holder.team2Wickets ??
             holder.teamTwoWickets ??
             "",
-
 
           overs:
             holder.team2Overs ??
@@ -1044,7 +960,6 @@
 
       }
 
-
       if (
         team.wickets !== undefined &&
         team.wickets !== null &&
@@ -1056,7 +971,6 @@
         );
 
       }
-
 
       return String(
         team.score
@@ -1081,7 +995,6 @@
 
       }
 
-
       return "-- overs";
 
     }
@@ -1094,7 +1007,6 @@
       let title =
         "";
 
-
       walk(
         data,
         (obj) => {
@@ -1106,7 +1018,6 @@
             return;
 
           }
-
 
           title =
             firstValue(
@@ -1123,7 +1034,6 @@
         }
       );
 
-
       return title;
 
     }
@@ -1138,7 +1048,6 @@
           data
         );
 
-
       if (
         !rawTitle
       ) {
@@ -1147,18 +1056,15 @@
 
       }
 
-
       const text =
         String(
           rawTitle
         ).trim();
 
-
       const parts =
         text.split(
           "-"
         );
-
 
       if (
         parts.length >= 2
@@ -1173,7 +1079,6 @@
 
       }
 
-
       if (
         text.toLowerCase() !==
         "2026 trinity games"
@@ -1183,7 +1088,6 @@
         return text;
 
       }
-
 
       return "LIVE CRICKET";
 
@@ -1197,7 +1101,6 @@
       let date =
         "";
 
-
       walk(
         data,
         (obj) => {
@@ -1209,7 +1112,6 @@
             return;
 
           }
-
 
           date =
             firstValue(
@@ -1223,7 +1125,6 @@
 
         }
       );
-
 
       return formatDate(
         date
@@ -1244,18 +1145,15 @@
 
       }
 
-
       const text =
         String(
           value
         ).trim();
 
-
       const slash =
         text.match(
           /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
         );
-
 
       if (
         slash
@@ -1268,7 +1166,6 @@
               "0"
             );
 
-
         const day =
           slash[2]
             .padStart(
@@ -1276,19 +1173,16 @@
               "0"
             );
 
-
         return (
           `${day}/${month}/${slash[3]}`
         );
 
       }
 
-
       const iso =
         text.match(
           /^(\d{4})-(\d{2})-(\d{2})/
         );
-
 
       if (
         iso
@@ -1300,19 +1194,17 @@
 
       }
 
-
       return text;
 
     }
 
 
-    function findCompletedResult(
+    function findStatus(
       data
     ) {
 
       let result =
         "";
-
 
       walk(
         data,
@@ -1326,261 +1218,25 @@
 
           }
 
-
-          const possible =
+          result =
             firstValue(
               obj,
               [
                 "result",
                 "resultText",
-                "matchResult"
+                "matchResult",
+                "status",
+                "matchStatus",
+                "chaseText"
               ]
             );
 
-
-          if (
-            possible &&
-            /won|tied|draw|abandon|no result/i.test(
-              String(possible)
-            )
-          ) {
-
-            result =
-              possible;
-
-          }
-
         }
       );
-
-
-      return result;
-
-    }
-
-
-    function findCurrentRunRate(
-      data
-    ) {
-
-      let rate =
-        null;
-
-
-      walk(
-        data,
-        (obj) => {
-
-          if (
-            rate !== null
-          ) {
-
-            return;
-
-          }
-
-
-          const value =
-            obj?.currentRunrate;
-
-
-          if (
-            value !== undefined &&
-            value !== null &&
-            String(value).trim() !== ""
-          ) {
-
-            const number =
-              Number(value);
-
-
-            if (
-              !Number.isNaN(number)
-            ) {
-
-              rate =
-                number;
-
-            }
-
-          }
-
-        }
-      );
-
-
-      return rate;
-
-    }
-
-
-    function findMatchOversLimit(
-      data
-    ) {
-
-      let overs =
-        null;
-
-
-      walk(
-        data,
-        (obj) => {
-
-          if (
-            overs !== null
-          ) {
-
-            return;
-
-          }
-
-
-          const directValues = [
-            obj?.matchOvers,
-            obj?.totalOvers,
-            obj?.maxOvers,
-            obj?.oversLimit,
-            obj?.noOfOvers
-          ];
-
-
-          for (
-            const value
-            of directValues
-          ) {
-
-            if (
-              value !== undefined &&
-              value !== null &&
-              String(value).trim() !== ""
-            ) {
-
-              const number =
-                Number(value);
-
-
-              if (
-                !Number.isNaN(number) &&
-                number > 0
-              ) {
-
-                overs =
-                  number;
-
-                return;
-
-              }
-
-            }
-
-          }
-
-
-          const textValues = [
-            obj?.matchResult,
-            obj?.status,
-            obj?.matchStatus
-          ];
-
-
-          for (
-            const value
-            of textValues
-          ) {
-
-            if (
-              !value
-            ) {
-
-              continue;
-
-            }
-
-
-            const match =
-              String(value).match(
-                /\/\s*(\d+(?:\.\d+)?)\s*ov/i
-              );
-
-
-            if (
-              match?.[1]
-            ) {
-
-              overs =
-                Number(match[1]);
-
-              return;
-
-            }
-
-          }
-
-        }
-      );
-
-
-      return overs;
-
-    }
-
-
-    function getProjectedScoreText(
-      data
-    ) {
-
-      const completedResult =
-        findCompletedResult(
-          data
-        );
-
-
-      if (
-        completedResult
-      ) {
-
-        return completedResult;
-
-      }
-
-
-      const currentRunRate =
-        findCurrentRunRate(
-          data
-        );
-
-
-      const oversLimit =
-        findMatchOversLimit(
-          data
-        );
-
-
-      if (
-        currentRunRate === null ||
-        oversLimit === null
-      ) {
-
-        return "MATCH IN PROGRESS";
-
-      }
-
-
-      const projected =
-        Math.round(
-          currentRunRate *
-          oversLimit
-        );
-
-
-      const formattedRate =
-        Number(
-          currentRunRate
-        ).toFixed(1);
-
 
       return (
-        `PROJECTED SCORE: ${projected} RUNS (CRR:${formattedRate})`
+        result ||
+        "MATCH IN PROGRESS"
       );
 
     }
@@ -1600,7 +1256,6 @@
 
         );
 
-
       if (
         !response.ok
       ) {
@@ -1611,22 +1266,18 @@
 
       }
 
-
       const config =
         await response.json();
-
 
       const matchUrl =
         config[
           "CricClubs Match URL"
         ] || "";
 
-
       const details =
         extractMatchDetails(
           matchUrl
         );
-
 
       if (
         details
@@ -1635,16 +1286,13 @@
         CLUB_ID =
           details.clubId;
 
-
         MATCH_ID =
           details.matchId;
-
 
         HAS_VALID_MATCH =
           true;
 
       }
-
 
       CURRENT_BACKGROUND =
         config[
@@ -1652,13 +1300,11 @@
         ] ||
         CURRENT_BACKGROUND;
 
-
       CUSTOM_BACKGROUND_URL =
         config[
           "Custom Background URL"
         ] ||
         CUSTOM_BACKGROUND_URL;
-
 
       applyBackground(
         CURRENT_BACKGROUND,
@@ -1681,11 +1327,9 @@
         ).textContent =
           "Waiting for match...";
 
-
         return;
 
       }
-
 
       try {
 
@@ -1701,7 +1345,6 @@
 
           );
 
-
         if (
           !response.ok
         ) {
@@ -1712,16 +1355,13 @@
 
         }
 
-
         const data =
           await response.json();
-
 
         const teams =
           buildTeams(
             data
           );
-
 
         if (
           teams.length < 2
@@ -1733,10 +1373,8 @@
 
         }
 
-
         const team1 =
           teams[0];
-
 
         const team2 =
           teams[1];
@@ -1813,12 +1451,11 @@
         document.getElementById(
           "status"
         ).textContent =
-          getProjectedScoreText(
+          findStatus(
             data
           );
 
       }
-
 
       catch (
         error
@@ -1842,7 +1479,6 @@
 
       }
 
-
       catch (
         error
       ) {
@@ -1853,7 +1489,6 @@
         );
 
       }
-
 
       await loadScore();
 
@@ -1868,9 +1503,7 @@
       UPDATE_INTERVAL_MS
     );
 
-
   </script>
-
 
 </body>
 

@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
     content="width=557,height=418,initial-scale=1.0"
@@ -13,7 +10,6 @@
   <title>Trinity Cricket Scoreboard</title>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
@@ -22,31 +18,33 @@
     body {
       margin: 0;
       padding: 0;
-
       width: 557px;
       height: 418px;
-
       overflow: hidden;
-
       background: #000;
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     #scoreboard {
       position: relative;
-
       width: 557px;
       height: 418px;
-
       overflow: hidden;
-
-      color: #ffffff;
+      color: #fff;
 
       background:
+        radial-gradient(
+          circle at 7% 13%,
+          rgba(255,255,255,0.25) 0,
+          rgba(255,255,255,0.08) 5%,
+          transparent 15%
+        ),
+        radial-gradient(
+          circle at 93% 13%,
+          rgba(255,255,255,0.25) 0,
+          rgba(255,255,255,0.08) 5%,
+          transparent 15%
+        ),
         linear-gradient(
           to bottom,
           #070b0f 0%,
@@ -62,12 +60,9 @@
 
     .content {
       position: relative;
-
       z-index: 5;
-
       width: 100%;
       height: 100%;
-
       display: flex;
       flex-direction: column;
 
@@ -81,7 +76,6 @@
 
       display: flex;
       flex-direction: column;
-
       align-items: center;
       justify-content: flex-end;
 
@@ -93,47 +87,41 @@
 
     .main-title {
       width: 100%;
-
       font-size: 27px;
       line-height: 1;
-
       font-weight: 900;
-
       white-space: nowrap;
     }
 
     .competition-title {
       width: 100%;
-
       margin-top: 10px;
 
       font-size: 23px;
       line-height: 1;
-
       font-weight: 900;
 
       white-space: nowrap;
-
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
+    /* Small Trinityhouse logo in the open space */
     .trinity-logo-holder {
       position: absolute;
 
       z-index: 20;
 
-      top: 98px;
+      top: 104px;
       left: 50%;
 
-      width: 52px;
-      height: 52px;
+      width: 46px;
+      height: 48px;
 
       transform:
         translateX(-50%);
 
       display: flex;
-
       align-items: center;
       justify-content: center;
 
@@ -142,11 +130,9 @@
 
     .trinity-logo {
       display: block;
-
       width: auto;
-      height: 50px;
-
-      max-width: 52px;
+      height: 46px;
+      max-width: 46px;
 
       object-fit: contain;
 
@@ -175,7 +161,6 @@
 
     .team {
       min-width: 0;
-
       height: 168px;
 
       display: grid;
@@ -186,7 +171,6 @@
         39px;
 
       align-items: center;
-
       justify-items: center;
 
       text-align: center;
@@ -206,17 +190,13 @@
 
       font-size: 21px;
       line-height: 1.05;
-
       font-weight: 900;
 
       text-align: center;
 
       white-space: normal;
-
       overflow: hidden;
-
       overflow-wrap: anywhere;
-
       word-break: normal;
     }
 
@@ -231,13 +211,11 @@
 
       font-size: 61px;
       line-height: 1;
-
       font-weight: 900;
 
       letter-spacing: -2.6px;
 
       white-space: nowrap;
-
       text-align: center;
     }
 
@@ -245,13 +223,11 @@
       height: 39px;
 
       display: flex;
-
       align-items: center;
       justify-content: center;
 
       font-size: 24px;
       line-height: 1;
-
       font-weight: 900;
 
       white-space: nowrap;
@@ -278,7 +254,6 @@
 
       font-size: 24px;
       line-height: 1;
-
       font-weight: 900;
     }
 
@@ -297,12 +272,9 @@
 
       font-size: 22px;
       line-height: 1.1;
-
       font-weight: 900;
     }
-
   </style>
-
 </head>
 
 
@@ -311,13 +283,11 @@
   <div id="scoreboard">
 
     <div class="trinity-logo-holder">
-
       <img
         class="trinity-logo"
         alt="Trinityhouse"
-        src="data:image/webp;base64,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"
+        src="data:image/webp;base64,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"
       >
-
     </div>
 
 
@@ -371,11 +341,9 @@
 
 
         <div class="vs-column">
-
           <div class="vs">
             VS
           </div>
-
         </div>
 
 
@@ -426,112 +394,65 @@
     let MATCH_ID = null;
     let HAS_VALID_MATCH = false;
 
-    let CURRENT_BACKGROUND =
-      "Stadium Night";
-
-    let CUSTOM_BACKGROUND_URL =
-      "";
+    let CURRENT_BACKGROUND = "Stadium Night";
+    let CUSTOM_BACKGROUND_URL = "";
 
 
-    function firstValue(
-      obj,
-      keys
-    ) {
+    function firstValue(obj, keys) {
 
-      for (
-        const key
-        of keys
-      ) {
+      for (const key of keys) {
 
-        const value =
-          obj?.[key];
+        const value = obj?.[key];
 
         if (
           value !== undefined &&
           value !== null &&
           String(value).trim() !== ""
         ) {
-
           return value;
-
         }
 
       }
 
       return "";
-
     }
 
 
-    function walk(
-      obj,
-      callback
-    ) {
+    function walk(obj, callback) {
 
       if (
         !obj ||
         typeof obj !== "object"
       ) {
-
         return;
-
       }
 
       callback(obj);
 
-      if (
-        Array.isArray(obj)
-      ) {
+      if (Array.isArray(obj)) {
 
-        for (
-          const item
-          of obj
-        ) {
+        for (const item of obj) {
+          walk(item, callback);
+        }
 
-          walk(
-            item,
-            callback
-          );
+      } else {
 
+        for (const value of Object.values(obj)) {
+          walk(value, callback);
         }
 
       }
-
-      else {
-
-        for (
-          const value
-          of Object.values(obj)
-        ) {
-
-          walk(
-            value,
-            callback
-          );
-
-        }
-
-      }
-
     }
 
 
-    function extractMatchDetails(
-      matchUrl
-    ) {
+    function extractMatchDetails(matchUrl) {
 
-      if (
-        !matchUrl
-      ) {
-
+      if (!matchUrl) {
         return null;
-
       }
 
       const text =
-        String(
-          matchUrl
-        ).trim();
+        String(matchUrl).trim();
 
       const clubMatch =
         text.match(
@@ -547,58 +468,50 @@
         !clubMatch ||
         !matchMatch
       ) {
-
         return null;
-
       }
 
       return {
-
-        clubId:
-          clubMatch[1],
-
-        matchId:
-          matchMatch[1]
-
+        clubId: clubMatch[1],
+        matchId: matchMatch[1]
       };
-
     }
 
 
-    function convertImageUrl(
-      url
-    ) {
+    function convertImageUrl(url) {
 
-      if (
-        !url
-      ) {
-
+      if (!url) {
         return "";
-
       }
 
       const value =
-        String(
-          url
-        ).trim();
+        String(url).trim();
 
       const fileMatch =
         value.match(
           /\/file\/d\/([^/]+)/
         );
 
-      if (
-        fileMatch?.[1]
-      ) {
+      if (fileMatch?.[1]) {
 
         return (
           `https://drive.google.com/thumbnail?id=${fileMatch[1]}&sz=w1600`
         );
+      }
 
+      const queryMatch =
+        value.match(
+          /[?&]id=([^&]+)/
+        );
+
+      if (queryMatch?.[1]) {
+
+        return (
+          `https://drive.google.com/thumbnail?id=${queryMatch[1]}&sz=w1600`
+        );
       }
 
       return value;
-
     }
 
 
@@ -611,7 +524,6 @@
         document.getElementById(
           "scoreboard"
         );
-
 
       if (
         name === "Custom" &&
@@ -640,29 +552,20 @@
 
         board.style.backgroundRepeat =
           "no-repeat";
-
       }
-
     }
 
 
-    function findTeamHolder(
-      data
-    ) {
+    function findTeamHolder(data) {
 
-      let holder =
-        null;
+      let holder = null;
 
       walk(
         data,
         (obj) => {
 
-          if (
-            holder
-          ) {
-
+          if (holder) {
             return;
-
           }
 
           if (
@@ -676,40 +579,28 @@
             )
           ) {
 
-            holder =
-              obj;
-
+            holder = obj;
           }
 
         }
       );
 
       return holder;
-
     }
 
 
-    function buildTeams(
-      data
-    ) {
+    function buildTeams(data) {
 
       const holder =
-        findTeamHolder(
-          data
-        );
+        findTeamHolder(data);
 
-      if (
-        !holder
-      ) {
-
+      if (!holder) {
         return [];
-
       }
 
       return [
 
         {
-
           teamName:
             holder.team1Name ??
             holder.teamOneName ??
@@ -729,11 +620,9 @@
             holder.team1Overs ??
             holder.teamOneOvers ??
             ""
-
         },
 
         {
-
           teamName:
             holder.team2Name ??
             holder.teamTwoName ??
@@ -753,26 +642,20 @@
             holder.team2Overs ??
             holder.teamTwoOvers ??
             ""
-
         }
 
       ];
-
     }
 
 
-    function formatScore(
-      team
-    ) {
+    function formatScore(team) {
 
       if (
         team.score === undefined ||
         team.score === null ||
         String(team.score).trim() === ""
       ) {
-
         return "--";
-
       }
 
       if (
@@ -784,19 +667,13 @@
         return (
           `${team.score}/${team.wickets}`
         );
-
       }
 
-      return String(
-        team.score
-      );
-
+      return String(team.score);
     }
 
 
-    function formatOvers(
-      team
-    ) {
+    function formatOvers(team) {
 
       if (
         team.overs !== undefined &&
@@ -807,31 +684,22 @@
         return (
           `${team.overs} overs`
         );
-
       }
 
       return "-- overs";
-
     }
 
 
-    function findCompetitionTitle(
-      data
-    ) {
+    function findCompetitionTitle(data) {
 
-      let title =
-        "";
+      let title = "";
 
       walk(
         data,
         (obj) => {
 
-          if (
-            title
-          ) {
-
+          if (title) {
             return;
-
           }
 
           title =
@@ -849,31 +717,17 @@
         }
       );
 
-
-      if (
-        !title
-      ) {
-
+      if (!title) {
         return "LIVE CRICKET";
-
       }
 
-
       const text =
-        String(
-          title
-        ).trim();
-
+        String(title).trim();
 
       const parts =
-        text.split(
-          "-"
-        );
+        text.split("-");
 
-
-      if (
-        parts.length >= 2
-      ) {
+      if (parts.length >= 2) {
 
         return (
           parts
@@ -881,32 +735,22 @@
             .join("-")
             .trim()
         );
-
       }
 
-
       return text;
-
     }
 
 
-    function findFinalResult(
-      data
-    ) {
+    function findFinalResult(data) {
 
-      let finalResult =
-        "";
+      let finalResult = "";
 
       walk(
         data,
         (obj) => {
 
-          if (
-            finalResult
-          ) {
-
+          if (finalResult) {
             return;
-
           }
 
           const possibleResult =
@@ -919,29 +763,21 @@
               ]
             );
 
-
           if (
             possibleResult &&
             /won by|won the match|tied|drawn|abandoned|no result/i.test(
-              String(
-                possibleResult
-              )
+              String(possibleResult)
             )
           ) {
 
             finalResult =
-              String(
-                possibleResult
-              );
-
+              String(possibleResult);
           }
 
         }
       );
 
-
       return finalResult;
-
     }
 
 
@@ -949,8 +785,7 @@
       scoreData
     ) {
 
-      let currentInnings =
-        null;
+      let currentInnings = null;
 
       walk(
         scoreData,
@@ -959,14 +794,11 @@
           if (
             currentInnings !== null
           ) {
-
             return;
-
           }
 
           const value =
             obj?.currentInnings;
-
 
           if (
             value !== undefined &&
@@ -975,30 +807,19 @@
           ) {
 
             const number =
-              Number(
-                value
-              );
-
+              Number(value);
 
             if (
-              Number.isFinite(
-                number
-              )
+              Number.isFinite(number)
             ) {
-
-              currentInnings =
-                number;
-
+              currentInnings = number;
             }
-
           }
 
         }
       );
 
-
       return currentInnings;
-
     }
 
 
@@ -1010,31 +831,26 @@
         oversValue === undefined ||
         oversValue === null
       ) {
-
         return 0;
-
       }
 
-
-      const parts =
+      const text =
         String(
           oversValue
-        )
-          .trim()
-          .split(
-            "."
-          );
+        ).trim();
 
+      const parts =
+        text.split(".");
+
+      const completedOvers =
+        Number(parts[0] || 0);
+
+      const ballsInOver =
+        Number(parts[1] || 0);
 
       return (
-        Number(
-          parts[0] || 0
-        ) * 6
-      ) +
-      Number(
-        parts[1] || 0
-      );
-
+        completedOvers * 6
+      ) + ballsInOver;
     }
 
 
@@ -1045,16 +861,20 @@
       const safeBalls =
         Math.max(
           0,
-          Math.floor(
-            balls
-          )
+          Math.floor(balls)
         );
 
+      const overs =
+        Math.floor(
+          safeBalls / 6
+        );
+
+      const ballsRemaining =
+        safeBalls % 6;
 
       return (
-        `${Math.floor(safeBalls / 6)}.${safeBalls % 6}`
+        `${overs}.${ballsRemaining}`
       );
-
     }
 
 
@@ -1062,9 +882,7 @@
       scoreData
     ) {
 
-      let oversLimit =
-        null;
-
+      let oversLimit = null;
 
       walk(
         scoreData,
@@ -1073,22 +891,16 @@
           if (
             oversLimit !== null
           ) {
-
             return;
-
           }
 
-
           const values = [
-
             obj?.matchOvers,
             obj?.totalOvers,
             obj?.maxOvers,
             obj?.oversLimit,
             obj?.noOfOvers
-
           ];
-
 
           for (
             const value
@@ -1096,27 +908,17 @@
           ) {
 
             const number =
-              Number(
-                value
-              );
-
+              Number(value);
 
             if (
-              Number.isFinite(
-                number
-              ) &&
+              Number.isFinite(number) &&
               number > 0
             ) {
 
-              oversLimit =
-                number;
-
+              oversLimit = number;
               return;
-
             }
-
           }
-
 
           const text =
             String(
@@ -1124,30 +926,27 @@
               ""
             );
 
-
           const match =
             text.match(
               /\/\s*(\d+(?:\.\d+)?)\s*ov/i
             );
 
+          if (match?.[1]) {
 
-          if (
-            match?.[1]
-          ) {
+            const number =
+              Number(match[1]);
 
-            oversLimit =
-              Number(
-                match[1]
-              );
-
+            if (
+              Number.isFinite(number)
+            ) {
+              oversLimit = number;
+            }
           }
 
         }
       );
 
-
       return oversLimit;
-
     }
 
 
@@ -1159,39 +958,24 @@
       const innings1 =
         ballsData?.data?.innings1Balls;
 
-
-      if (
-        !innings1
-      ) {
-
+      if (!innings1) {
         return "";
-
       }
 
-
       const runs =
-        Number(
-          innings1.runs
-        );
-
+        Number(innings1.runs);
 
       const balls =
         oversToBalls(
           innings1.overs
         );
 
-
       if (
-        !Number.isFinite(
-          runs
-        ) ||
+        !Number.isFinite(runs) ||
         balls <= 0
       ) {
-
         return "";
-
       }
-
 
       const exactRunRate =
         (
@@ -1199,14 +983,10 @@
         ) /
         balls;
 
-
       const displayedRunRate =
         Number(
-          exactRunRate.toFixed(
-            1
-          )
+          exactRunRate.toFixed(1)
         );
-
 
       if (
         !Number.isFinite(
@@ -1218,9 +998,7 @@
         return (
           `CRR: ${displayedRunRate.toFixed(1)}`
         );
-
       }
-
 
       const projectedScore =
         Math.round(
@@ -1228,11 +1006,9 @@
           oversLimit
         );
 
-
       return (
         `PROJECTED SCORE : ${projectedScore} RUNS (CRR:${displayedRunRate.toFixed(1)})`
       );
-
     }
 
 
@@ -1244,36 +1020,35 @@
       const innings1 =
         ballsData?.data?.innings1Balls;
 
-
       const innings2 =
         ballsData?.data?.innings2Balls;
-
 
       if (
         !innings1 ||
         !innings2
       ) {
-
         return "";
-
       }
-
 
       const firstInningsRuns =
         Number(
           innings1.runs
         );
 
-
       const secondInningsRuns =
         Number(
           innings2.runs
         );
 
+      if (
+        !Number.isFinite(firstInningsRuns) ||
+        !Number.isFinite(secondInningsRuns)
+      ) {
+        return "";
+      }
 
       const target =
         firstInningsRuns + 1;
-
 
       const runsNeeded =
         Math.max(
@@ -1282,15 +1057,11 @@
           secondInningsRuns
         );
 
-
       if (
         runsNeeded <= 0
       ) {
-
         return "";
-
       }
-
 
       if (
         !Number.isFinite(
@@ -1302,29 +1073,24 @@
         return (
           `${runsNeeded} runs needed`
         );
-
       }
-
 
       const ballsUsed =
         oversToBalls(
           innings2.overs
         );
 
+      const totalBalls =
+        oversLimit * 6;
 
       const ballsRemaining =
         Math.max(
           0,
-          (
-            oversLimit * 6
-          ) -
+          totalBalls -
           ballsUsed
         );
 
-
-      let wicketsLost =
-        0;
-
+      let wicketsLost = 0;
 
       const rcb =
         String(
@@ -1332,24 +1098,17 @@
           ""
         );
 
-
       const wicketMatch =
         rcb.match(
           /\/\s*(\d+)/
         );
 
-
-      if (
-        wicketMatch?.[1]
-      ) {
-
+      if (wicketMatch?.[1]) {
         wicketsLost =
           Number(
             wicketMatch[1]
           );
-
       }
-
 
       const wicketsRemaining =
         Math.max(
@@ -1358,6 +1117,10 @@
           wicketsLost
         );
 
+      const oversRemaining =
+        ballsToOvers(
+          ballsRemaining
+        );
 
       const requiredRunRate =
         ballsRemaining > 0
@@ -1367,15 +1130,16 @@
             ballsRemaining
           : null;
 
+      const rrrText =
+        Number.isFinite(
+          requiredRunRate
+        )
+          ? requiredRunRate.toFixed(2)
+          : "--";
 
       return (
-        `${runsNeeded} runs needed in ${ballsToOvers(ballsRemaining)} overs (${ballsRemaining} balls) with ${wicketsRemaining} wickets remaining. RRR: ${
-          Number.isFinite(requiredRunRate)
-            ? requiredRunRate.toFixed(2)
-            : "--"
-        }`
+        `${runsNeeded} runs needed in ${oversRemaining} overs (${ballsRemaining} balls) with ${wicketsRemaining} wickets remaining. RRR: ${rrrText}`
       );
-
     }
 
 
@@ -1389,27 +1153,19 @@
           scoreData
         );
 
-
-      if (
-        finalResult
-      ) {
-
+      if (finalResult) {
         return finalResult;
-
       }
-
 
       const oversLimit =
         findOversLimit(
           scoreData
         );
 
-
       const currentInnings =
         findCurrentInnings(
           scoreData
         );
-
 
       if (
         currentInnings === 1
@@ -1421,9 +1177,7 @@
             oversLimit
           )
         );
-
       }
-
 
       if (
         currentInnings === 2
@@ -1435,13 +1189,10 @@
             oversLimit
           )
         );
-
       }
-
 
       const innings2 =
         ballsData?.data?.innings2Balls;
-
 
       if (
         innings2 &&
@@ -1456,9 +1207,7 @@
             oversLimit
           )
         );
-
       }
-
 
       return (
         getFirstInningsText(
@@ -1466,7 +1215,6 @@
           oversLimit
         )
       );
-
     }
 
 
@@ -1474,20 +1222,22 @@
 
       const response =
         await fetch(
-
           `${CONFIG_URL}?t=${Date.now()}`,
-
           {
             cache:
               "no-store"
           }
-
         );
 
+      if (!response.ok) {
+
+        throw new Error(
+          `Config HTTP ${response.status}`
+        );
+      }
 
       const config =
         await response.json();
-
 
       const details =
         extractMatchDetails(
@@ -1496,10 +1246,7 @@
           ] || ""
         );
 
-
-      if (
-        details
-      ) {
+      if (details) {
 
         CLUB_ID =
           details.clubId;
@@ -1509,9 +1256,7 @@
 
         HAS_VALID_MATCH =
           true;
-
       }
-
 
       CURRENT_BACKGROUND =
         config[
@@ -1519,32 +1264,28 @@
         ] ||
         CURRENT_BACKGROUND;
 
-
       CUSTOM_BACKGROUND_URL =
         config[
           "Custom Background URL"
         ] ||
         CUSTOM_BACKGROUND_URL;
 
-
       applyBackground(
         CURRENT_BACKGROUND,
         CUSTOM_BACKGROUND_URL
       );
-
     }
 
 
     async function loadScore() {
 
       if (
-        !HAS_VALID_MATCH
+        !HAS_VALID_MATCH ||
+        !CLUB_ID ||
+        !MATCH_ID
       ) {
-
         return;
-
       }
-
 
       try {
 
@@ -1553,9 +1294,7 @@
           ballsResponse
         ] =
           await Promise.all(
-
             [
-
               fetch(
                 `/api/${CLUB_ID}/${MATCH_ID}?t=${Date.now()}`,
                 {
@@ -1571,48 +1310,50 @@
                     "no-store"
                 }
               )
-
             ]
-
           );
 
+        if (!scoreResponse.ok) {
+
+          throw new Error(
+            `Score HTTP ${scoreResponse.status}`
+          );
+        }
+
+        if (!ballsResponse.ok) {
+
+          throw new Error(
+            `Balls HTTP ${ballsResponse.status}`
+          );
+        }
 
         const scoreData =
           await scoreResponse.json();
 
-
         const ballsData =
           await ballsResponse.json();
-
 
         const teams =
           buildTeams(
             scoreData
           );
 
-
         if (
           teams.length < 2
         ) {
-
           return;
-
         }
-
 
         const team1 =
           teams[0];
 
-
         const team2 =
           teams[1];
-
 
         document.getElementById(
           "mainTitle"
         ).textContent =
           "2026 Trinity Games";
-
 
         document.getElementById(
           "competitionTitle"
@@ -1621,20 +1362,17 @@
             scoreData
           );
 
-
         document.getElementById(
           "team1Name"
         ).textContent =
           team1.teamName ||
           "TEAM 1";
 
-
         document.getElementById(
           "team2Name"
         ).textContent =
           team2.teamName ||
           "TEAM 2";
-
 
         document.getElementById(
           "team1Score"
@@ -1643,14 +1381,12 @@
             team1
           );
 
-
         document.getElementById(
           "team2Score"
         ).textContent =
           formatScore(
             team2
           );
-
 
         document.getElementById(
           "team1Overs"
@@ -1659,14 +1395,12 @@
             team1
           );
 
-
         document.getElementById(
           "team2Overs"
         ).textContent =
           formatOvers(
             team2
           );
-
 
         document.getElementById(
           "status"
@@ -1676,18 +1410,13 @@
             ballsData
           );
 
-      }
-
-      catch (
-        error
-      ) {
+      } catch (error) {
 
         console.error(
+          "Score error:",
           error
         );
-
       }
-
     }
 
 
@@ -1697,26 +1426,19 @@
 
         await loadConfig();
 
-      }
-
-      catch (
-        error
-      ) {
+      } catch (error) {
 
         console.error(
+          "Config error:",
           error
         );
-
       }
 
-
       await loadScore();
-
     }
 
 
     updateScoreboard();
-
 
     setInterval(
       updateScoreboard,
@@ -1726,5 +1448,4 @@
   </script>
 
 </body>
-
 </html>

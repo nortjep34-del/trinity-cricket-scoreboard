@@ -36,7 +36,6 @@
         sans-serif;
     }
 
-
     #scoreboard {
       position: relative;
 
@@ -73,7 +72,6 @@
       background-repeat: no-repeat;
     }
 
-
     .stadium {
       position: absolute;
       inset: 0;
@@ -82,7 +80,6 @@
 
       pointer-events: none;
     }
-
 
     .stadium::before {
       content: "";
@@ -116,7 +113,6 @@
         );
     }
 
-
     .field {
       position: absolute;
 
@@ -135,7 +131,6 @@
 
       pointer-events: none;
     }
-
 
     .field::after {
       content: "";
@@ -164,7 +159,6 @@
         );
     }
 
-
     .content {
       position: relative;
 
@@ -182,12 +176,12 @@
 
 
     /* =====================================
-       TOP SECTION
+       HEADER
        ===================================== */
 
     .header {
-      height: 139px;
-      flex: 0 0 139px;
+      height: 146px;
+      flex: 0 0 146px;
 
       display: flex;
       flex-direction: column;
@@ -196,11 +190,10 @@
       justify-content: flex-end;
 
       padding:
-        0 13px 8px;
+        0 13px 5px;
 
       text-align: center;
     }
-
 
     .main-title {
       width: 100%;
@@ -211,17 +204,12 @@
       font-weight: 900;
 
       white-space: nowrap;
-
-      overflow: hidden;
-
-      text-overflow: ellipsis;
     }
-
 
     .competition-title {
       width: 100%;
 
-      margin-top: 10px;
+      margin-top: 9px;
 
       font-size: 23px;
       line-height: 1;
@@ -231,34 +219,44 @@
       white-space: nowrap;
 
       overflow: hidden;
-
       text-overflow: ellipsis;
     }
 
+    .logo-holder {
+      height: 55px;
 
-    .match-date {
-      width: 100%;
+      margin-top: 8px;
 
-      margin-top: 10px;
+      display: flex;
 
-      font-size: 19px;
-      line-height: 1;
+      align-items: center;
+      justify-content: center;
+    }
 
-      font-weight: 900;
+    .trinity-logo {
+      display: block;
 
-      text-align: center;
+      width: auto;
+      height: 50px;
 
-      white-space: nowrap;
+      object-fit: contain;
+
+      opacity: 0.95;
+
+      filter:
+        drop-shadow(
+          0 2px 4px rgba(0,0,0,0.65)
+        );
     }
 
 
     /* =====================================
-       MATCH SECTION
+       MATCH
        ===================================== */
 
     .match {
-      height: 183px;
-      flex: 0 0 183px;
+      height: 176px;
+      flex: 0 0 176px;
 
       display: grid;
 
@@ -270,9 +268,8 @@
       align-items: end;
 
       padding:
-        5px 14px 0;
+        2px 14px 0;
     }
-
 
     .team {
       min-width: 0;
@@ -292,7 +289,6 @@
 
       text-align: center;
     }
-
 
     .team-name {
       width: 100%;
@@ -322,7 +318,6 @@
       word-break: normal;
     }
 
-
     .score {
       width: 100%;
       height: 70px;
@@ -344,7 +339,6 @@
       text-align: center;
     }
 
-
     .overs {
       height: 39px;
 
@@ -361,7 +355,6 @@
       white-space: nowrap;
     }
 
-
     .vs-column {
       height: 168px;
 
@@ -372,7 +365,6 @@
         70px
         39px;
     }
-
 
     .vs {
       grid-row: 2;
@@ -390,7 +382,7 @@
 
 
     /* =====================================
-       RESULT
+       BOTTOM LIVE INFO / RESULT
        ===================================== */
 
     .result {
@@ -402,12 +394,12 @@
       justify-content: center;
 
       padding:
-        6px 22px 0;
+        5px 18px 0;
 
       text-align: center;
 
-      font-size: 29px;
-      line-height: 1.05;
+      font-size: 22px;
+      line-height: 1.1;
 
       font-weight: 900;
     }
@@ -421,24 +413,19 @@
 
   <div id="scoreboard">
 
-
     <div
       class="stadium"
       id="stadiumOverlay"
     ></div>
-
 
     <div
       class="field"
       id="fieldOverlay"
     ></div>
 
-
     <div class="content">
 
-
       <div class="header">
-
 
         <div
           class="main-title"
@@ -447,7 +434,6 @@
           2026 Trinity Games
         </div>
 
-
         <div
           class="competition-title"
           id="competitionTitle"
@@ -455,23 +441,22 @@
           LIVE CRICKET
         </div>
 
+        <div class="logo-holder">
 
-        <div
-          class="match-date"
-          id="matchDate"
-        >
-          LIVE
+          <img
+            src="trinityhouse-logo.png"
+            class="trinity-logo"
+            alt="Trinityhouse"
+          >
+
         </div>
-
 
       </div>
 
 
       <div class="match">
 
-
         <div class="team">
-
 
           <div
             class="team-name"
@@ -480,7 +465,6 @@
             Loading...
           </div>
 
-
           <div
             class="score"
             id="team1Score"
@@ -488,14 +472,12 @@
             --
           </div>
 
-
           <div
             class="overs"
             id="team1Overs"
           >
             -- overs
           </div>
-
 
         </div>
 
@@ -511,14 +493,12 @@
 
         <div class="team">
 
-
           <div
             class="team-name"
             id="team2Name"
           >
             Loading...
           </div>
-
 
           <div
             class="score"
@@ -527,7 +507,6 @@
             --
           </div>
 
-
           <div
             class="overs"
             id="team2Overs"
@@ -535,9 +514,7 @@
             -- overs
           </div>
 
-
         </div>
-
 
       </div>
 
@@ -547,7 +524,6 @@
         id="status"
       ></div>
 
-
     </div>
 
   </div>
@@ -555,16 +531,21 @@
 
   <script>
 
+    const CONFIG_URL =
+      "/api";
 
-    const CONFIG_URL = "/api";
+    const UPDATE_INTERVAL_MS =
+      5000;
 
-    const UPDATE_INTERVAL_MS = 5000;
 
+    let CLUB_ID =
+      null;
 
-    let CLUB_ID = null;
-    let MATCH_ID = null;
+    let MATCH_ID =
+      null;
 
-    let HAS_VALID_MATCH = false;
+    let HAS_VALID_MATCH =
+      false;
 
     let CURRENT_BACKGROUND =
       "Stadium Night";
@@ -576,7 +557,6 @@
     /* =========================================
        HELPERS
        ========================================= */
-
 
     function firstValue(
       obj,
@@ -591,7 +571,6 @@
         const value =
           obj?.[key];
 
-
         if (
           value !== undefined &&
           value !== null &&
@@ -604,11 +583,9 @@
 
       }
 
-
       return "";
 
     }
-
 
 
     function walk(
@@ -625,9 +602,7 @@
 
       }
 
-
       callback(obj);
-
 
       if (
         Array.isArray(obj)
@@ -666,11 +641,9 @@
     }
 
 
-
     /* =========================================
        MATCH URL
        ========================================= */
-
 
     function extractMatchDetails(
       matchUrl
@@ -684,24 +657,20 @@
 
       }
 
-
       const text =
         String(
           matchUrl
         ).trim();
-
 
       const clubMatch =
         text.match(
           /[?&]clubId=(\d+)/i
         );
 
-
       const matchMatch =
         text.match(
           /[?&]matchId=(\d+)/i
         );
-
 
       if (
         !clubMatch ||
@@ -711,7 +680,6 @@
         return null;
 
       }
-
 
       return {
 
@@ -726,11 +694,9 @@
     }
 
 
-
     /* =========================================
-       CUSTOM BACKGROUND
+       BACKGROUND
        ========================================= */
-
 
     function convertImageUrl(
       url
@@ -744,18 +710,15 @@
 
       }
 
-
       const value =
         String(
           url
         ).trim();
 
-
       const fileMatch =
         value.match(
           /\/file\/d\/([^/]+)/
         );
-
 
       if (
         fileMatch?.[1]
@@ -767,12 +730,10 @@
 
       }
 
-
       const queryMatch =
         value.match(
           /[?&]id=([^&]+)/
         );
-
 
       if (
         queryMatch?.[1]
@@ -784,11 +745,9 @@
 
       }
 
-
       return value;
 
     }
-
 
 
     function applyBackground(
@@ -801,12 +760,10 @@
           "scoreboard"
         );
 
-
       const stadium =
         document.getElementById(
           "stadiumOverlay"
         );
-
 
       const field =
         document.getElementById(
@@ -824,7 +781,6 @@
             customUrl
           );
 
-
         board.style.backgroundImage =
           `
           linear-gradient(
@@ -834,77 +790,37 @@
           url("${imageUrl}")
           `;
 
-
         board.style.backgroundSize =
           "cover";
-
 
         board.style.backgroundPosition =
           "center";
 
-
         board.style.backgroundRepeat =
           "no-repeat";
-
 
         stadium.style.display =
           "none";
 
-
         field.style.display =
           "none";
-
 
         return;
 
       }
 
-
       stadium.style.display =
         "block";
-
 
       field.style.display =
         "block";
 
-
-      if (
-        name === "Plain Dark"
-      ) {
-
-        board.style.background =
-          "linear-gradient(to bottom, #05070a, #0b0e13)";
-
-      }
-
-
-      else if (
-        name === "Trinity Blue"
-      ) {
-
-        board.style.background =
-          "linear-gradient(to bottom, #071b3a, #0b315f)";
-
-      }
-
-
-      else if (
-        name === "Stadium Day"
-      ) {
-
-        board.style.background =
-          "linear-gradient(to bottom, #79a9c9 0%, #769d65 55%, #2d6b34 100%)";
-
-      }
-
     }
 
 
-
     /* =========================================
-       TEAM DATA
+       SCORE SUMMARY DATA
        ========================================= */
-
 
     function findTeamHolder(
       data
@@ -912,7 +828,6 @@
 
       let holder =
         null;
-
 
       walk(
         data,
@@ -926,16 +841,13 @@
 
           }
 
-
           const hasTeam1 =
             obj?.team1Name ||
             obj?.teamOneName;
 
-
           const hasTeam2 =
             obj?.team2Name ||
             obj?.teamTwoName;
-
 
           if (
             hasTeam1 &&
@@ -950,11 +862,9 @@
         }
       );
 
-
       return holder;
 
     }
-
 
 
     function buildTeams(
@@ -966,7 +876,6 @@
           data
         );
 
-
       if (
         !holder
       ) {
@@ -974,7 +883,6 @@
         return [];
 
       }
-
 
       return [
 
@@ -985,18 +893,15 @@
             holder.teamOneName ??
             "",
 
-
           score:
             holder.team1Score ??
             holder.teamOneScore ??
             "",
 
-
           wickets:
             holder.team1Wickets ??
             holder.teamOneWickets ??
             "",
-
 
           overs:
             holder.team1Overs ??
@@ -1005,7 +910,6 @@
 
         },
 
-
         {
 
           teamName:
@@ -1013,18 +917,15 @@
             holder.teamTwoName ??
             "",
 
-
           score:
             holder.team2Score ??
             holder.teamTwoScore ??
             "",
 
-
           wickets:
             holder.team2Wickets ??
             holder.teamTwoWickets ??
             "",
-
 
           overs:
             holder.team2Overs ??
@@ -1036,7 +937,6 @@
       ];
 
     }
-
 
 
     function formatScore(
@@ -1053,7 +953,6 @@
 
       }
 
-
       if (
         team.wickets !== undefined &&
         team.wickets !== null &&
@@ -1066,13 +965,11 @@
 
       }
 
-
       return String(
         team.score
       );
 
     }
-
 
 
     function formatOvers(
@@ -1091,16 +988,9 @@
 
       }
 
-
       return "-- overs";
 
     }
-
-
-
-    /* =========================================
-       COMPETITION TITLE
-       ========================================= */
 
 
     function findRawMatchTitle(
@@ -1109,7 +999,6 @@
 
       let title =
         "";
-
 
       walk(
         data,
@@ -1122,7 +1011,6 @@
             return;
 
           }
-
 
           title =
             firstValue(
@@ -1139,11 +1027,9 @@
         }
       );
 
-
       return title;
 
     }
-
 
 
     function findCompetitionTitle(
@@ -1155,7 +1041,6 @@
           data
         );
 
-
       if (
         !rawTitle
       ) {
@@ -1164,18 +1049,15 @@
 
       }
 
-
       const text =
         String(
           rawTitle
         ).trim();
 
-
       const parts =
         text.split(
           "-"
         );
-
 
       if (
         parts.length >= 2
@@ -1190,148 +1072,21 @@
 
       }
 
-
       return text;
 
     }
 
 
-
     /* =========================================
-       DATE
+       FINAL RESULT
        ========================================= */
 
-
-    function findMatchDate(
-      data
-    ) {
-
-      let date =
-        "";
-
-
-      walk(
-        data,
-        (obj) => {
-
-          if (
-            date
-          ) {
-
-            return;
-
-          }
-
-
-          date =
-            firstValue(
-              obj,
-              [
-                "matchDate",
-                "fixtureDate",
-                "date"
-              ]
-            );
-
-        }
-      );
-
-
-      return formatDate(
-        date
-      );
-
-    }
-
-
-
-    function formatDate(
-      value
-    ) {
-
-      if (
-        !value
-      ) {
-
-        return "LIVE";
-
-      }
-
-
-      const text =
-        String(
-          value
-        ).trim();
-
-
-      const slash =
-        text.match(
-          /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
-        );
-
-
-      if (
-        slash
-      ) {
-
-        const month =
-          slash[1]
-            .padStart(
-              2,
-              "0"
-            );
-
-
-        const day =
-          slash[2]
-            .padStart(
-              2,
-              "0"
-            );
-
-
-        return (
-          `${day}/${month}/${slash[3]}`
-        );
-
-      }
-
-
-      const iso =
-        text.match(
-          /^(\d{4})-(\d{2})-(\d{2})/
-        );
-
-
-      if (
-        iso
-      ) {
-
-        return (
-          `${iso[3]}/${iso[2]}/${iso[1]}`
-        );
-
-      }
-
-
-      return text;
-
-    }
-
-
-
-    /* =========================================
-       FINAL RESULT ONLY
-       ========================================= */
-
-
-    function findBottomStatus(
+    function findFinalResult(
       data
     ) {
 
       let finalResult =
         "";
-
 
       walk(
         data,
@@ -1345,7 +1100,6 @@
 
           }
 
-
           const possibleResult =
             firstValue(
               obj,
@@ -1355,7 +1109,6 @@
                 "matchResult"
               ]
             );
-
 
           if (
             possibleResult &&
@@ -1376,17 +1129,726 @@
         }
       );
 
-
       return finalResult;
 
     }
 
 
+    /* =========================================
+       OVERS / BALL HELPERS
+       ========================================= */
+
+    function oversToBalls(
+      oversValue
+    ) {
+
+      if (
+        oversValue === undefined ||
+        oversValue === null
+      ) {
+
+        return 0;
+
+      }
+
+      const text =
+        String(
+          oversValue
+        ).trim();
+
+      const parts =
+        text.split(
+          "."
+        );
+
+      const completedOvers =
+        Number(
+          parts[0] || 0
+        );
+
+      const ballsInOver =
+        Number(
+          parts[1] || 0
+        );
+
+      return (
+        completedOvers * 6
+      ) + ballsInOver;
+
+    }
+
+
+    function ballsToOvers(
+      balls
+    ) {
+
+      const safeBalls =
+        Math.max(
+          0,
+          Math.floor(
+            balls
+          )
+        );
+
+      const overs =
+        Math.floor(
+          safeBalls / 6
+        );
+
+      const ballsRemaining =
+        safeBalls % 6;
+
+      return (
+        `${overs}.${ballsRemaining}`
+      );
+
+    }
+
+
+    /* =========================================
+       MATCH OVERS LIMIT
+       ========================================= */
+
+    function findOversLimit(
+      scoreData,
+      ballsData
+    ) {
+
+      let oversLimit =
+        null;
+
+
+      walk(
+        scoreData,
+        (obj) => {
+
+          if (
+            oversLimit !== null
+          ) {
+
+            return;
+
+          }
+
+          const possibleValues = [
+
+            obj?.matchOvers,
+            obj?.totalOvers,
+            obj?.maxOvers,
+            obj?.oversLimit,
+            obj?.noOfOvers
+
+          ];
+
+          for (
+            const value
+            of possibleValues
+          ) {
+
+            if (
+              value !== undefined &&
+              value !== null &&
+              String(value).trim() !== ""
+            ) {
+
+              const number =
+                Number(
+                  value
+                );
+
+              if (
+                Number.isFinite(
+                  number
+                ) &&
+                number > 0
+              ) {
+
+                oversLimit =
+                  number;
+
+                return;
+
+              }
+
+            }
+
+          }
+
+          const text =
+            String(
+              obj?.matchResult ||
+              ""
+            );
+
+          const match =
+            text.match(
+              /\/\s*(\d+(?:\.\d+)?)\s*ov/i
+            );
+
+          if (
+            match?.[1]
+          ) {
+
+            const number =
+              Number(
+                match[1]
+              );
+
+            if (
+              Number.isFinite(
+                number
+              )
+            ) {
+
+              oversLimit =
+                number;
+
+            }
+
+          }
+
+        }
+      );
+
+
+      /*
+        If not found in score summary,
+        estimate from the innings when possible.
+      */
+
+      if (
+        oversLimit === null
+      ) {
+
+        const innings1 =
+          ballsData?.data?.innings1Balls;
+
+        const innings2 =
+          ballsData?.data?.innings2Balls;
+
+
+        /*
+          Only use common cricket limits
+          if the endpoint itself doesn't expose one.
+        */
+
+        const candidates =
+          [
+            innings1?.overs,
+            innings2?.overs
+          ];
+
+        for (
+          const candidate
+          of candidates
+        ) {
+
+          const balls =
+            oversToBalls(
+              candidate
+            );
+
+          if (
+            balls > 120
+          ) {
+
+            oversLimit =
+              50;
+
+            break;
+
+          }
+
+        }
+
+      }
+
+
+      return oversLimit;
+
+    }
+
+
+    /* =========================================
+       FIRST INNINGS PROJECTION
+       ========================================= */
+
+    function getFirstInningsText(
+      ballsData,
+      oversLimit
+    ) {
+
+      const innings1 =
+        ballsData?.data?.innings1Balls;
+
+
+      if (
+        !innings1 ||
+        innings1.runs === undefined ||
+        innings1.runs === null
+      ) {
+
+        return "";
+
+      }
+
+
+      const runs =
+        Number(
+          innings1.runs
+        );
+
+
+      const balls =
+        oversToBalls(
+          innings1.overs
+        );
+
+
+      if (
+        !Number.isFinite(
+          runs
+        ) ||
+        balls <= 0
+      ) {
+
+        return "";
+
+      }
+
+
+      /*
+        Prefer the latest over's CricClubs
+        runRate if available.
+      */
+
+      let runRate =
+        null;
+
+
+      const oversMap =
+        innings1?.oversMap;
+
+
+      if (
+        oversMap &&
+        typeof oversMap === "object"
+      ) {
+
+        const overKeys =
+          Object.keys(
+            oversMap
+          );
+
+
+        if (
+          overKeys.length > 0
+        ) {
+
+          overKeys.sort(
+            (a, b) => {
+
+              const aNum =
+                Number(
+                  a.replace(
+                    /\D/g,
+                    ""
+                  )
+                );
+
+              const bNum =
+                Number(
+                  b.replace(
+                    /\D/g,
+                    ""
+                  )
+                );
+
+              return (
+                aNum -
+                bNum
+              );
+
+            }
+          );
+
+
+          const latestOver =
+            oversMap[
+              overKeys[
+                overKeys.length - 1
+              ]
+            ];
+
+
+          const value =
+            Number(
+              latestOver?.runRate
+            );
+
+
+          if (
+            Number.isFinite(
+              value
+            )
+          ) {
+
+            runRate =
+              value;
+
+          }
+
+        }
+
+      }
+
+
+      /*
+        Fallback: calculate CRR ourselves.
+      */
+
+      if (
+        runRate === null
+      ) {
+
+        runRate =
+          (
+            runs * 6
+          ) /
+          balls;
+
+      }
+
+
+      if (
+        !Number.isFinite(
+          runRate
+        )
+      ) {
+
+        return "";
+
+      }
+
+
+      /*
+        We need the match overs limit for
+        a useful projected score.
+      */
+
+      if (
+        !Number.isFinite(
+          oversLimit
+        ) ||
+        oversLimit <= 0
+      ) {
+
+        return (
+          `CRR: ${runRate.toFixed(1)}`
+        );
+
+      }
+
+
+      const projectedScore =
+        Math.round(
+          runRate *
+          oversLimit
+        );
+
+
+      return (
+        `PROJECTED SCORE : ${projectedScore} RUNS (CRR:${runRate.toFixed(1)})`
+      );
+
+    }
+
+
+    /* =========================================
+       SECOND INNINGS CHASE
+       ========================================= */
+
+    function getSecondInningsText(
+      ballsData,
+      oversLimit
+    ) {
+
+      const innings1 =
+        ballsData?.data?.innings1Balls;
+
+
+      const innings2 =
+        ballsData?.data?.innings2Balls;
+
+
+      if (
+        !innings1 ||
+        !innings2
+      ) {
+
+        return "";
+
+      }
+
+
+      const firstInningsRuns =
+        Number(
+          innings1.runs
+        );
+
+
+      const secondInningsRuns =
+        Number(
+          innings2.runs
+        );
+
+
+      if (
+        !Number.isFinite(
+          firstInningsRuns
+        ) ||
+        !Number.isFinite(
+          secondInningsRuns
+        )
+      ) {
+
+        return "";
+
+      }
+
+
+      const target =
+        firstInningsRuns + 1;
+
+
+      const runsNeeded =
+        Math.max(
+          0,
+          target -
+          secondInningsRuns
+        );
+
+
+      /*
+        If target already reached, don't show
+        chase info — final result should appear
+        from the score summary.
+      */
+
+      if (
+        runsNeeded <= 0
+      ) {
+
+        return "";
+
+      }
+
+
+      const ballsUsed =
+        oversToBalls(
+          innings2.overs
+        );
+
+
+      let ballsRemaining =
+        null;
+
+
+      if (
+        Number.isFinite(
+          oversLimit
+        ) &&
+        oversLimit > 0
+      ) {
+
+        ballsRemaining =
+          Math.max(
+            0,
+            (
+              oversLimit * 6
+            ) -
+            ballsUsed
+          );
+
+      }
+
+
+      /*
+        Wickets lost from rcb e.g. "2/0"
+      */
+
+      let wicketsLost =
+        0;
+
+
+      const rcb =
+        String(
+          innings2.rcb ||
+          ""
+        );
+
+
+      const wicketMatch =
+        rcb.match(
+          /\/\s*(\d+)/
+        );
+
+
+      if (
+        wicketMatch?.[1]
+      ) {
+
+        wicketsLost =
+          Number(
+            wicketMatch[1]
+          );
+
+      }
+
+
+      const wicketsRemaining =
+        Math.max(
+          0,
+          10 -
+          wicketsLost
+        );
+
+
+      let requiredRunRate =
+        null;
+
+
+      if (
+        ballsRemaining !== null &&
+        ballsRemaining > 0
+      ) {
+
+        requiredRunRate =
+          (
+            runsNeeded * 6
+          ) /
+          ballsRemaining;
+
+      }
+
+
+      if (
+        ballsRemaining === null
+      ) {
+
+        return (
+          `${runsNeeded} runs needed with ${wicketsRemaining} wickets remaining`
+        );
+
+      }
+
+
+      const oversRemaining =
+        ballsToOvers(
+          ballsRemaining
+        );
+
+
+      const rrrText =
+        Number.isFinite(
+          requiredRunRate
+        )
+          ? requiredRunRate.toFixed(2)
+          : "--";
+
+
+      return (
+        `${runsNeeded} runs needed in ${oversRemaining} overs (${ballsRemaining} balls) with ${wicketsRemaining} wickets remaining. RRR: ${rrrText}`
+      );
+
+    }
+
+
+    /* =========================================
+       BOTTOM LINE PRIORITY
+       ========================================= */
+
+    function getBottomText(
+      scoreData,
+      ballsData
+    ) {
+
+      /*
+        1. Finished match
+      */
+
+      const finalResult =
+        findFinalResult(
+          scoreData
+        );
+
+
+      if (
+        finalResult
+      ) {
+
+        return finalResult;
+
+      }
+
+
+      const oversLimit =
+        findOversLimit(
+          scoreData,
+          ballsData
+        );
+
+
+      const innings2 =
+        ballsData?.data?.innings2Balls;
+
+
+      /*
+        2. Second innings
+      */
+
+      if (
+        innings2 &&
+        Number(
+          innings2.runs
+        ) >= 0
+      ) {
+
+        const chaseText =
+          getSecondInningsText(
+            ballsData,
+            oversLimit
+          );
+
+
+        if (
+          chaseText
+        ) {
+
+          return chaseText;
+
+        }
+
+      }
+
+
+      /*
+        3. First innings
+      */
+
+      return (
+        getFirstInningsText(
+          ballsData,
+          oversLimit
+        )
+      );
+
+    }
+
 
     /* =========================================
        CONFIG
        ========================================= */
-
 
     async function loadConfig() {
 
@@ -1433,10 +1895,8 @@
         CLUB_ID =
           details.clubId;
 
-
         MATCH_ID =
           details.matchId;
-
 
         HAS_VALID_MATCH =
           true;
@@ -1466,11 +1926,9 @@
     }
 
 
-
     /* =========================================
-       LIVE SCORE
+       LOAD LIVE SCORE
        ========================================= */
-
 
     async function loadScore() {
 
@@ -1487,37 +1945,79 @@
 
       try {
 
-        const response =
-          await fetch(
+        /*
+          Fetch score summary and ball-by-ball
+          at the same time.
+        */
 
-            `/api/${CLUB_ID}/${MATCH_ID}?t=${Date.now()}`,
+        const [
+          scoreResponse,
+          ballsResponse
+        ] =
+          await Promise.all(
 
-            {
-              cache:
-                "no-store"
-            }
+            [
+
+              fetch(
+
+                `/api/${CLUB_ID}/${MATCH_ID}?t=${Date.now()}`,
+
+                {
+                  cache:
+                    "no-store"
+                }
+
+              ),
+
+              fetch(
+
+                `/api/${CLUB_ID}/${MATCH_ID}/balls?t=${Date.now()}`,
+
+                {
+                  cache:
+                    "no-store"
+                }
+
+              )
+
+            ]
 
           );
 
 
         if (
-          !response.ok
+          !scoreResponse.ok
         ) {
 
           throw new Error(
-            `HTTP ${response.status}`
+            `Score HTTP ${scoreResponse.status}`
           );
 
         }
 
 
-        const data =
-          await response.json();
+        if (
+          !ballsResponse.ok
+        ) {
+
+          throw new Error(
+            `Balls HTTP ${ballsResponse.status}`
+          );
+
+        }
+
+
+        const scoreData =
+          await scoreResponse.json();
+
+
+        const ballsData =
+          await ballsResponse.json();
 
 
         const teams =
           buildTeams(
-            data
+            scoreData
           );
 
 
@@ -1550,15 +2050,7 @@
           "competitionTitle"
         ).textContent =
           findCompetitionTitle(
-            data
-          );
-
-
-        document.getElementById(
-          "matchDate"
-        ).textContent =
-          findMatchDate(
-            data
+            scoreData
           );
 
 
@@ -1611,8 +2103,9 @@
         document.getElementById(
           "status"
         ).textContent =
-          findBottomStatus(
-            data
+          getBottomText(
+            scoreData,
+            ballsData
           );
 
       }
@@ -1632,11 +2125,9 @@
     }
 
 
-
     /* =========================================
-       UPDATE EVERY 5 SECONDS
+       UPDATE
        ========================================= */
-
 
     async function updateScoreboard() {
 
@@ -1645,7 +2136,6 @@
         await loadConfig();
 
       }
-
 
       catch (
         error
@@ -1671,7 +2161,6 @@
       updateScoreboard,
       UPDATE_INTERVAL_MS
     );
-
 
   </script>
 

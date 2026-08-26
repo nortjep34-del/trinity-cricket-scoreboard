@@ -1383,103 +1383,41 @@
       }
 
 
-      let runRate =
-        null;
+      /*
+        IMPORTANT:
+        Calculate CRR from the live innings
+        total and actual balls bowled.
+
+        Example:
+        14 runs after 2.3 overs
+        = 15 balls
+
+        CRR = 14 x 6 / 15
+            = 5.6
+      */
+
+      const exactRunRate =
+        (
+          runs * 6
+        ) /
+        balls;
 
 
-      const oversMap =
-        innings1?.oversMap;
+      /*
+        CricClubs displays CRR to one decimal.
+      */
 
-
-      if (
-        oversMap &&
-        typeof oversMap === "object"
-      ) {
-
-        const overKeys =
-          Object.keys(
-            oversMap
-          );
-
-
-        if (
-          overKeys.length > 0
-        ) {
-
-          overKeys.sort(
-            (a, b) => {
-
-              const aNum =
-                Number(
-                  a.replace(
-                    /\D/g,
-                    ""
-                  )
-                );
-
-              const bNum =
-                Number(
-                  b.replace(
-                    /\D/g,
-                    ""
-                  )
-                );
-
-              return (
-                aNum -
-                bNum
-              );
-
-            }
-          );
-
-
-          const latestOver =
-            oversMap[
-              overKeys[
-                overKeys.length - 1
-              ]
-            ];
-
-
-          const value =
-            Number(
-              latestOver?.runRate
-            );
-
-
-          if (
-            Number.isFinite(
-              value
-            )
-          ) {
-
-            runRate =
-              value;
-
-          }
-
-        }
-
-      }
-
-
-      if (
-        runRate === null
-      ) {
-
-        runRate =
-          (
-            runs * 6
-          ) /
-          balls;
-
-      }
+      const displayedRunRate =
+        Number(
+          exactRunRate.toFixed(
+            1
+          )
+        );
 
 
       if (
         !Number.isFinite(
-          runRate
+          displayedRunRate
         )
       ) {
 
@@ -1487,6 +1425,11 @@
 
       }
 
+
+      /*
+        If match overs limit isn't available,
+        show CRR only.
+      */
 
       if (
         !Number.isFinite(
@@ -1496,21 +1439,29 @@
       ) {
 
         return (
-          `CRR: ${runRate.toFixed(1)}`
+          `CRR: ${displayedRunRate.toFixed(1)}`
         );
 
       }
 
 
+      /*
+        Match CricClubs projection style
+        using displayed one-decimal CRR.
+
+        Example:
+        5.6 x 20 = 112
+      */
+
       const projectedScore =
         Math.round(
-          runRate *
+          displayedRunRate *
           oversLimit
         );
 
 
       return (
-        `PROJECTED SCORE : ${projectedScore} RUNS (CRR:${runRate.toFixed(1)})`
+        `PROJECTED SCORE : ${projectedScore} RUNS (CRR:${displayedRunRate.toFixed(1)})`
       );
 
     }
@@ -1706,6 +1657,10 @@
       ballsData
     ) {
 
+      /*
+        1. Finished match
+      */
+
       const finalResult =
         findFinalResult(
           scoreData
@@ -1734,8 +1689,7 @@
 
 
       /*
-        If CricClubs explicitly says innings 1,
-        always show first-innings information.
+        2. First innings
       */
 
       if (
@@ -1753,8 +1707,7 @@
 
 
       /*
-        If CricClubs explicitly says innings 2,
-        show chase information.
+        3. Second innings
       */
 
       if (
@@ -1772,8 +1725,8 @@
 
 
       /*
-        Fallback only if currentInnings
-        isn't supplied.
+        Fallback if CricClubs doesn't expose
+        currentInnings.
       */
 
       const innings2 =

@@ -180,8 +180,8 @@
        ===================================== */
 
     .header {
-      height: 146px;
-      flex: 0 0 146px;
+      height: 118px;
+      flex: 0 0 118px;
 
       display: flex;
       flex-direction: column;
@@ -190,7 +190,7 @@
       justify-content: flex-end;
 
       padding:
-        0 13px 5px;
+        0 13px 10px;
 
       text-align: center;
     }
@@ -209,7 +209,7 @@
     .competition-title {
       width: 100%;
 
-      margin-top: 9px;
+      margin-top: 10px;
 
       font-size: 23px;
       line-height: 1;
@@ -222,41 +222,14 @@
       text-overflow: ellipsis;
     }
 
-    .logo-holder {
-      height: 55px;
-
-      margin-top: 8px;
-
-      display: flex;
-
-      align-items: center;
-      justify-content: center;
-    }
-
-    .trinity-logo {
-      display: block;
-
-      width: auto;
-      height: 50px;
-
-      object-fit: contain;
-
-      opacity: 0.95;
-
-      filter:
-        drop-shadow(
-          0 2px 4px rgba(0,0,0,0.65)
-        );
-    }
-
 
     /* =====================================
        MATCH
        ===================================== */
 
     .match {
-      height: 176px;
-      flex: 0 0 176px;
+      height: 204px;
+      flex: 0 0 204px;
 
       display: grid;
 
@@ -268,7 +241,7 @@
       align-items: end;
 
       padding:
-        2px 14px 0;
+        8px 14px 0;
     }
 
     .team {
@@ -439,16 +412,6 @@
           id="competitionTitle"
         >
           LIVE CRICKET
-        </div>
-
-        <div class="logo-holder">
-
-          <img
-            src="trinityhouse-logo.png"
-            class="trinity-logo"
-            alt="Trinityhouse"
-          >
-
         </div>
 
       </div>
@@ -1135,6 +1098,64 @@
 
 
     /* =========================================
+       CURRENT INNINGS
+       ========================================= */
+
+    function findCurrentInnings(
+      scoreData
+    ) {
+
+      let currentInnings =
+        null;
+
+      walk(
+        scoreData,
+        (obj) => {
+
+          if (
+            currentInnings !== null
+          ) {
+
+            return;
+
+          }
+
+          const value =
+            obj?.currentInnings;
+
+          if (
+            value !== undefined &&
+            value !== null &&
+            String(value).trim() !== ""
+          ) {
+
+            const number =
+              Number(
+                value
+              );
+
+            if (
+              Number.isFinite(
+                number
+              )
+            ) {
+
+              currentInnings =
+                number;
+
+            }
+
+          }
+
+        }
+      );
+
+      return currentInnings;
+
+    }
+
+
+    /* =========================================
        OVERS / BALL HELPERS
        ========================================= */
 
@@ -1206,17 +1227,15 @@
 
 
     /* =========================================
-       MATCH OVERS LIMIT
+       OVERS LIMIT
        ========================================= */
 
     function findOversLimit(
-      scoreData,
-      ballsData
+      scoreData
     ) {
 
       let oversLimit =
         null;
-
 
       walk(
         scoreData,
@@ -1274,16 +1293,19 @@
 
           }
 
+
           const text =
             String(
               obj?.matchResult ||
               ""
             );
 
+
           const match =
             text.match(
               /\/\s*(\d+(?:\.\d+)?)\s*ov/i
             );
+
 
           if (
             match?.[1]
@@ -1310,67 +1332,13 @@
         }
       );
 
-
-      /*
-        If not found in score summary,
-        estimate from the innings when possible.
-      */
-
-      if (
-        oversLimit === null
-      ) {
-
-        const innings1 =
-          ballsData?.data?.innings1Balls;
-
-        const innings2 =
-          ballsData?.data?.innings2Balls;
-
-
-        /*
-          Only use common cricket limits
-          if the endpoint itself doesn't expose one.
-        */
-
-        const candidates =
-          [
-            innings1?.overs,
-            innings2?.overs
-          ];
-
-        for (
-          const candidate
-          of candidates
-        ) {
-
-          const balls =
-            oversToBalls(
-              candidate
-            );
-
-          if (
-            balls > 120
-          ) {
-
-            oversLimit =
-              50;
-
-            break;
-
-          }
-
-        }
-
-      }
-
-
       return oversLimit;
 
     }
 
 
     /* =========================================
-       FIRST INNINGS PROJECTION
+       FIRST INNINGS
        ========================================= */
 
     function getFirstInningsText(
@@ -1383,9 +1351,7 @@
 
 
       if (
-        !innings1 ||
-        innings1.runs === undefined ||
-        innings1.runs === null
+        !innings1
       ) {
 
         return "";
@@ -1416,11 +1382,6 @@
 
       }
 
-
-      /*
-        Prefer the latest over's CricClubs
-        runRate if available.
-      */
 
       let runRate =
         null;
@@ -1503,10 +1464,6 @@
       }
 
 
-      /*
-        Fallback: calculate CRR ourselves.
-      */
-
       if (
         runRate === null
       ) {
@@ -1530,11 +1487,6 @@
 
       }
 
-
-      /*
-        We need the match overs limit for
-        a useful projected score.
-      */
 
       if (
         !Number.isFinite(
@@ -1565,7 +1517,7 @@
 
 
     /* =========================================
-       SECOND INNINGS CHASE
+       SECOND INNINGS
        ========================================= */
 
     function getSecondInningsText(
@@ -1629,12 +1581,6 @@
         );
 
 
-      /*
-        If target already reached, don't show
-        chase info — final result should appear
-        from the score summary.
-      */
-
       if (
         runsNeeded <= 0
       ) {
@@ -1650,32 +1596,31 @@
         );
 
 
-      let ballsRemaining =
-        null;
-
-
       if (
-        Number.isFinite(
+        !Number.isFinite(
           oversLimit
-        ) &&
-        oversLimit > 0
+        ) ||
+        oversLimit <= 0
       ) {
 
-        ballsRemaining =
-          Math.max(
-            0,
-            (
-              oversLimit * 6
-            ) -
-            ballsUsed
-          );
+        return (
+          `${runsNeeded} runs needed`
+        );
 
       }
 
 
-      /*
-        Wickets lost from rcb e.g. "2/0"
-      */
+      const totalBalls =
+        oversLimit * 6;
+
+
+      const ballsRemaining =
+        Math.max(
+          0,
+          totalBalls -
+          ballsUsed
+        );
+
 
       let wicketsLost =
         0;
@@ -1714,12 +1659,17 @@
         );
 
 
+      const oversRemaining =
+        ballsToOvers(
+          ballsRemaining
+        );
+
+
       let requiredRunRate =
         null;
 
 
       if (
-        ballsRemaining !== null &&
         ballsRemaining > 0
       ) {
 
@@ -1730,23 +1680,6 @@
           ballsRemaining;
 
       }
-
-
-      if (
-        ballsRemaining === null
-      ) {
-
-        return (
-          `${runsNeeded} runs needed with ${wicketsRemaining} wickets remaining`
-        );
-
-      }
-
-
-      const oversRemaining =
-        ballsToOvers(
-          ballsRemaining
-        );
 
 
       const rrrText =
@@ -1765,17 +1698,13 @@
 
 
     /* =========================================
-       BOTTOM LINE PRIORITY
+       BOTTOM TEXT
        ========================================= */
 
     function getBottomText(
       scoreData,
       ballsData
     ) {
-
-      /*
-        1. Finished match
-      */
 
       const finalResult =
         findFinalResult(
@@ -1794,47 +1723,79 @@
 
       const oversLimit =
         findOversLimit(
-          scoreData,
-          ballsData
+          scoreData
         );
 
 
-      const innings2 =
-        ballsData?.data?.innings2Balls;
+      const currentInnings =
+        findCurrentInnings(
+          scoreData
+        );
 
 
       /*
-        2. Second innings
+        If CricClubs explicitly says innings 1,
+        always show first-innings information.
       */
 
       if (
-        innings2 &&
-        Number(
-          innings2.runs
-        ) >= 0
+        currentInnings === 1
       ) {
 
-        const chaseText =
-          getSecondInningsText(
+        return (
+          getFirstInningsText(
             ballsData,
             oversLimit
-          );
-
-
-        if (
-          chaseText
-        ) {
-
-          return chaseText;
-
-        }
+          )
+        );
 
       }
 
 
       /*
-        3. First innings
+        If CricClubs explicitly says innings 2,
+        show chase information.
       */
+
+      if (
+        currentInnings === 2
+      ) {
+
+        return (
+          getSecondInningsText(
+            ballsData,
+            oversLimit
+          )
+        );
+
+      }
+
+
+      /*
+        Fallback only if currentInnings
+        isn't supplied.
+      */
+
+      const innings2 =
+        ballsData?.data?.innings2Balls;
+
+
+      if (
+        innings2 &&
+        Number(
+          innings2.runs
+        ) > 0
+      ) {
+
+        return (
+          getSecondInningsText(
+            ballsData,
+            oversLimit
+          )
+        );
+
+      }
+
 
       return (
         getFirstInningsText(
@@ -1927,7 +1888,7 @@
 
 
     /* =========================================
-       LOAD LIVE SCORE
+       LOAD SCORE
        ========================================= */
 
     async function loadScore() {
@@ -1944,11 +1905,6 @@
 
 
       try {
-
-        /*
-          Fetch score summary and ball-by-ball
-          at the same time.
-        */
 
         const [
           scoreResponse,

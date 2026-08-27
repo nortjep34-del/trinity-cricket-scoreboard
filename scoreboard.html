@@ -2172,9 +2172,174 @@
           /\b(out|wicket|bowled|caught|run\s*out|stumped|lbw|hit\s*wicket)\b/i
             .test(commentary);
 
+        /*
+          STRICT BOUNDARY DETECTION
+
+          Only a genuine FOUR or SIX off the bat
+          may trigger the boundary animation.
+
+          These must NOT trigger:
+          - wide + 3 = 4
+          - wide + 5 = 6
+          - byes
+          - leg byes
+          - no-ball combinations
+          - penalty/extras combinations
+        */
+
+        const numericValue = value => {
+          if (
+            value === undefined ||
+            value === null ||
+            String(value).trim() === ""
+          ) {
+            return 0;
+          }
+
+          const number =
+            Number(value);
+
+          return Number.isFinite(number)
+            ? number
+            : 0;
+        };
+
+        const wideRuns =
+          numericValue(
+            firstValue(
+              obj,
+              [
+                "wides",
+                "wide",
+                "wideRuns",
+                "wd",
+                "w"
+              ]
+            )
+          );
+
+        const byeRuns =
+          numericValue(
+            firstValue(
+              obj,
+              [
+                "byes",
+                "bye",
+                "byeRuns",
+                "b"
+              ]
+            )
+          );
+
+        const legByeRuns =
+          numericValue(
+            firstValue(
+              obj,
+              [
+                "legByes",
+                "legBye",
+                "legByeRuns",
+                "lb"
+              ]
+            )
+          );
+
+        const noBallRuns =
+          numericValue(
+            firstValue(
+              obj,
+              [
+                "noBalls",
+                "noBall",
+                "noBallRuns",
+                "noballs",
+                "nb"
+              ]
+            )
+          );
+
+        const penaltyRuns =
+          numericValue(
+            firstValue(
+              obj,
+              [
+                "penaltyRuns",
+                "penalty",
+                "penalties"
+              ]
+            )
+          );
+
+        const extrasTotal =
+          numericValue(
+            firstValue(
+              obj,
+              [
+                "extras",
+                "extraRuns",
+                "extrasRuns"
+              ]
+            )
+          );
+
+        const commentaryHasExtras =
+          /\b(wide|wides|bye|byes|leg\s*bye|leg\s*byes|no[\s-]*ball|penalty)\b/i
+            .test(commentary);
+
+        const hasAnyExtras =
+          wideRuns > 0 ||
+          byeRuns > 0 ||
+          legByeRuns > 0 ||
+          noBallRuns > 0 ||
+          penaltyRuns > 0 ||
+          extrasTotal > 0 ||
+          commentaryHasExtras;
+
+        /*
+          Prefer a dedicated batsman/batter-runs field
+          if CricClubs supplies one.
+        */
+        const batterRunsRaw =
+          firstValue(
+            obj,
+            [
+              "batterRuns",
+              "batsmanRuns",
+              "batsmenRuns",
+              "runsOffBat",
+              "batRuns",
+              "batterScore",
+              "batsmanScore"
+            ]
+          );
+
+        const hasExplicitBatterRuns =
+          batterRunsRaw !== undefined &&
+          batterRunsRaw !== null &&
+          String(batterRunsRaw).trim() !== "";
+
+        const batterRuns =
+          hasExplicitBatterRuns
+            ? numericValue(batterRunsRaw)
+            : (
+                hasAnyExtras
+                  ? null
+                  : runs
+              );
+
+        const genuineBoundary =
+          !hasAnyExtras &&
+          (
+            batterRuns === 4 ||
+            batterRuns === 6
+          );
+
         deliveries.push({
           key: deliveryKey(obj),
           runs,
+          batterRuns,
+          hasAnyExtras,
+          genuineBoundary,
           isWicket:
             explicitOut ||
             wicketFields ||
@@ -2841,8 +3006,7 @@
         .find(
           delivery =>
             delivery.isWicket ||
-            delivery.runs === 4 ||
-            delivery.runs === 6
+            delivery.genuineBoundary
         );
 
       if (
@@ -2861,8 +3025,12 @@
         return;
       }
 
+      /*
+        Only a delivery that passed the strict
+        genuine-boundary test reaches this point.
+      */
       showBoundaryAnimation(
-        latestEvent.runs
+        latestEvent.batterRuns
       );
     }
 

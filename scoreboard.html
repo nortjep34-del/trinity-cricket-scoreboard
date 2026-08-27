@@ -221,6 +221,7 @@
       font-weight: 900;
     }
 
+
     /* ---------------- BOUNDARY CELEBRATIONS ---------------- */
 
     .boundary-overlay {
@@ -232,269 +233,337 @@
       justify-content: center;
       overflow: hidden;
       pointer-events: none;
-
-      background:
-        radial-gradient(circle at 50% 50%, rgba(245,183,52,0.17) 0%, transparent 36%),
-        linear-gradient(145deg, rgba(5,20,46,0.99) 0%, rgba(80,13,34,0.99) 52%, rgba(5,20,46,0.99) 100%);
-
       opacity: 0;
+
+      /* Approved clean Trinity school-colour blend */
+      background:
+        radial-gradient(circle at 18% 20%, rgba(255,216,120,.18), transparent 28%),
+        radial-gradient(circle at 78% 24%, rgba(141,27,60,.34), transparent 34%),
+        radial-gradient(circle at 50% 78%, rgba(18,52,92,.72), transparent 48%),
+        linear-gradient(
+          135deg,
+          #07192f 0%,
+          #0d2d55 34%,
+          #711a34 66%,
+          #c89828 100%
+        );
+    }
+
+    .boundary-overlay::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(255,216,120,.22), transparent 28%),
+        linear-gradient(
+          135deg,
+          rgba(7,25,47,.10),
+          rgba(122,23,50,.20),
+          rgba(242,193,78,.13)
+        );
+      opacity: 0;
+      z-index: 2;
     }
 
     .boundary-overlay.show {
       display: flex;
-      animation: boundaryOverlay 2.5s ease both;
+      animation: boundaryOverlay 3.5s ease both;
     }
 
-    .boundary-word {
-      position: relative;
-      z-index: 8;
-
-      font-size: 122px;
-      line-height: 0.85;
-      font-weight: 900;
-      letter-spacing: -6px;
-
-      color: #f5b734;
-      text-transform: uppercase;
-      text-align: center;
-
-      -webkit-text-stroke: 2px #fff0b4;
-
-      text-shadow:
-        0 5px 0 #651127,
-        0 10px 22px rgba(0,0,0,0.78),
-        0 0 30px rgba(245,183,52,0.75);
-
-      opacity: 0;
-      transform: scale(0.18);
-    }
-
-    .boundary-overlay.four .boundary-word {
-      animation: fourPop 2.5s cubic-bezier(.18,.9,.26,1.35) both;
-    }
-
-    .boundary-overlay.six .boundary-word {
-      font-size: 136px;
-      animation: sixPop 2.5s cubic-bezier(.15,.9,.24,1.25) both;
+    .boundary-overlay.show::before {
+      animation: celebrationWash 3.5s ease both;
     }
 
     .boundary-flash {
       position: absolute;
       inset: 0;
-      z-index: 4;
-      background: #f5b734;
+      z-index: 9;
+      background: rgba(255,235,175,.95);
       opacity: 0;
+      mix-blend-mode: screen;
     }
 
     .boundary-overlay.show .boundary-flash {
-      animation: screenFlash 2.5s linear both;
+      animation: boundaryFlash 3.5s ease both;
     }
 
-    /* Firework bursts behind FOUR / SIX */
-    .firework {
-      position: absolute;
-      z-index: 5;
-
-      width: 250px;
-      height: 250px;
-      border-radius: 50%;
-
+    .boundary-word {
+      position: relative;
+      z-index: 8;
+      line-height: .9;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 1000;
+      letter-spacing: -.05em;
+      text-transform: uppercase;
+      text-align: center;
       opacity: 0;
-      transform: scale(0.08) rotate(0deg);
-
-      background:
-        repeating-conic-gradient(
-          from 0deg,
-          rgba(245,183,52,0.98) 0deg 3deg,
-          transparent 3deg 18deg
-        );
-
-      -webkit-mask:
-        radial-gradient(
-          circle,
-          transparent 0 15%,
-          #000 16% 48%,
-          transparent 49% 100%
-        );
-
-      mask:
-        radial-gradient(
-          circle,
-          transparent 0 15%,
-          #000 16% 48%,
-          transparent 49% 100%
-        );
-
-      filter:
-        drop-shadow(0 0 8px rgba(245,183,52,0.9))
-        drop-shadow(0 0 18px rgba(245,183,52,0.55));
+      transform: scale(.15);
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
     }
 
-    .firework::before,
-    .firework::after {
-      content: '';
+    /* FOUR: white, crisp, maroon border, gold edge — no fireworks */
+    .boundary-overlay.four .boundary-word {
+      font-size: 122px;
+      color: #fffdf8;
+      -webkit-text-stroke: 3px #711a34;
+      paint-order: stroke fill;
+      text-shadow:
+        0 2px 0 #f2c14e,
+        0 6px 0 #47101f,
+        0 12px 24px rgba(0,0,0,.72),
+        0 0 8px rgba(255,255,255,.35);
+
+      animation: fourPop 3.5s cubic-bezier(.18,.9,.28,1) both;
+    }
+
+    /* SIX: intentionally larger and more dramatic */
+    .boundary-overlay.six .boundary-word {
+      font-size: 166px;
+      color: #ffd878;
+      -webkit-text-stroke: 4px #711a34;
+      paint-order: stroke fill;
+      text-shadow:
+        0 3px 0 #f2c14e,
+        0 8px 0 #47101f,
+        0 16px 30px rgba(0,0,0,.76),
+        0 0 16px rgba(242,193,78,.68);
+
+      animation: sixPop 3.5s cubic-bezier(.15,.92,.2,1) both;
+    }
+
+    /* Real particle-style fireworks used ONLY for SIX */
+    .fireworks-layer {
       position: absolute;
-      inset: 20%;
-      border-radius: 50%;
-
-      background:
-        repeating-conic-gradient(
-          from 9deg,
-          rgba(117,17,44,0.98) 0deg 4deg,
-          transparent 4deg 22deg
-        );
-
-      -webkit-mask:
-        radial-gradient(
-          circle,
-          transparent 0 12%,
-          #000 13% 49%,
-          transparent 50% 100%
-        );
-
-      mask:
-        radial-gradient(
-          circle,
-          transparent 0 12%,
-          #000 13% 49%,
-          transparent 50% 100%
-        );
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
     }
 
-    .firework::after {
-      inset: 31%;
-      background:
-        repeating-conic-gradient(
-          from 4deg,
-          rgba(255,242,190,0.95) 0deg 5deg,
-          transparent 5deg 30deg
-        );
+    .firework-burst {
+      position: absolute;
+      width: 2px;
+      height: 2px;
     }
 
     .fw-main {
       left: 50%;
-      top: 51%;
-      margin-left: -125px;
-      margin-top: -125px;
+      top: 50%;
     }
 
-    .fw-left {
-      width: 175px;
-      height: 175px;
-      left: 11%;
-      top: 25%;
+    .fw-one {
+      left: 28%;
+      top: 32%;
     }
 
-    .fw-right {
-      width: 185px;
-      height: 185px;
-      right: 9%;
-      bottom: 18%;
+    .fw-two {
+      left: 73%;
+      top: 34%;
     }
 
-    .boundary-overlay.show .fw-main {
-      animation: fireworkMain 2.5s ease-out both;
+    .fw-three {
+      left: 34%;
+      top: 69%;
     }
 
-    .boundary-overlay.show .fw-left {
-      animation: fireworkSideA 2.5s ease-out both;
+    .fw-four {
+      left: 67%;
+      top: 67%;
     }
 
-    .boundary-overlay.show .fw-right {
-      animation: fireworkSideB 2.5s ease-out both;
-    }
+    .firework-spark {
+      --a: 0deg;
+      --d: 170px;
+      --delay: 0s;
 
-    .spark-field {
       position: absolute;
-      inset: 0;
-      z-index: 6;
+      left: 0;
+      top: 0;
+
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+
+      background: #ffd878;
+      box-shadow:
+        0 0 6px #ffd878,
+        0 0 14px #f2c14e;
+
       opacity: 0;
-      background:
-        radial-gradient(circle at 18% 38%, #f5b734 0 2px, transparent 3px),
-        radial-gradient(circle at 27% 68%, #fff2be 0 2px, transparent 3px),
-        radial-gradient(circle at 37% 25%, #7a1734 0 3px, transparent 4px),
-        radial-gradient(circle at 46% 76%, #f5b734 0 2px, transparent 3px),
-        radial-gradient(circle at 58% 21%, #fff2be 0 2px, transparent 3px),
-        radial-gradient(circle at 68% 66%, #7a1734 0 3px, transparent 4px),
-        radial-gradient(circle at 78% 34%, #f5b734 0 2px, transparent 3px),
-        radial-gradient(circle at 86% 57%, #fff2be 0 2px, transparent 3px);
+      transform: rotate(var(--a)) translateX(0) scale(.2);
+      animation-delay: var(--delay);
     }
 
-    .boundary-overlay.show .spark-field {
-      animation: sparkField 2.5s ease-out both;
+    .firework-spark.maroon {
+      background: #e34d79;
+      box-shadow:
+        0 0 6px #e34d79,
+        0 0 15px #8d1b3c;
+    }
+
+    .firework-spark.white {
+      background: #fff7dd;
+      box-shadow:
+        0 0 7px #fff7dd,
+        0 0 15px #f2c14e;
+    }
+
+    .firework-spark.small {
+      width: 3px;
+      height: 3px;
+    }
+
+    .firework-comet {
+      --a: 0deg;
+      --d: 150px;
+      --delay: 0s;
+
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      width: 58px;
+      height: 2px;
+      transform-origin: left center;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255,236,180,.98),
+          rgba(242,193,78,.58),
+          rgba(242,193,78,0)
+        );
+
+      opacity: 0;
+      animation-delay: var(--delay);
+    }
+
+    .boundary-overlay.show.six .firework-spark {
+      animation: fireworkSpark 3.5s cubic-bezier(.18,.8,.2,1) both;
+    }
+
+    .boundary-overlay.show.six .firework-comet {
+      animation: fireworkComet 3.5s ease-out both;
     }
 
     @keyframes boundaryOverlay {
       0%   { opacity: 0; }
-      5%   { opacity: 1; }
-      88%  { opacity: 1; }
+      4%   { opacity: 1; }
+      90%  { opacity: 1; }
       100% { opacity: 0; }
     }
 
+    @keyframes celebrationWash {
+      0%   { opacity: 0; }
+      7%   { opacity: .92; }
+      72%  { opacity: .78; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes boundaryFlash {
+      0%, 4%   { opacity: 0; }
+      6%       { opacity: .80; }
+      8%       { opacity: 0; }
+      14%      { opacity: .26; }
+      16%      { opacity: 0; }
+      24%      { opacity: .16; }
+      26%,100% { opacity: 0; }
+    }
+
     @keyframes fourPop {
-      0%   { opacity: 0; transform: scale(0.18); }
-      9%   { opacity: 1; transform: scale(1.20); }
-      17%  { transform: scale(0.96); }
-      26%  { transform: scale(1.07); }
-      36%  { transform: scale(1); }
-      54%  { transform: scale(1.05); filter: brightness(1.24); }
-      64%  { transform: scale(1); filter: brightness(1); }
-      88%  { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(1.12); }
+      0%   { opacity: 0; transform: scale(.15); }
+      6%   { opacity: 1; transform: scale(1.28); }
+      11%  { transform: scale(.90); }
+      17%  { transform: scale(1.10); }
+      24%  { transform: scale(.98); }
+      32%  { transform: scale(1); }
+      73%  { opacity: 1; transform: scale(1); }
+      82%  { transform: scale(1.06); }
+      100% { opacity: 0; transform: scale(.90); }
     }
 
     @keyframes sixPop {
-      0%   { opacity: 0; transform: scale(0.12) rotate(-3deg); }
-      9%   { opacity: 1; transform: scale(1.28) rotate(2deg); }
-      18%  { transform: scale(0.94) rotate(0deg); }
-      28%  { transform: scale(1.09); }
-      40%  { transform: scale(1); }
-      56%  { transform: scale(1.09); filter: brightness(1.28); }
-      69%  { transform: scale(1); filter: brightness(1); }
-      88%  { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(1.20); }
+      0%   { opacity: 0; transform: scale(.08); }
+      5%   { opacity: 1; transform: scale(1.48); }
+      10%  { transform: scale(.84); }
+      16%  { transform: scale(1.20); }
+      22%  { transform: scale(.96); }
+      30%  { transform: scale(1.08); }
+      36%  { opacity: 1; transform: scale(1.04); }
+      72%  { opacity: 1; transform: scale(1.04); }
+      80%  { transform: scale(1.12); }
+      100% { opacity: 0; transform: scale(.90); }
     }
 
-    @keyframes screenFlash {
-      0%, 6%, 20%, 34%, 100% { opacity: 0; }
-      8%  { opacity: 0.34; }
-      22% { opacity: 0.14; }
-      36% { opacity: 0.08; }
+    @keyframes fireworkSpark {
+      0%, 7% {
+        opacity: 0;
+        transform: rotate(var(--a)) translateX(0) scale(.2);
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      34% {
+        opacity: 1;
+        transform: rotate(var(--a)) translateX(var(--d)) scale(1);
+      }
+
+      62% {
+        opacity: .85;
+        transform:
+          rotate(var(--a))
+          translateX(calc(var(--d) * 1.24))
+          translateY(8px)
+          scale(.7);
+      }
+
+      100% {
+        opacity: 0;
+        transform:
+          rotate(var(--a))
+          translateX(calc(var(--d) * 1.50))
+          translateY(24px)
+          scale(.1);
+      }
     }
 
-    @keyframes fireworkMain {
-      0%, 4% { opacity: 0; transform: scale(0.05) rotate(0deg); }
-      12%    { opacity: 1; transform: scale(0.58) rotate(8deg); }
-      28%    { opacity: 1; transform: scale(1.15) rotate(18deg); }
-      48%    { opacity: 0.85; transform: scale(1.45) rotate(28deg); }
-      72%    { opacity: 0.30; transform: scale(1.72) rotate(36deg); }
-      100%   { opacity: 0; transform: scale(1.95) rotate(44deg); }
-    }
+    @keyframes fireworkComet {
+      0%, 6% {
+        opacity: 0;
+        transform: rotate(var(--a)) translateX(0) scaleX(.2);
+      }
 
-    @keyframes fireworkSideA {
-      0%, 13% { opacity: 0; transform: scale(0.06) rotate(-10deg); }
-      21%     { opacity: 0.95; transform: scale(0.72) rotate(4deg); }
-      43%     { opacity: 0.78; transform: scale(1.22) rotate(18deg); }
-      70%     { opacity: 0.20; transform: scale(1.55) rotate(30deg); }
-      100%    { opacity: 0; transform: scale(1.80) rotate(38deg); }
-    }
+      9% {
+        opacity: 1;
+      }
 
-    @keyframes fireworkSideB {
-      0%, 20% { opacity: 0; transform: scale(0.06) rotate(10deg); }
-      28%     { opacity: 0.95; transform: scale(0.70) rotate(-4deg); }
-      49%     { opacity: 0.80; transform: scale(1.20) rotate(-16deg); }
-      74%     { opacity: 0.22; transform: scale(1.52) rotate(-28deg); }
-      100%    { opacity: 0; transform: scale(1.78) rotate(-36deg); }
-    }
+      30% {
+        opacity: .85;
+        transform:
+          rotate(var(--a))
+          translateX(calc(var(--d) * .55))
+          scaleX(1);
+      }
 
-    @keyframes sparkField {
-      0%, 9% { opacity: 0; transform: scale(0.82); }
-      18%    { opacity: 1; transform: scale(1); }
-      50%    { opacity: 0.75; transform: scale(1.08); }
-      85%    { opacity: 0.18; transform: scale(1.18); }
-      100%   { opacity: 0; transform: scale(1.25); }
-    }
+      65% {
+        opacity: .4;
+        transform:
+          rotate(var(--a))
+          translateX(var(--d))
+          scaleX(.8);
+      }
 
+      100% {
+        opacity: 0;
+        transform:
+          rotate(var(--a))
+          translateX(calc(var(--d) * 1.28))
+          scaleX(.25);
+      }
+    }
   </style>
 </head>
 
@@ -505,12 +574,20 @@
 
     <!-- Full-screen FOUR / SIX celebration overlay -->
     <div id="boundaryOverlay" class="boundary-overlay" aria-hidden="true">
+
       <div class="boundary-flash"></div>
-      <div class="firework fw-main"></div>
-      <div class="firework fw-left"></div>
-      <div class="firework fw-right"></div>
-      <div class="spark-field"></div>
+
+      <!-- Fireworks are dynamically created only when a SIX is detected -->
+      <div class="fireworks-layer" aria-hidden="true">
+        <div id="fwMain" class="firework-burst fw-main"></div>
+        <div id="fwOne" class="firework-burst fw-one"></div>
+        <div id="fwTwo" class="firework-burst fw-two"></div>
+        <div id="fwThree" class="firework-burst fw-three"></div>
+        <div id="fwFour" class="firework-burst fw-four"></div>
+      </div>
+
       <div id="boundaryWord" class="boundary-word"></div>
+
     </div>
 
     <div class="content">
@@ -1545,30 +1622,242 @@
       return deliveries;
     }
 
+
+    function clearSixFireworks() {
+      [
+        "fwMain",
+        "fwOne",
+        "fwTwo",
+        "fwThree",
+        "fwFour"
+      ].forEach(id => {
+        const holder = document.getElementById(id);
+        if (holder) holder.innerHTML = "";
+      });
+    }
+
+    function addFireworkBurst(holderId, count, baseDistance, delayBase = 0) {
+      const holder = document.getElementById(holderId);
+      if (!holder) return;
+
+      holder.innerHTML = "";
+
+      for (let i = 0; i < count; i++) {
+        const spark = document.createElement("span");
+
+        const colourClass =
+          i % 3 === 1
+            ? " maroon"
+            : i % 3 === 2
+              ? " white"
+              : "";
+
+        spark.className =
+          "firework-spark" +
+          colourClass +
+          (i % 4 === 0 ? " small" : "");
+
+        const angle =
+          (360 / count) * i +
+          (Math.random() * 7 - 3.5);
+
+        const distance =
+          baseDistance *
+          (.72 + Math.random() * .50);
+
+        spark.style.setProperty(
+          "--a",
+          `${angle}deg`
+        );
+
+        spark.style.setProperty(
+          "--d",
+          `${distance}px`
+        );
+
+        spark.style.setProperty(
+          "--delay",
+          `${delayBase + Math.random() * .08}s`
+        );
+
+        holder.appendChild(spark);
+      }
+
+      const cometCount =
+        Math.max(
+          8,
+          Math.round(count / 4)
+        );
+
+      for (let i = 0; i < cometCount; i++) {
+        const comet =
+          document.createElement("span");
+
+        comet.className =
+          "firework-comet";
+
+        const angle =
+          (360 / cometCount) * i +
+          (Math.random() * 8 - 4);
+
+        const distance =
+          baseDistance *
+          (.72 + Math.random() * .30);
+
+        comet.style.setProperty(
+          "--a",
+          `${angle}deg`
+        );
+
+        comet.style.setProperty(
+          "--d",
+          `${distance}px`
+        );
+
+        comet.style.setProperty(
+          "--delay",
+          `${delayBase + Math.random() * .05}s`
+        );
+
+        holder.appendChild(comet);
+      }
+    }
+
+    function buildSixFireworks() {
+      clearSixFireworks();
+
+      /* Main explosion */
+      addFireworkBurst(
+        "fwMain",
+        72,
+        225,
+        0
+      );
+
+      /* Staggered secondary explosions */
+      addFireworkBurst(
+        "fwOne",
+        28,
+        86,
+        .10
+      );
+
+      addFireworkBurst(
+        "fwTwo",
+        28,
+        86,
+        .14
+      );
+
+      addFireworkBurst(
+        "fwThree",
+        22,
+        74,
+        .18
+      );
+
+      addFireworkBurst(
+        "fwFour",
+        22,
+        74,
+        .21
+      );
+    }
+
+
     function showBoundaryAnimation(runs) {
       if (runs !== 4 && runs !== 6) return;
 
-      const overlay = document.getElementById("boundaryOverlay");
-      const word = document.getElementById("boundaryWord");
+      const overlay =
+        document.getElementById(
+          "boundaryOverlay"
+        );
+
+      const word =
+        document.getElementById(
+          "boundaryWord"
+        );
+
       if (!overlay || !word) return;
 
       if (BOUNDARY_HIDE_TIMER) {
-        clearTimeout(BOUNDARY_HIDE_TIMER);
-        BOUNDARY_HIDE_TIMER = null;
+        clearTimeout(
+          BOUNDARY_HIDE_TIMER
+        );
+
+        BOUNDARY_HIDE_TIMER =
+          null;
       }
 
-      BOUNDARY_ANIMATION_ACTIVE = true;
-      overlay.className = "boundary-overlay";
+      BOUNDARY_ANIMATION_ACTIVE =
+        true;
+
+      /*
+        Reset the previous animation completely.
+        This allows another boundary to animate
+        even if it follows quickly.
+      */
+      overlay.className =
+        "boundary-overlay";
+
+      clearSixFireworks();
+
       void overlay.offsetWidth;
 
-      word.textContent = runs === 4 ? "FOUR" : "SIX";
-      overlay.classList.add("show", runs === 4 ? "four" : "six");
+      if (runs === 4) {
+        word.textContent =
+          "FOUR";
 
-      BOUNDARY_HIDE_TIMER = setTimeout(() => {
-        overlay.className = "boundary-overlay";
-        word.textContent = "";
-        BOUNDARY_ANIMATION_ACTIVE = false;
-      }, 2500);
+        /*
+          FOUR:
+          white + maroon/gold outline,
+          pop/flash only,
+          NO fireworks.
+        */
+        overlay.classList.add(
+          "show",
+          "four"
+        );
+      }
+
+      else {
+        word.textContent =
+          "SIX";
+
+        /*
+          SIX:
+          larger gold lettering,
+          stronger pop,
+          full fireworks explosion.
+        */
+        buildSixFireworks();
+
+        overlay.classList.add(
+          "show",
+          "six"
+        );
+      }
+
+      /*
+        Approved animation length:
+        3.5 seconds.
+      */
+      BOUNDARY_HIDE_TIMER =
+        setTimeout(
+          () => {
+            overlay.className =
+              "boundary-overlay";
+
+            word.textContent =
+              "";
+
+            clearSixFireworks();
+
+            BOUNDARY_ANIMATION_ACTIVE =
+              false;
+          },
+          3500
+        );
     }
 
     function processBoundaryAnimations(ballsData) {

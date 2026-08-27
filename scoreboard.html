@@ -222,7 +222,8 @@
     }
 
 
-    /* ---------------- BOUNDARY CELEBRATIONS ---------------- */
+
+    /* ---------------- FOUR / SIX / WICKET CELEBRATIONS ---------------- */
 
     .boundary-overlay {
       position: absolute;
@@ -235,17 +236,17 @@
       pointer-events: none;
       opacity: 0;
 
-      /* Approved clean Trinity school-colour blend */
+      /* Approved deep navy -> true maroon -> gold blend */
       background:
-        radial-gradient(circle at 18% 20%, rgba(255,216,120,.18), transparent 28%),
-        radial-gradient(circle at 78% 24%, rgba(141,27,60,.34), transparent 34%),
-        radial-gradient(circle at 50% 78%, rgba(18,52,92,.72), transparent 48%),
+        radial-gradient(circle at 18% 20%, rgba(255,216,116,.14), transparent 26%),
+        radial-gradient(circle at 78% 23%, rgba(74,15,33,.42), transparent 33%),
+        radial-gradient(circle at 50% 76%, rgba(10,39,72,.82), transparent 50%),
         linear-gradient(
           135deg,
-          #07192f 0%,
-          #0d2d55 34%,
-          #711a34 66%,
-          #c89828 100%
+          #06162b 0%,
+          #0a2748 34%,
+          #4a0f21 68%,
+          #9b7220 100%
         );
     }
 
@@ -254,91 +255,186 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 50% 48%, rgba(255,216,120,.22), transparent 28%),
         linear-gradient(
-          135deg,
-          rgba(7,25,47,.10),
-          rgba(122,23,50,.20),
-          rgba(242,193,78,.13)
+          155deg,
+          rgba(255,255,255,.03),
+          transparent 20%,
+          rgba(227,173,47,.06) 52%,
+          transparent 78%
         );
-      opacity: 0;
-      z-index: 2;
+      mix-blend-mode: screen;
+      pointer-events: none;
     }
 
     .boundary-overlay.show {
       display: flex;
-      animation: boundaryOverlay 3.5s ease both;
-    }
-
-    .boundary-overlay.show::before {
-      animation: celebrationWash 3.5s ease both;
+      animation: celebrationOverlay 3.5s ease both;
     }
 
     .boundary-flash {
       position: absolute;
       inset: 0;
-      z-index: 9;
-      background: rgba(255,235,175,.95);
+      z-index: 40;
+      background: #fff3cf;
       opacity: 0;
       mix-blend-mode: screen;
     }
 
     .boundary-overlay.show .boundary-flash {
-      animation: boundaryFlash 3.5s ease both;
+      animation: celebrationFlash 3.5s ease both;
     }
 
     .boundary-word {
-      position: relative;
-      z-index: 8;
-      line-height: .9;
-      font-family: Arial, Helvetica, sans-serif;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 20;
+      transform: translate(-50%, -50%) scale(.1);
+      font-family: Arial Black, Arial, Helvetica, sans-serif;
       font-weight: 1000;
-      letter-spacing: -.05em;
-      text-transform: uppercase;
+      line-height: .86;
+      letter-spacing: -.055em;
       text-align: center;
+      text-transform: uppercase;
       opacity: 0;
-      transform: scale(.15);
-      backface-visibility: hidden;
       -webkit-font-smoothing: antialiased;
       text-rendering: geometricPrecision;
+      backface-visibility: hidden;
     }
 
-    /* FOUR: white, crisp, maroon border, gold edge — no fireworks */
+    /* FOUR — ivory/white, maroon edge, gold impact rays */
     .boundary-overlay.four .boundary-word {
       font-size: 122px;
-      color: #fffdf8;
-      -webkit-text-stroke: 3px #711a34;
+      color: #fffdf4;
+      -webkit-text-stroke: 3px #4a0f21;
       paint-order: stroke fill;
       text-shadow:
-        0 2px 0 #f2c14e,
-        0 6px 0 #47101f,
-        0 12px 24px rgba(0,0,0,.72),
-        0 0 8px rgba(255,255,255,.35);
+        0 2px 0 #e3ad2f,
+        0 6px 0 #2b0914,
+        0 14px 24px rgba(0,0,0,.78),
+        0 0 8px rgba(255,255,255,.28);
 
-      animation: fourPop 3.5s cubic-bezier(.18,.9,.28,1) both;
+      animation:
+        fourFinalPop
+        3.5s
+        cubic-bezier(.16,.9,.24,1)
+        both;
     }
 
-    /* SIX: intentionally larger and more dramatic */
+    /* SIX — deliberately much bigger, metallic gold, full fireworks */
     .boundary-overlay.six .boundary-word {
-      font-size: 166px;
-      color: #ffd878;
-      -webkit-text-stroke: 4px #711a34;
+      font-size: 172px;
+      color: #ffd874;
+      -webkit-text-stroke: 4px #4a0f21;
       paint-order: stroke fill;
       text-shadow:
-        0 3px 0 #f2c14e,
-        0 8px 0 #47101f,
-        0 16px 30px rgba(0,0,0,.76),
-        0 0 16px rgba(242,193,78,.68);
+        0 3px 0 #e3ad2f,
+        0 9px 0 #2b0914,
+        0 18px 34px rgba(0,0,0,.82),
+        0 0 18px rgba(227,173,47,.70);
 
-      animation: sixPop 3.5s cubic-bezier(.15,.92,.2,1) both;
+      animation:
+        sixFinalPop
+        3.5s
+        cubic-bezier(.14,.94,.18,1)
+        both;
     }
 
-    /* Real particle-style fireworks used ONLY for SIX */
+    /* WICKET — crisp white text over tall stumps and flying bails */
+    .boundary-overlay.wicket .boundary-word {
+      font-size: 102px;
+      color: #fffdf4;
+      -webkit-text-stroke: 4px #4a0f21;
+      paint-order: stroke fill;
+      text-shadow:
+        0 3px 0 #e3ad2f,
+        0 8px 0 #2b0914,
+        0 18px 32px rgba(0,0,0,.82);
+
+      animation:
+        wicketFinalPop
+        3.5s
+        cubic-bezier(.14,.92,.2,1)
+        both;
+    }
+
+    /* ---------- FOUR IMPACT RAYS ---------- */
+
+    .impact-rays {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 2px;
+      height: 2px;
+      z-index: 8;
+      display: none;
+      pointer-events: none;
+    }
+
+    .boundary-overlay.show.four .impact-rays {
+      display: block;
+    }
+
+    .impact-ray {
+      --a: 0deg;
+      --len: 180px;
+      --delay: 0s;
+
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--len);
+      height: 3px;
+      transform-origin: left center;
+      transform: rotate(var(--a)) scaleX(.05);
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255,221,124,.98),
+          rgba(227,173,47,.72),
+          rgba(227,173,47,0)
+        );
+
+      opacity: 0;
+      filter:
+        drop-shadow(
+          0 0 5px rgba(227,173,47,.55)
+        );
+
+      animation-delay: var(--delay);
+    }
+
+    .impact-ray.maroon {
+      background:
+        linear-gradient(
+          90deg,
+          rgba(104,22,44,.95),
+          rgba(74,15,33,.58),
+          rgba(74,15,33,0)
+        );
+    }
+
+    .boundary-overlay.show.four .impact-ray {
+      animation:
+        impactRayBurst
+        3.5s
+        ease-out
+        both;
+    }
+
+    /* ---------- SIX FIREWORKS ---------- */
+
     .fireworks-layer {
       position: absolute;
       inset: 0;
-      z-index: 5;
+      z-index: 10;
+      display: none;
       pointer-events: none;
+    }
+
+    .boundary-overlay.show.six .fireworks-layer {
+      display: block;
     }
 
     .firework-burst {
@@ -347,34 +443,15 @@
       height: 2px;
     }
 
-    .fw-main {
-      left: 50%;
-      top: 50%;
-    }
-
-    .fw-one {
-      left: 28%;
-      top: 32%;
-    }
-
-    .fw-two {
-      left: 73%;
-      top: 34%;
-    }
-
-    .fw-three {
-      left: 34%;
-      top: 69%;
-    }
-
-    .fw-four {
-      left: 67%;
-      top: 67%;
-    }
+    .fw-main  { left: 50%; top: 50%; }
+    .fw-one   { left: 24%; top: 29%; }
+    .fw-two   { left: 77%; top: 31%; }
+    .fw-three { left: 33%; top: 72%; }
+    .fw-four  { left: 68%; top: 69%; }
 
     .firework-spark {
       --a: 0deg;
-      --d: 170px;
+      --d: 180px;
       --delay: 0s;
 
       position: absolute;
@@ -385,28 +462,27 @@
       height: 5px;
       border-radius: 50%;
 
-      background: #ffd878;
+      background: #ffd874;
       box-shadow:
-        0 0 6px #ffd878,
-        0 0 14px #f2c14e;
+        0 0 7px #ffd874,
+        0 0 17px #e3ad2f;
 
       opacity: 0;
-      transform: rotate(var(--a)) translateX(0) scale(.2);
       animation-delay: var(--delay);
-    }
-
-    .firework-spark.maroon {
-      background: #e34d79;
-      box-shadow:
-        0 0 6px #e34d79,
-        0 0 15px #8d1b3c;
     }
 
     .firework-spark.white {
       background: #fff7dd;
       box-shadow:
-        0 0 7px #fff7dd,
-        0 0 15px #f2c14e;
+        0 0 7px #ffffff,
+        0 0 17px #e3ad2f;
+    }
+
+    .firework-spark.maroon {
+      background: #68162c;
+      box-shadow:
+        0 0 7px #68162c,
+        0 0 15px #4a0f21;
     }
 
     .firework-spark.small {
@@ -416,23 +492,23 @@
 
     .firework-comet {
       --a: 0deg;
-      --d: 150px;
+      --d: 160px;
       --delay: 0s;
 
       position: absolute;
       left: 0;
       top: 0;
 
-      width: 58px;
+      width: 66px;
       height: 2px;
       transform-origin: left center;
 
       background:
         linear-gradient(
           90deg,
-          rgba(255,236,180,.98),
-          rgba(242,193,78,.58),
-          rgba(242,193,78,0)
+          rgba(255,239,189,1),
+          rgba(227,173,47,.70),
+          rgba(227,173,47,0)
         );
 
       opacity: 0;
@@ -440,128 +516,569 @@
     }
 
     .boundary-overlay.show.six .firework-spark {
-      animation: fireworkSpark 3.5s cubic-bezier(.18,.8,.2,1) both;
+      animation:
+        sixFireworkSpark
+        3.5s
+        cubic-bezier(.17,.8,.2,1)
+        both;
     }
 
     .boundary-overlay.show.six .firework-comet {
-      animation: fireworkComet 3.5s ease-out both;
+      animation:
+        sixFireworkComet
+        3.5s
+        ease-out
+        both;
     }
 
-    @keyframes boundaryOverlay {
+    /* ---------- WICKET STUMPS / BAILS / DEBRIS ---------- */
+
+    .wicket-stumps {
+      position: absolute;
+      left: 50%;
+      top: 49%;
+      width: 170px;
+      height: 300px;
+      transform: translate(-50%, -50%) scale(.5);
+      z-index: 11;
+      opacity: 0;
+      display: none;
+      pointer-events: none;
+    }
+
+    .boundary-overlay.show.wicket .wicket-stumps {
+      display: block;
+      animation:
+        wicketStumpsHit
+        3.5s
+        ease
+        both;
+    }
+
+    .wicket-stump {
+      position: absolute;
+      bottom: 0;
+
+      width: 20px;
+      height: 248px;
+      border-radius: 9px 9px 4px 4px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #8a5c12,
+          #ffe5a0 38%,
+          #d9a737 70%,
+          #684107
+        );
+
+      box-shadow:
+        0 0 14px rgba(227,173,47,.38),
+        0 10px 16px rgba(0,0,0,.42);
+    }
+
+    .wicket-stump.one   { left: 18px; }
+    .wicket-stump.two   { left: 75px; }
+    .wicket-stump.three { left: 132px; }
+
+    .wicket-bail {
+      position: absolute;
+      top: 28px;
+
+      width: 70px;
+      height: 12px;
+      border-radius: 8px;
+
+      background:
+        linear-gradient(
+          #ffe9ad,
+          #b87913
+        );
+
+      box-shadow:
+        0 3px 9px rgba(0,0,0,.44);
+
+      transform-origin: center;
+    }
+
+    .wicket-bail.one { left: 12px; }
+    .wicket-bail.two { left: 79px; }
+
+    .boundary-overlay.show.wicket .wicket-bail.one {
+      animation:
+        wicketBailOne
+        3.5s
+        ease-out
+        both;
+    }
+
+    .boundary-overlay.show.wicket .wicket-bail.two {
+      animation:
+        wicketBailTwo
+        3.5s
+        ease-out
+        both;
+    }
+
+    .wicket-debris {
+      position: absolute;
+      inset: 0;
+      z-index: 9;
+      display: none;
+      pointer-events: none;
+    }
+
+    .boundary-overlay.show.wicket .wicket-debris {
+      display: block;
+    }
+
+    .wicket-chip {
+      --x: 0px;
+      --y: 0px;
+      --r: 0deg;
+      --delay: 0s;
+
+      position: absolute;
+      left: 50%;
+      top: 51%;
+
+      width: 7px;
+      height: 16px;
+      border-radius: 3px;
+
+      background: #e3ad2f;
+      opacity: 0;
+      animation-delay: var(--delay);
+    }
+
+    .wicket-chip.maroon {
+      background: #65162d;
+    }
+
+    .wicket-chip.white {
+      background: #fff3cf;
+    }
+
+    .boundary-overlay.show.wicket .wicket-chip {
+      animation:
+        wicketChipFly
+        3.5s
+        cubic-bezier(.18,.75,.2,1)
+        both;
+    }
+
+    /* ---------- KEYFRAMES ---------- */
+
+    @keyframes celebrationOverlay {
       0%   { opacity: 0; }
-      4%   { opacity: 1; }
-      90%  { opacity: 1; }
+      3%   { opacity: 1; }
+      91%  { opacity: 1; }
       100% { opacity: 0; }
     }
 
-    @keyframes celebrationWash {
-      0%   { opacity: 0; }
-      7%   { opacity: .92; }
-      72%  { opacity: .78; }
-      100% { opacity: 0; }
+    @keyframes celebrationFlash {
+      0%,3% { opacity: 0; }
+      5%    { opacity: .88; }
+      7%    { opacity: 0; }
+      13%   { opacity: .22; }
+      15%,100% { opacity: 0; }
     }
 
-    @keyframes boundaryFlash {
-      0%, 4%   { opacity: 0; }
-      6%       { opacity: .80; }
-      8%       { opacity: 0; }
-      14%      { opacity: .26; }
-      16%      { opacity: 0; }
-      24%      { opacity: .16; }
-      26%,100% { opacity: 0; }
-    }
-
-    @keyframes fourPop {
-      0%   { opacity: 0; transform: scale(.15); }
-      6%   { opacity: 1; transform: scale(1.28); }
-      11%  { transform: scale(.90); }
-      17%  { transform: scale(1.10); }
-      24%  { transform: scale(.98); }
-      32%  { transform: scale(1); }
-      73%  { opacity: 1; transform: scale(1); }
-      82%  { transform: scale(1.06); }
-      100% { opacity: 0; transform: scale(.90); }
-    }
-
-    @keyframes sixPop {
-      0%   { opacity: 0; transform: scale(.08); }
-      5%   { opacity: 1; transform: scale(1.48); }
-      10%  { transform: scale(.84); }
-      16%  { transform: scale(1.20); }
-      22%  { transform: scale(.96); }
-      30%  { transform: scale(1.08); }
-      36%  { opacity: 1; transform: scale(1.04); }
-      72%  { opacity: 1; transform: scale(1.04); }
-      80%  { transform: scale(1.12); }
-      100% { opacity: 0; transform: scale(.90); }
-    }
-
-    @keyframes fireworkSpark {
-      0%, 7% {
+    @keyframes fourFinalPop {
+      0% {
         opacity: 0;
-        transform: rotate(var(--a)) translateX(0) scale(.2);
+        transform:
+          translate(-50%, -50%)
+          scale(.1);
       }
 
-      10% {
+      6% {
         opacity: 1;
+        transform:
+          translate(-50%, -50%)
+          scale(1.32);
       }
 
-      34% {
+      12% {
+        transform:
+          translate(-50%, -50%)
+          scale(.90);
+      }
+
+      19% {
+        transform:
+          translate(-50%, -50%)
+          scale(1.10);
+      }
+
+      28%,74% {
         opacity: 1;
-        transform: rotate(var(--a)) translateX(var(--d)) scale(1);
+        transform:
+          translate(-50%, -50%)
+          scale(1);
       }
 
-      62% {
-        opacity: .85;
+      82% {
+        transform:
+          translate(-50%, -50%)
+          scale(1.06);
+      }
+
+      100% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          scale(.90);
+      }
+    }
+
+    @keyframes sixFinalPop {
+      0% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          scale(.05);
+      }
+
+      4% {
+        opacity: 1;
+        transform:
+          translate(-50%, -50%)
+          scale(1.58);
+      }
+
+      9% {
+        transform:
+          translate(-50%, -50%)
+          scale(.82);
+      }
+
+      15% {
+        transform:
+          translate(-50%, -50%)
+          scale(1.24);
+      }
+
+      22% {
+        transform:
+          translate(-50%, -50%)
+          scale(.96);
+      }
+
+      30% {
+        transform:
+          translate(-50%, -50%)
+          scale(1.10);
+      }
+
+      36%,72% {
+        opacity: 1;
+        transform:
+          translate(-50%, -50%)
+          scale(1.06);
+      }
+
+      80% {
+        transform:
+          translate(-50%, -50%)
+          scale(1.15);
+      }
+
+      100% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          scale(.90);
+      }
+    }
+
+    @keyframes wicketFinalPop {
+      0%,6% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          scale(.1);
+      }
+
+      9% {
+        opacity: 1;
+        transform:
+          translate(-50%, -50%)
+          scale(1.34);
+      }
+
+      14% {
+        transform:
+          translate(-50%, -50%)
+          scale(.92);
+      }
+
+      20% {
+        transform:
+          translate(-50%, -50%)
+          scale(1.10);
+      }
+
+      28%,74% {
+        opacity: 1;
+        transform:
+          translate(-50%, -50%)
+          scale(1);
+      }
+
+      82% {
+        transform:
+          translate(-50%, -50%)
+          scale(1.05);
+      }
+
+      100% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          scale(.90);
+      }
+    }
+
+    @keyframes impactRayBurst {
+      0%,4% {
+        opacity: 0;
         transform:
           rotate(var(--a))
-          translateX(calc(var(--d) * 1.24))
-          translateY(8px)
-          scale(.7);
+          scaleX(.05);
+      }
+
+      7% {
+        opacity: 1;
+      }
+
+      22% {
+        opacity: .90;
+        transform:
+          rotate(var(--a))
+          scaleX(1);
+      }
+
+      52% {
+        opacity: .50;
+        transform:
+          rotate(var(--a))
+          scaleX(1.25);
       }
 
       100% {
         opacity: 0;
         transform:
           rotate(var(--a))
-          translateX(calc(var(--d) * 1.50))
-          translateY(24px)
-          scale(.1);
+          scaleX(1.55);
       }
     }
 
-    @keyframes fireworkComet {
-      0%, 6% {
+    @keyframes sixFireworkSpark {
+      0%,6% {
         opacity: 0;
-        transform: rotate(var(--a)) translateX(0) scaleX(.2);
+        transform:
+          rotate(var(--a))
+          translateX(0)
+          scale(.2);
       }
 
       9% {
         opacity: 1;
       }
 
-      30% {
-        opacity: .85;
-        transform:
-          rotate(var(--a))
-          translateX(calc(var(--d) * .55))
-          scaleX(1);
-      }
-
-      65% {
-        opacity: .4;
+      32% {
+        opacity: 1;
         transform:
           rotate(var(--a))
           translateX(var(--d))
-          scaleX(.8);
+          scale(1);
+      }
+
+      62% {
+        opacity: .85;
+        transform:
+          rotate(var(--a))
+          translateX(calc(var(--d) * 1.26))
+          translateY(8px)
+          scale(.72);
       }
 
       100% {
         opacity: 0;
         transform:
           rotate(var(--a))
-          translateX(calc(var(--d) * 1.28))
-          scaleX(.25);
+          translateX(calc(var(--d) * 1.55))
+          translateY(28px)
+          scale(.1);
+      }
+    }
+
+    @keyframes sixFireworkComet {
+      0%,5% {
+        opacity: 0;
+        transform:
+          rotate(var(--a))
+          translateX(0)
+          scaleX(.2);
+      }
+
+      8% {
+        opacity: 1;
+      }
+
+      28% {
+        opacity: .95;
+        transform:
+          rotate(var(--a))
+          translateX(calc(var(--d) * .56))
+          scaleX(1);
+      }
+
+      62% {
+        opacity: .42;
+        transform:
+          rotate(var(--a))
+          translateX(var(--d))
+          scaleX(.78);
+      }
+
+      100% {
+        opacity: 0;
+        transform:
+          rotate(var(--a))
+          translateX(calc(var(--d) * 1.30))
+          scaleX(.2);
+      }
+    }
+
+    @keyframes wicketStumpsHit {
+      0% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          scale(.38);
+      }
+
+      5% {
+        opacity: 1;
+        transform:
+          translate(-50%, -50%)
+          scale(1.16);
+      }
+
+      12%,64% {
+        opacity: .88;
+        transform:
+          translate(-50%, -50%)
+          scale(1);
+      }
+
+      82%,100% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          scale(1);
+      }
+    }
+
+    @keyframes wicketBailOne {
+      0%,7% {
+        transform:
+          translate(0,0)
+          rotate(0);
+      }
+
+      20% {
+        transform:
+          translate(-82px,-112px)
+          rotate(-132deg);
+      }
+
+      55% {
+        transform:
+          translate(-125px,-148px)
+          rotate(-260deg);
+      }
+
+      100% {
+        opacity: 0;
+        transform:
+          translate(-165px,115px)
+          rotate(-450deg);
+      }
+    }
+
+    @keyframes wicketBailTwo {
+      0%,7% {
+        transform:
+          translate(0,0)
+          rotate(0);
+      }
+
+      20% {
+        transform:
+          translate(88px,-118px)
+          rotate(136deg);
+      }
+
+      55% {
+        transform:
+          translate(130px,-152px)
+          rotate(270deg);
+      }
+
+      100% {
+        opacity: 0;
+        transform:
+          translate(170px,118px)
+          rotate(455deg);
+      }
+    }
+
+    @keyframes wicketChipFly {
+      0%,6% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          scale(.2);
+      }
+
+      8% {
+        opacity: 1;
+      }
+
+      30% {
+        opacity: 1;
+        transform:
+          translate(
+            calc(-50% + var(--x)),
+            calc(-50% + var(--y))
+          )
+          rotate(var(--r))
+          scale(1);
+      }
+
+      68% {
+        opacity: .70;
+        transform:
+          translate(
+            calc(-50% + var(--x)),
+            calc(-50% + var(--y) + 22px)
+          )
+          rotate(calc(var(--r) + 85deg))
+          scale(.75);
+      }
+
+      100% {
+        opacity: 0;
+        transform:
+          translate(
+            calc(-50% + var(--x)),
+            calc(-50% + var(--y) + 90px)
+          )
+          rotate(calc(var(--r) + 175deg))
+          scale(.2);
       }
     }
   </style>
@@ -572,12 +1089,15 @@
   <div id="scoreboard">
 
 
-    <!-- Full-screen FOUR / SIX celebration overlay -->
+    <!-- Full-screen FOUR / SIX / WICKET celebration overlay -->
     <div id="boundaryOverlay" class="boundary-overlay" aria-hidden="true">
 
       <div class="boundary-flash"></div>
 
-      <!-- Fireworks are dynamically created only when a SIX is detected -->
+      <!-- FOUR impact rays -->
+      <div id="impactRays" class="impact-rays" aria-hidden="true"></div>
+
+      <!-- SIX fireworks -->
       <div class="fireworks-layer" aria-hidden="true">
         <div id="fwMain" class="firework-burst fw-main"></div>
         <div id="fwOne" class="firework-burst fw-one"></div>
@@ -585,6 +1105,18 @@
         <div id="fwThree" class="firework-burst fw-three"></div>
         <div id="fwFour" class="firework-burst fw-four"></div>
       </div>
+
+      <!-- WICKET tall stumps and flying bails -->
+      <div id="wicketStumps" class="wicket-stumps" aria-hidden="true">
+        <div class="wicket-stump one"></div>
+        <div class="wicket-stump two"></div>
+        <div class="wicket-stump three"></div>
+
+        <div class="wicket-bail one"></div>
+        <div class="wicket-bail two"></div>
+      </div>
+
+      <div id="wicketDebris" class="wicket-debris" aria-hidden="true"></div>
 
       <div id="boundaryWord" class="boundary-word"></div>
 
@@ -1559,7 +2091,7 @@
 
 
     /* =========================================
-       FOUR / SIX ANIMATION DETECTION
+       FOUR / SIX / WICKET ANIMATION DETECTION
        ========================================= */
 
     const SEEN_DELIVERY_KEYS = new Set();
@@ -1604,9 +2136,49 @@
         const runs = Number(String(rawRuns).replace(/[^0-9.-]/g, ""));
         if (!Number.isFinite(runs)) return;
 
+        const commentary =
+          String(
+            firstValue(
+              obj,
+              [
+                "commentary",
+                "description"
+              ]
+            ) || ""
+          );
+
+        const explicitOut =
+          obj.isOut === true ||
+          String(obj.isOut).toLowerCase() === "true";
+
+        const wicketFields =
+          [
+            obj.wicketTaker,
+            obj.wicketTaker1,
+            obj.wicketTaker2,
+            obj.wicketType,
+            obj.dismissalType,
+            obj.outType
+          ]
+          .some(
+            value =>
+              value !== undefined &&
+              value !== null &&
+              String(value).trim() !== "" &&
+              String(value).trim() !== "0"
+          );
+
+        const commentaryWicket =
+          /\b(out|wicket|bowled|caught|run\s*out|stumped|lbw|hit\s*wicket)\b/i
+            .test(commentary);
+
         deliveries.push({
           key: deliveryKey(obj),
           runs,
+          isWicket:
+            explicitOut ||
+            wicketFields ||
+            commentaryWicket,
           createdAt: String(obj.createdAt || ""),
           raw: obj
         });
@@ -1623,6 +2195,88 @@
     }
 
 
+    function clearImpactRays() {
+      const holder =
+        document.getElementById(
+          "impactRays"
+        );
+
+      if (holder) {
+        holder.innerHTML =
+          "";
+      }
+    }
+
+    function buildImpactRays() {
+      clearImpactRays();
+
+      const holder =
+        document.getElementById(
+          "impactRays"
+        );
+
+      if (!holder) return;
+
+      const count =
+        34;
+
+      for (
+        let i = 0;
+        i < count;
+        i++
+      ) {
+        const ray =
+          document.createElement(
+            "span"
+          );
+
+        ray.className =
+          "impact-ray" +
+          (
+            i % 5 === 0
+              ? " maroon"
+              : ""
+          );
+
+        const angle =
+          (
+            360 /
+            count
+          ) *
+          i +
+          (
+            Math.random() *
+            5 -
+            2.5
+          );
+
+        const length =
+          130 +
+          Math.random() *
+          115;
+
+        ray.style.setProperty(
+          "--a",
+          `${angle}deg`
+        );
+
+        ray.style.setProperty(
+          "--len",
+          `${length}px`
+        );
+
+        ray.style.setProperty(
+          "--delay",
+          `${Math.random() * .06}s`
+        );
+
+        holder.appendChild(
+          ray
+        );
+      }
+    }
+
+
     function clearSixFireworks() {
       [
         "fwMain",
@@ -1630,20 +2284,48 @@
         "fwTwo",
         "fwThree",
         "fwFour"
-      ].forEach(id => {
-        const holder = document.getElementById(id);
-        if (holder) holder.innerHTML = "";
-      });
+      ]
+      .forEach(
+        id => {
+          const holder =
+            document.getElementById(
+              id
+            );
+
+          if (holder) {
+            holder.innerHTML =
+              "";
+          }
+        }
+      );
     }
 
-    function addFireworkBurst(holderId, count, baseDistance, delayBase = 0) {
-      const holder = document.getElementById(holderId);
+    function addFireworkBurst(
+      holderId,
+      count,
+      baseDistance,
+      delayBase =
+        0
+    ) {
+      const holder =
+        document.getElementById(
+          holderId
+        );
+
       if (!holder) return;
 
-      holder.innerHTML = "";
+      holder.innerHTML =
+        "";
 
-      for (let i = 0; i < count; i++) {
-        const spark = document.createElement("span");
+      for (
+        let i = 0;
+        i < count;
+        i++
+      ) {
+        const spark =
+          document.createElement(
+            "span"
+          );
 
         const colourClass =
           i % 3 === 1
@@ -1655,15 +2337,31 @@
         spark.className =
           "firework-spark" +
           colourClass +
-          (i % 4 === 0 ? " small" : "");
+          (
+            i % 4 === 0
+              ? " small"
+              : ""
+          );
 
         const angle =
-          (360 / count) * i +
-          (Math.random() * 7 - 3.5);
+          (
+            360 /
+            count
+          ) *
+          i +
+          (
+            Math.random() *
+            7 -
+            3.5
+          );
 
         const distance =
           baseDistance *
-          (.72 + Math.random() * .50);
+          (
+            .72 +
+            Math.random() *
+            .52
+          );
 
         spark.style.setProperty(
           "--a",
@@ -1677,32 +2375,59 @@
 
         spark.style.setProperty(
           "--delay",
-          `${delayBase + Math.random() * .08}s`
+          `${
+            delayBase +
+            Math.random() *
+            .08
+          }s`
         );
 
-        holder.appendChild(spark);
+        holder.appendChild(
+          spark
+        );
       }
 
       const cometCount =
         Math.max(
-          8,
-          Math.round(count / 4)
+          10,
+          Math.round(
+            count /
+            4
+          )
         );
 
-      for (let i = 0; i < cometCount; i++) {
+      for (
+        let i = 0;
+        i < cometCount;
+        i++
+      ) {
         const comet =
-          document.createElement("span");
+          document.createElement(
+            "span"
+          );
 
         comet.className =
           "firework-comet";
 
         const angle =
-          (360 / cometCount) * i +
-          (Math.random() * 8 - 4);
+          (
+            360 /
+            cometCount
+          ) *
+          i +
+          (
+            Math.random() *
+            9 -
+            4.5
+          );
 
         const distance =
           baseDistance *
-          (.72 + Math.random() * .30);
+          (
+            .72 +
+            Math.random() *
+            .34
+          );
 
         comet.style.setProperty(
           "--a",
@@ -1716,57 +2441,179 @@
 
         comet.style.setProperty(
           "--delay",
-          `${delayBase + Math.random() * .05}s`
+          `${
+            delayBase +
+            Math.random() *
+            .05
+          }s`
         );
 
-        holder.appendChild(comet);
+        holder.appendChild(
+          comet
+        );
       }
     }
 
     function buildSixFireworks() {
       clearSixFireworks();
 
-      /* Main explosion */
+      /*
+        Big central explosion.
+      */
       addFireworkBurst(
         "fwMain",
-        72,
-        225,
+        82,
+        235,
         0
       );
 
-      /* Staggered secondary explosions */
+      /*
+        Staggered secondary
+        explosions.
+      */
       addFireworkBurst(
         "fwOne",
-        28,
-        86,
-        .10
+        32,
+        96,
+        .08
       );
 
       addFireworkBurst(
         "fwTwo",
-        28,
-        86,
-        .14
+        32,
+        96,
+        .12
       );
 
       addFireworkBurst(
         "fwThree",
-        22,
-        74,
-        .18
+        26,
+        82,
+        .17
       );
 
       addFireworkBurst(
         "fwFour",
-        22,
-        74,
-        .21
+        26,
+        82,
+        .20
       );
     }
 
 
-    function showBoundaryAnimation(runs) {
-      if (runs !== 4 && runs !== 6) return;
+    function clearWicketDebris() {
+      const holder =
+        document.getElementById(
+          "wicketDebris"
+        );
+
+      if (holder) {
+        holder.innerHTML =
+          "";
+      }
+    }
+
+    function buildWicketDebris() {
+      clearWicketDebris();
+
+      const holder =
+        document.getElementById(
+          "wicketDebris"
+        );
+
+      if (!holder) return;
+
+      const count =
+        34;
+
+      for (
+        let i = 0;
+        i < count;
+        i++
+      ) {
+        const chip =
+          document.createElement(
+            "span"
+          );
+
+        chip.className =
+          "wicket-chip" +
+          (
+            i % 3 === 1
+              ? " maroon"
+              : i % 3 === 2
+                ? " white"
+                : ""
+          );
+
+        const angle =
+          Math.random() *
+          Math.PI *
+          2;
+
+        const distance =
+          85 +
+          Math.random() *
+          145;
+
+        chip.style.setProperty(
+          "--x",
+          `${
+            Math.cos(angle) *
+            distance
+          }px`
+        );
+
+        chip.style.setProperty(
+          "--y",
+          `${
+            Math.sin(angle) *
+            distance *
+            .66
+          }px`
+        );
+
+        chip.style.setProperty(
+          "--r",
+          `${
+            Math.random() *
+            320 -
+            160
+          }deg`
+        );
+
+        chip.style.setProperty(
+          "--delay",
+          `${
+            Math.random() *
+            .08
+          }s`
+        );
+
+        holder.appendChild(
+          chip
+        );
+      }
+    }
+
+
+    function clearCelebrationEffects() {
+      clearImpactRays();
+      clearSixFireworks();
+      clearWicketDebris();
+    }
+
+
+    function showCricketAnimation(
+      type
+    ) {
+      if (
+        type !== "FOUR" &&
+        type !== "SIX" &&
+        type !== "WICKET"
+      ) {
+        return;
+      }
 
       const overlay =
         document.getElementById(
@@ -1778,9 +2625,16 @@
           "boundaryWord"
         );
 
-      if (!overlay || !word) return;
+      if (
+        !overlay ||
+        !word
+      ) {
+        return;
+      }
 
-      if (BOUNDARY_HIDE_TIMER) {
+      if (
+        BOUNDARY_HIDE_TIMER
+      ) {
         clearTimeout(
           BOUNDARY_HIDE_TIMER
         );
@@ -1793,43 +2647,40 @@
         true;
 
       /*
-        Reset the previous animation completely.
-        This allows another boundary to animate
-        even if it follows quickly.
+        Fully reset the last animation
+        so consecutive events can still
+        trigger correctly.
       */
       overlay.className =
         "boundary-overlay";
 
-      clearSixFireworks();
+      word.textContent =
+        "";
+
+      clearCelebrationEffects();
 
       void overlay.offsetWidth;
 
-      if (runs === 4) {
+      if (
+        type === "FOUR"
+      ) {
         word.textContent =
           "FOUR";
 
-        /*
-          FOUR:
-          white + maroon/gold outline,
-          pop/flash only,
-          NO fireworks.
-        */
+        buildImpactRays();
+
         overlay.classList.add(
           "show",
           "four"
         );
       }
 
-      else {
+      else if (
+        type === "SIX"
+      ) {
         word.textContent =
           "SIX";
 
-        /*
-          SIX:
-          larger gold lettering,
-          stronger pop,
-          full fireworks explosion.
-        */
         buildSixFireworks();
 
         overlay.classList.add(
@@ -1838,9 +2689,21 @@
         );
       }
 
+      else {
+        word.textContent =
+          "WICKET";
+
+        buildWicketDebris();
+
+        overlay.classList.add(
+          "show",
+          "wicket"
+        );
+      }
+
       /*
-        Approved animation length:
-        3.5 seconds.
+        All approved animations
+        last 3.5 seconds.
       */
       BOUNDARY_HIDE_TIMER =
         setTimeout(
@@ -1851,7 +2714,7 @@
             word.textContent =
               "";
 
-            clearSixFireworks();
+            clearCelebrationEffects();
 
             BOUNDARY_ANIMATION_ACTIVE =
               false;
@@ -1860,35 +2723,147 @@
         );
     }
 
-    function processBoundaryAnimations(ballsData) {
-      const deliveries = collectDeliveries(ballsData);
-      if (!deliveries.length) return;
 
-      if (!BOUNDARY_BASELINE_READY) {
-        for (const delivery of deliveries) {
-          SEEN_DELIVERY_KEYS.add(delivery.key);
-        }
-        BOUNDARY_BASELINE_READY = true;
+    function showBoundaryAnimation(
+      runs
+    ) {
+      if (
+        runs === 4
+      ) {
+        showCricketAnimation(
+          "FOUR"
+        );
+      }
+
+      else if (
+        runs === 6
+      ) {
+        showCricketAnimation(
+          "SIX"
+        );
+      }
+    }
+
+
+    function processBoundaryAnimations(
+      ballsData
+    ) {
+      const deliveries =
+        collectDeliveries(
+          ballsData
+        );
+
+      if (
+        !deliveries.length
+      ) {
         return;
       }
 
-      const unseen = deliveries.filter(d => !SEEN_DELIVERY_KEYS.has(d.key));
+      /*
+        First load creates a baseline.
+        This prevents an old FOUR,
+        SIX or WICKET from playing
+        immediately when the page opens.
+      */
+      if (
+        !BOUNDARY_BASELINE_READY
+      ) {
+        for (
+          const delivery
+          of deliveries
+        ) {
+          SEEN_DELIVERY_KEYS.add(
+            delivery.key
+          );
+        }
 
-      for (const delivery of deliveries) {
-        SEEN_DELIVERY_KEYS.add(delivery.key);
+        BOUNDARY_BASELINE_READY =
+          true;
+
+        return;
       }
 
-      while (SEEN_DELIVERY_KEYS.size > 300) {
-        const oldest = SEEN_DELIVERY_KEYS.values().next().value;
-        SEEN_DELIVERY_KEYS.delete(oldest);
+      const unseen =
+        deliveries.filter(
+          delivery =>
+            !SEEN_DELIVERY_KEYS.has(
+              delivery.key
+            )
+        );
+
+      for (
+        const delivery
+        of deliveries
+      ) {
+        SEEN_DELIVERY_KEYS.add(
+          delivery.key
+        );
       }
 
-      if (!unseen.length) return;
+      /*
+        Prevent the set from
+        growing forever.
+      */
+      while (
+        SEEN_DELIVERY_KEYS.size >
+        300
+      ) {
+        const oldest =
+          SEEN_DELIVERY_KEYS
+            .values()
+            .next()
+            .value;
 
-      const latestBoundary = [...unseen].reverse().find(d => d.runs === 4 || d.runs === 6);
-      if (latestBoundary) {
-        showBoundaryAnimation(latestBoundary.runs);
+        SEEN_DELIVERY_KEYS.delete(
+          oldest
+        );
       }
+
+      if (
+        !unseen.length
+      ) {
+        return;
+      }
+
+      /*
+        Use the latest unseen
+        scoring event only.
+
+        WICKET takes priority
+        over a boundary on the
+        same delivery.
+      */
+      const latestEvent =
+        [
+          ...unseen
+        ]
+        .reverse()
+        .find(
+          delivery =>
+            delivery.isWicket ||
+            delivery.runs === 4 ||
+            delivery.runs === 6
+        );
+
+      if (
+        !latestEvent
+      ) {
+        return;
+      }
+
+      if (
+        latestEvent.isWicket
+      ) {
+        showCricketAnimation(
+          "WICKET"
+        );
+
+        return;
+      }
+
+      showBoundaryAnimation(
+        latestEvent.runs
+      );
     }
 
 

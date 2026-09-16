@@ -2096,6 +2096,10 @@
 
     const SEEN_DELIVERY_KEYS = new Set();
     let BOUNDARY_BASELINE_READY = false;
+
+    // Stores the latest actual delivery so a normal
+    // 5-second API refresh cannot replay an old event.
+    let LAST_LIVE_DELIVERY_SIGNATURE = null;
     let BOUNDARY_ANIMATION_ACTIVE = false;
     let BOUNDARY_HIDE_TIMER = null;
 
@@ -2108,6 +2112,44 @@
       const commentary = firstValue(ball, ["commentary", "description"]);
       return [createdAt, over, delivery, batsman, runs, commentary].join("|");
     }
+
+    function liveDeliverySignature(delivery) {
+      const obj =
+        delivery && delivery.raw
+          ? delivery.raw
+          : {};
+
+      const innings =
+        firstValue(
+          obj,
+          ["innings", "inningsNo", "inning", "inningNo"]
+        ) || "";
+
+      const over =
+        firstValue(
+          obj,
+          ["over", "overNum", "overNo", "overNumber"]
+        ) || "";
+
+      const ball =
+        firstValue(
+          obj,
+          ["ball", "ballNum", "ballNo", "ballNumber"]
+        ) || "";
+
+      /*
+        Deliberately exclude runs/commentary from this ID.
+        CricClubs can reformat those fields on refresh,
+        but it is still the same cricket delivery.
+      */
+      return [
+        delivery.createdAt || "",
+        innings,
+        over,
+        ball
+      ].join("|");
+    }
+
 
     function collectDeliveries(ballsData) {
       const deliveries = [];
@@ -2925,22 +2967,62 @@
       }
 
       /*
-        First load creates a baseline.
-        This prevents an old FOUR,
-        SIX or WICKET from playing
-        immediately when the page opens.
+        The /balls feed contains historical deliveries on
+        every refresh. Find only the newest actual delivery.
+      */
+      const indexed =
+        deliveries.map(
+          (delivery, index) => ({
+            delivery,
+            index
+          })
+        );
+
+      indexed.sort(
+        (a, b) => {
+          const aTime =
+            Date.parse(
+              a.delivery.createdAt || ""
+            );
+
+          const bTime =
+            Date.parse(
+              b.delivery.createdAt || ""
+            );
+
+          if (
+            Number.isFinite(aTime) &&
+            Number.isFinite(bTime) &&
+            aTime !== bTime
+          ) {
+            return aTime - bTime;
+          }
+
+          return a.index - b.index;
+        }
+      );
+
+      const latest =
+        indexed[
+          indexed.length - 1
+        ].delivery;
+
+      const signature =
+        liveDeliverySignature(
+          latest
+        );
+
+      /*
+        FIRST LOAD:
+        Set the current ball as the baseline. Never play
+        FOUR, SIX or OUT for something that happened before
+        the scoreboard/browser source opened.
       */
       if (
         !BOUNDARY_BASELINE_READY
       ) {
-        for (
-          const delivery
-          of deliveries
-        ) {
-          SEEN_DELIVERY_KEYS.add(
-            delivery.key
-          );
-        }
+        LAST_LIVE_DELIVERY_SIGNATURE =
+          signature;
 
         BOUNDARY_BASELINE_READY =
           true;
@@ -2948,75 +3030,29 @@
         return;
       }
 
-      const unseen =
-        deliveries.filter(
-          delivery =>
-            !SEEN_DELIVERY_KEYS.has(
-              delivery.key
-            )
-        );
-
-      for (
-        const delivery
-        of deliveries
-      ) {
-        SEEN_DELIVERY_KEYS.add(
-          delivery.key
-        );
-      }
-
       /*
-        Prevent the set from
-        growing forever.
+        SAME DELIVERY, NEW 5-SECOND REFRESH:
+        Do absolutely nothing.
       */
-      while (
-        SEEN_DELIVERY_KEYS.size >
-        300
-      ) {
-        const oldest =
-          SEEN_DELIVERY_KEYS
-            .values()
-            .next()
-            .value;
-
-        SEEN_DELIVERY_KEYS.delete(
-          oldest
-        );
-      }
-
       if (
-        !unseen.length
+        signature ===
+        LAST_LIVE_DELIVERY_SIGNATURE
       ) {
         return;
       }
 
       /*
-        Use the latest unseen
-        scoring event only.
-
-        WICKET takes priority
-        over a boundary on the
-        same delivery.
+        A genuinely new delivery has arrived. Store it
+        immediately, including dot balls and normal runs.
       */
-      const latestEvent =
-        [
-          ...unseen
-        ]
-        .reverse()
-        .find(
-          delivery =>
-            delivery.isWicket ||
-            delivery.genuineBoundary
-        );
+      LAST_LIVE_DELIVERY_SIGNATURE =
+        signature;
 
+      /*
+        OUT has priority, but ONLY on this new delivery.
+      */
       if (
-        !latestEvent
-      ) {
-        return;
-      }
-
-      if (
-        latestEvent.isWicket
+        latest.isWicket
       ) {
         showCricketAnimation(
           "WICKET"
@@ -3026,14 +3062,17 @@
       }
 
       /*
-        Only a delivery that passed the strict
-        genuine-boundary test reaches this point.
+        FOUR/SIX only run when the strict extras filter has
+        confirmed a genuine boundary off the bat.
       */
-      showBoundaryAnimation(
-        latestEvent.batterRuns
-      );
+      if (
+        latest.genuineBoundary
+      ) {
+        showBoundaryAnimation(
+          latest.batterRuns
+        );
+      }
     }
-
 
     async function loadScore() {
 

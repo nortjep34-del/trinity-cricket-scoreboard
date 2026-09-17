@@ -3252,288 +3252,126 @@
     }
 
     function renderLiveCricketStats(scoreData, ballsData) {
-      const objects = [
-        ...walkObjects(scoreData),
-        ...walkObjects(ballsData)
+      /*
+        CricClubs already supplies the authoritative live figures in:
+          data.latestBatting.batsman1 / batsman2
+          data.latestBowling.bowler1
+
+        Do NOT recalculate these figures from historical deliveries.
+      */
+      const liveRoot =
+        ballsData && ballsData.data
+          ? ballsData.data
+          : {};
+
+      const latestBatting =
+        liveRoot.latestBatting || {};
+
+      const latestBowling =
+        liveRoot.latestBowling || {};
+
+      const batsman1 = latestBatting.batsman1 || null;
+      const batsman2 = latestBatting.batsman2 || null;
+      const currentBowler = latestBowling.bowler1 || null;
+
+      function fullPlayerName(player, fallback) {
+        if (!player) return fallback;
+        const name = [player.firstName, player.lastName]
+          .filter(Boolean)
+          .join(" ")
+          .trim();
+        return name || fallback;
+      }
+
+      function battingText(player) {
+        if (!player) return "0 (0)";
+        const runs = Number(player.runsScored ?? 0);
+        const balls = Number(player.ballsFaced ?? 0);
+        return `${Number.isFinite(runs) ? runs : 0} (${Number.isFinite(balls) ? balls : 0})`;
+      }
+
+      function bowlingText(player) {
+        if (!player) return "0/0 (0.0)";
+        const wickets = Number(player.wickets ?? 0);
+        const runs = Number(player.runs ?? 0);
+        const overs = String(player.overs ?? "0.0");
+        return `${Number.isFinite(wickets) ? wickets : 0}/${Number.isFinite(runs) ? runs : 0} (${overs})`;
+      }
+
+      /*
+        Determine strike from the newest REAL scoring delivery.
+        The feed is stored newest-over last, while balls inside each over
+        are newest first. Ignore Auto Comment Ball entries.
+      */
+      let latestRealBall = null;
+      let latestTime = -Infinity;
+
+      const inningsKeys = [
+        "innings1Balls",
+        "innings2Balls",
+        "innings3Balls",
+        "innings4Balls",
+        "superOverInnings1Balls",
+        "superOverInnings2Balls"
       ];
 
-      const deliveries = collectDeliveries(ballsData);
-      const latest = deliveries.length
-        ? deliveries[deliveries.length - 1]
-        : null;
-      const latestRaw = latest?.raw || {};
+      for (const inningsKey of inningsKeys) {
+        const innings = liveRoot[inningsKey];
+        const oversMap = innings && innings.oversMap;
+        if (!oversMap) continue;
 
-      let strikerName = "";
-      let nonStrikerName = "";
-      let bowlerName = "";
-
-      // Prefer fields explicitly describing the CURRENT players.
-      for (const obj of objects) {
-        strikerName ||= getNamedValue(obj, [
-          "currentStrikerName",
-          "strikerName",
-          "currentBatsmanName",
-          "currentBatterName"
-        ]);
-
-        nonStrikerName ||= getNamedValue(obj, [
-          "currentNonStrikerName",
-          "nonStrikerName",
-          "runnerName"
-        ]);
-
-        bowlerName ||= getNamedValue(obj, [
-          "currentBowlerName",
-          "bowlerName"
-        ]);
-      }
-
-      // Delivery fallback.
-      strikerName ||= getNamedValue(latestRaw, [
-        "strikerName",
-        "batsmanName",
-        "batterName"
-      ]);
-
-      nonStrikerName ||= getNamedValue(latestRaw, [
-        "nonStrikerName",
-        "runnerName"
-      ]);
-
-      bowlerName ||= getNamedValue(latestRaw, [
-        "bowlerName",
-        "bowler"
-      ]);
-
-      // Aggregate delivery data as a fallback for live figures.
-      const batting = new Map();
-      const bowling = new Map();
-
-      for (const delivery of deliveries) {
-        const raw = delivery.raw || {};
-
-        const batter = getNamedValue(raw, [
-          "strikerName",
-          "batsmanName",
-          "batterName"
-        ]);
-
-        if (batter) {
-          if (!batting.has(batter)) {
-            batting.set(batter, { runs: 0, balls: 0 });
+        for (const over of Object.values(oversMap)) {
+          const balls = Array.isArray(over && over.balls) ? over.balls : [];
+          for (const ball of balls) {
+            if (!ball || ball.ballType === "Auto Comment Ball") continue;
+            const time = Date.parse(ball.createdAt || "");
+            const comparable = Number.isFinite(time) ? time : 0;
+            if (comparable >= latestTime) {
+              latestTime = comparable;
+              latestRealBall = ball;
+            }
           }
-
-          const row = batting.get(batter);
-
-          const explicitBatRuns = firstValue(raw, [
-            "batterRuns",
-            "batsmanRuns",
-            "batsmenRuns",
-            "runsOffBat",
-            "batRuns"
-          ]);
-
-          const batRuns =
-            explicitBatRuns !== undefined &&
-            explicitBatRuns !== null &&
-            String(explicitBatRuns).trim() !== ""
-              ? statNumber(explicitBatRuns)
-              : (
-                  delivery.hasAnyExtras
-                    ? 0
-                    : statNumber(delivery.runs)
-                );
-
-          row.runs += batRuns;
-
-          const isWide =
-            statNumber(firstValue(raw, [
-              "wides", "wide", "wideRuns", "wd"
-            ])) > 0 ||
-            /\bwide\b/i.test(String(raw.commentary || ""));
-
-          if (!isWide) row.balls += 1;
-        }
-
-        const bowler = getNamedValue(raw, [
-          "bowlerName",
-          "bowler"
-        ]);
-
-        if (bowler) {
-          if (!bowling.has(bowler)) {
-            bowling.set(bowler, {
-              runs: 0,
-              wickets: 0,
-              legalBalls: 0
-            });
-          }
-
-          const row = bowling.get(bowler);
-
-          const wides = statNumber(firstValue(raw, [
-            "wides", "wide", "wideRuns", "wd"
-          ]));
-
-          const noBalls = statNumber(firstValue(raw, [
-            "noBalls", "noBall", "noBallRuns", "nb"
-          ]));
-
-          const byes = statNumber(firstValue(raw, [
-            "byes", "bye", "byeRuns"
-          ]));
-
-          const legByes = statNumber(firstValue(raw, [
-            "legByes", "legBye", "legByeRuns", "lb"
-          ]));
-
-          // Bowler concedes total delivery runs except byes/leg-byes.
-          row.runs += Math.max(
-            0,
-            statNumber(delivery.runs) - byes - legByes
-          );
-
-          if (delivery.isWicket) row.wickets += 1;
-
-          const commentary = String(raw.commentary || "");
-          const illegal =
-            wides > 0 ||
-            noBalls > 0 ||
-            /\bwide\b/i.test(commentary) ||
-            /\bno[\s-]*ball\b/i.test(commentary);
-
-          if (!illegal) row.legalBalls += 1;
         }
       }
 
-      // Look for structured scorecard records to improve batting figures.
-      function structuredBatting(name) {
-        if (!name) return null;
-        const target = name.toLowerCase();
+      let leftPlayer = batsman1;
+      let rightPlayer = batsman2;
 
-        for (const obj of objects) {
-          const candidate = getNamedValue(obj, [
-            "batsmanName",
-            "batterName",
-            "playerName",
-            "name"
-          ]);
+      if (latestRealBall) {
+        const strikerId = Number(latestRealBall.striker || 0);
+        const nonStrikerId = Number(latestRealBall.nonStriker || 0);
 
-          if (!candidate || candidate.toLowerCase() !== target) continue;
+        const b1Id = Number(batsman1 && batsman1.playerID || 0);
+        const b2Id = Number(batsman2 && batsman2.playerID || 0);
 
-          const runs = firstValue(obj, [
-            "batsmanRuns",
-            "batterRuns",
-            "runs",
-            "score"
-          ]);
-
-          const balls = firstValue(obj, [
-            "ballsFaced",
-            "balls",
-            "ballsPlayed"
-          ]);
-
-          if (
-            runs !== undefined &&
-            balls !== undefined
-          ) {
-            return {
-              runs: statNumber(runs),
-              balls: statNumber(balls)
-            };
-          }
+        // Left side is always the batsman currently on strike.
+        if (strikerId && strikerId === b2Id) {
+          leftPlayer = batsman2;
+          rightPlayer = batsman1;
+        } else if (strikerId && strikerId === b1Id) {
+          leftPlayer = batsman1;
+          rightPlayer = batsman2;
+        } else if (nonStrikerId && nonStrikerId === b1Id) {
+          leftPlayer = batsman2;
+          rightPlayer = batsman1;
         }
-
-        return null;
       }
-
-      function structuredBowling(name) {
-        if (!name) return null;
-        const target = name.toLowerCase();
-
-        for (const obj of objects) {
-          const candidate = getNamedValue(obj, [
-            "bowlerName",
-            "playerName",
-            "name"
-          ]);
-
-          if (!candidate || candidate.toLowerCase() !== target) continue;
-
-          const wickets = firstValue(obj, [
-            "wicketsTaken",
-            "wickets",
-            "wkts"
-          ]);
-
-          const runs = firstValue(obj, [
-            "runsConceded",
-            "bowlingRuns"
-          ]);
-
-          const overs = firstValue(obj, [
-            "oversBowled",
-            "overs"
-          ]);
-
-          if (
-            wickets !== undefined &&
-            runs !== undefined &&
-            overs !== undefined
-          ) {
-            return {
-              wickets: statNumber(wickets),
-              runs: statNumber(runs),
-              overs: String(overs)
-            };
-          }
-        }
-
-        return null;
-      }
-
-      const striker =
-        structuredBatting(strikerName) ||
-        batting.get(strikerName) ||
-        { runs: 0, balls: 0 };
-
-      const nonStriker =
-        structuredBatting(nonStrikerName) ||
-        batting.get(nonStrikerName) ||
-        { runs: 0, balls: 0 };
-
-      const structuredBowler =
-        structuredBowling(bowlerName);
-
-      const fallbackBowler =
-        bowling.get(bowlerName) ||
-        { wickets: 0, runs: 0, legalBalls: 0 };
-
-      const bowlerFigures =
-        structuredBowler
-          ? `${structuredBowler.wickets}/${structuredBowler.runs} (${structuredBowler.overs})`
-          : `${fallbackBowler.wickets}/${fallbackBowler.runs} (${cricketOversFromBalls(fallbackBowler.legalBalls)})`;
 
       document.getElementById("strikerName").textContent =
-        strikerName || "BATSMAN";
-
+        fullPlayerName(leftPlayer, "BATSMAN");
       document.getElementById("strikerStat").textContent =
-        `${striker.runs} (${striker.balls})`;
+        battingText(leftPlayer);
 
       document.getElementById("nonStrikerName").textContent =
-        nonStrikerName || "BATSMAN";
-
+        fullPlayerName(rightPlayer, "BATSMAN");
       document.getElementById("nonStrikerStat").textContent =
-        `${nonStriker.runs} (${nonStriker.balls})`;
+        battingText(rightPlayer);
 
       document.getElementById("bowlerName").textContent =
-        bowlerName || "BOWLER";
-
+        fullPlayerName(currentBowler, "BOWLER");
       document.getElementById("bowlerStat").textContent =
-        bowlerFigures;
+        bowlingText(currentBowler);
     }
-
 
     async function loadScore() {
 

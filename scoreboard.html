@@ -67,16 +67,7 @@
     /* ---------------- HEADER ---------------- */
 
     .header {
-      height: 106px;
-      flex: 0 0 106px;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      padding: 18px 13px 2px;
-      text-align: center;
+      display: none;
     }
 
     .main-title {
@@ -1081,6 +1072,121 @@
           scale(.2);
       }
     }
+
+    /* ===== APPROVED LIVE-STATS SCOREBOARD LAYOUT ===== */
+    .content { height: 100%; }
+
+    .match {
+      height: 205px;
+      flex: 0 0 205px;
+      padding: 5px 12px 0;
+      grid-template-columns: minmax(0,1fr) 49px minmax(0,1fr);
+      align-items: start;
+    }
+
+    .team {
+      height: 200px;
+      grid-template-rows: 82px 76px 42px;
+    }
+
+    .team-name {
+      height: 82px;
+      padding: 3px 3px 4px;
+      align-items: center;
+      font-size: 27px; /* approx 20% larger than the enlarged concept */
+      line-height: .98;
+      overflow: visible;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .score {
+      height: 76px;
+      font-size: 64px;
+    }
+
+    .overs {
+      height: 42px;
+      font-size: 25px;
+    }
+
+    .vs-column {
+      height: 200px;
+      grid-template-rows: 82px 76px 42px;
+    }
+
+    .vs {
+      grid-row: 2;
+      font-size: 27px;
+    }
+
+    .player-row {
+      height: 86px;
+      flex: 0 0 86px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: start;
+      padding: 5px 16px 0;
+    }
+
+    .batter {
+      min-width: 0;
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .batter.striker { position: relative; }
+
+    .batter.striker::before {
+      content: "▶";
+      position: absolute;
+      left: 0;
+      top: 5px;
+      font-size: 17px;
+    }
+
+    .batter-name {
+      font-size: 22px;
+      line-height: 1.02;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .batter-stat {
+      margin-top: 5px;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .bowler-row {
+      height: 70px;
+      flex: 0 0 70px;
+      text-align: center;
+      font-weight: 900;
+      padding-top: 2px;
+    }
+
+    .bowler-name {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .bowler-stat {
+      margin-top: 5px;
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .result {
+      flex: 1;
+      min-height: 0;
+      align-items: flex-end;
+      padding: 0 12px 9px;
+      font-size: 19px;
+      line-height: 1.05;
+    }
+
   </style>
 </head>
 
@@ -1206,6 +1312,23 @@
 
       </div>
 
+
+      <div class="player-row">
+        <div class="batter striker">
+          <div id="strikerName" class="batter-name">BATSMAN</div>
+          <div id="strikerStat" class="batter-stat">0 (0)</div>
+        </div>
+
+        <div class="batter">
+          <div id="nonStrikerName" class="batter-name">BATSMAN</div>
+          <div id="nonStrikerStat" class="batter-stat">0 (0)</div>
+        </div>
+      </div>
+
+      <div class="bowler-row">
+        <div id="bowlerName" class="bowler-name">BOWLER</div>
+        <div id="bowlerStat" class="bowler-stat">0/0 (0.0)</div>
+      </div>
 
       <div
         class="result"
@@ -3074,6 +3197,344 @@
       }
     }
 
+
+    function statNumber(value, fallback = 0) {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function walkObjects(root) {
+      const found = [];
+      const seen = new Set();
+
+      function walk(value) {
+        if (!value || typeof value !== "object" || seen.has(value)) return;
+        seen.add(value);
+
+        if (Array.isArray(value)) {
+          value.forEach(walk);
+          return;
+        }
+
+        found.push(value);
+        Object.values(value).forEach(walk);
+      }
+
+      walk(root);
+      return found;
+    }
+
+    function cleanName(value) {
+      if (value === undefined || value === null) return "";
+      if (typeof value === "object") {
+        return String(
+          value.playerName ||
+          value.name ||
+          value.fullName ||
+          ""
+        ).trim();
+      }
+      return String(value).trim();
+    }
+
+    function getNamedValue(obj, keys) {
+      for (const key of keys) {
+        const value = obj?.[key];
+        const name = cleanName(value);
+        if (name) return name;
+      }
+      return "";
+    }
+
+    function cricketOversFromBalls(balls) {
+      const b = Math.max(0, Math.round(statNumber(balls)));
+      return `${Math.floor(b / 6)}.${b % 6}`;
+    }
+
+    function renderLiveCricketStats(scoreData, ballsData) {
+      const objects = [
+        ...walkObjects(scoreData),
+        ...walkObjects(ballsData)
+      ];
+
+      const deliveries = collectDeliveries(ballsData);
+      const latest = deliveries.length
+        ? deliveries[deliveries.length - 1]
+        : null;
+      const latestRaw = latest?.raw || {};
+
+      let strikerName = "";
+      let nonStrikerName = "";
+      let bowlerName = "";
+
+      // Prefer fields explicitly describing the CURRENT players.
+      for (const obj of objects) {
+        strikerName ||= getNamedValue(obj, [
+          "currentStrikerName",
+          "strikerName",
+          "currentBatsmanName",
+          "currentBatterName"
+        ]);
+
+        nonStrikerName ||= getNamedValue(obj, [
+          "currentNonStrikerName",
+          "nonStrikerName",
+          "runnerName"
+        ]);
+
+        bowlerName ||= getNamedValue(obj, [
+          "currentBowlerName",
+          "bowlerName"
+        ]);
+      }
+
+      // Delivery fallback.
+      strikerName ||= getNamedValue(latestRaw, [
+        "strikerName",
+        "batsmanName",
+        "batterName"
+      ]);
+
+      nonStrikerName ||= getNamedValue(latestRaw, [
+        "nonStrikerName",
+        "runnerName"
+      ]);
+
+      bowlerName ||= getNamedValue(latestRaw, [
+        "bowlerName",
+        "bowler"
+      ]);
+
+      // Aggregate delivery data as a fallback for live figures.
+      const batting = new Map();
+      const bowling = new Map();
+
+      for (const delivery of deliveries) {
+        const raw = delivery.raw || {};
+
+        const batter = getNamedValue(raw, [
+          "strikerName",
+          "batsmanName",
+          "batterName"
+        ]);
+
+        if (batter) {
+          if (!batting.has(batter)) {
+            batting.set(batter, { runs: 0, balls: 0 });
+          }
+
+          const row = batting.get(batter);
+
+          const explicitBatRuns = firstValue(raw, [
+            "batterRuns",
+            "batsmanRuns",
+            "batsmenRuns",
+            "runsOffBat",
+            "batRuns"
+          ]);
+
+          const batRuns =
+            explicitBatRuns !== undefined &&
+            explicitBatRuns !== null &&
+            String(explicitBatRuns).trim() !== ""
+              ? statNumber(explicitBatRuns)
+              : (
+                  delivery.hasAnyExtras
+                    ? 0
+                    : statNumber(delivery.runs)
+                );
+
+          row.runs += batRuns;
+
+          const isWide =
+            statNumber(firstValue(raw, [
+              "wides", "wide", "wideRuns", "wd"
+            ])) > 0 ||
+            /\bwide\b/i.test(String(raw.commentary || ""));
+
+          if (!isWide) row.balls += 1;
+        }
+
+        const bowler = getNamedValue(raw, [
+          "bowlerName",
+          "bowler"
+        ]);
+
+        if (bowler) {
+          if (!bowling.has(bowler)) {
+            bowling.set(bowler, {
+              runs: 0,
+              wickets: 0,
+              legalBalls: 0
+            });
+          }
+
+          const row = bowling.get(bowler);
+
+          const wides = statNumber(firstValue(raw, [
+            "wides", "wide", "wideRuns", "wd"
+          ]));
+
+          const noBalls = statNumber(firstValue(raw, [
+            "noBalls", "noBall", "noBallRuns", "nb"
+          ]));
+
+          const byes = statNumber(firstValue(raw, [
+            "byes", "bye", "byeRuns"
+          ]));
+
+          const legByes = statNumber(firstValue(raw, [
+            "legByes", "legBye", "legByeRuns", "lb"
+          ]));
+
+          // Bowler concedes total delivery runs except byes/leg-byes.
+          row.runs += Math.max(
+            0,
+            statNumber(delivery.runs) - byes - legByes
+          );
+
+          if (delivery.isWicket) row.wickets += 1;
+
+          const commentary = String(raw.commentary || "");
+          const illegal =
+            wides > 0 ||
+            noBalls > 0 ||
+            /\bwide\b/i.test(commentary) ||
+            /\bno[\s-]*ball\b/i.test(commentary);
+
+          if (!illegal) row.legalBalls += 1;
+        }
+      }
+
+      // Look for structured scorecard records to improve batting figures.
+      function structuredBatting(name) {
+        if (!name) return null;
+        const target = name.toLowerCase();
+
+        for (const obj of objects) {
+          const candidate = getNamedValue(obj, [
+            "batsmanName",
+            "batterName",
+            "playerName",
+            "name"
+          ]);
+
+          if (!candidate || candidate.toLowerCase() !== target) continue;
+
+          const runs = firstValue(obj, [
+            "batsmanRuns",
+            "batterRuns",
+            "runs",
+            "score"
+          ]);
+
+          const balls = firstValue(obj, [
+            "ballsFaced",
+            "balls",
+            "ballsPlayed"
+          ]);
+
+          if (
+            runs !== undefined &&
+            balls !== undefined
+          ) {
+            return {
+              runs: statNumber(runs),
+              balls: statNumber(balls)
+            };
+          }
+        }
+
+        return null;
+      }
+
+      function structuredBowling(name) {
+        if (!name) return null;
+        const target = name.toLowerCase();
+
+        for (const obj of objects) {
+          const candidate = getNamedValue(obj, [
+            "bowlerName",
+            "playerName",
+            "name"
+          ]);
+
+          if (!candidate || candidate.toLowerCase() !== target) continue;
+
+          const wickets = firstValue(obj, [
+            "wicketsTaken",
+            "wickets",
+            "wkts"
+          ]);
+
+          const runs = firstValue(obj, [
+            "runsConceded",
+            "bowlingRuns"
+          ]);
+
+          const overs = firstValue(obj, [
+            "oversBowled",
+            "overs"
+          ]);
+
+          if (
+            wickets !== undefined &&
+            runs !== undefined &&
+            overs !== undefined
+          ) {
+            return {
+              wickets: statNumber(wickets),
+              runs: statNumber(runs),
+              overs: String(overs)
+            };
+          }
+        }
+
+        return null;
+      }
+
+      const striker =
+        structuredBatting(strikerName) ||
+        batting.get(strikerName) ||
+        { runs: 0, balls: 0 };
+
+      const nonStriker =
+        structuredBatting(nonStrikerName) ||
+        batting.get(nonStrikerName) ||
+        { runs: 0, balls: 0 };
+
+      const structuredBowler =
+        structuredBowling(bowlerName);
+
+      const fallbackBowler =
+        bowling.get(bowlerName) ||
+        { wickets: 0, runs: 0, legalBalls: 0 };
+
+      const bowlerFigures =
+        structuredBowler
+          ? `${structuredBowler.wickets}/${structuredBowler.runs} (${structuredBowler.overs})`
+          : `${fallbackBowler.wickets}/${fallbackBowler.runs} (${cricketOversFromBalls(fallbackBowler.legalBalls)})`;
+
+      document.getElementById("strikerName").textContent =
+        strikerName || "BATSMAN";
+
+      document.getElementById("strikerStat").textContent =
+        `${striker.runs} (${striker.balls})`;
+
+      document.getElementById("nonStrikerName").textContent =
+        nonStrikerName || "BATSMAN";
+
+      document.getElementById("nonStrikerStat").textContent =
+        `${nonStriker.runs} (${nonStriker.balls})`;
+
+      document.getElementById("bowlerName").textContent =
+        bowlerName || "BOWLER";
+
+      document.getElementById("bowlerStat").textContent =
+        bowlerFigures;
+    }
+
+
     async function loadScore() {
 
       if (
@@ -3132,6 +3593,11 @@
 
 
         processBoundaryAnimations(
+          ballsData
+        );
+
+        renderLiveCricketStats(
+          scoreData,
           ballsData
         );
 
